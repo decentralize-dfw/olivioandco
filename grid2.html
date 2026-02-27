@@ -3,364 +3,383 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <title>Olivio&amp;Co — Product Catalog 3D</title>
+  <title>Olivio&amp;Co — Product Catalog</title>
 
   <!-- ═══════════════════════════════════════════
        CONFIG — change only these two numbers
   ═══════════════════════════════════════════ -->
   <script>
-    const THUMBNAIL_WIDTH = 400;   // px — image on each 3D card
-    const IMAGE_WIDTH     = 1200;  // px — full-size image in popup
+    const THUMBNAIL_WIDTH = 50;   // px — 3D card images
+    const IMAGE_WIDTH     = 1200;  // px — popup full-size images
   </script>
 
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+    /* ── Base ─────────────────────────────────────────── */
     html, body {
-      height: 100%;
-      background: #0a0a0a;
-      color: #ffffff;
+      height: 100%; width: 100%;
+      background: #ffffff;
+      color: #000000;
       font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
       font-size: 13px;
       overflow: hidden;
       touch-action: none;
+      -webkit-tap-highlight-color: transparent;
     }
 
-    /* ── UI Container (top) ──────────────────────────── */
-    #ui-container {
+    /* ── Top UI ───────────────────────────────────────── */
+    #ui-top {
       position: fixed;
       top: 0; left: 0; right: 0;
       z-index: 100;
-      padding: 14px 18px;
-      pointer-events: none;
+      padding: 12px 16px 8px;
       display: flex;
       flex-direction: column;
-      gap: 8px;
-      align-items: flex-start;
+      gap: 7px;
+      pointer-events: none;
     }
 
+    /* Main menu bar */
     .menu-bar {
       display: flex;
-      flex-wrap: wrap;
+      flex-wrap: nowrap;
       gap: 4px;
       align-items: center;
       pointer-events: auto;
-      background: rgba(0,0,0,0.65);
-      padding: 7px 13px;
+      background: rgba(255,255,255,0.92);
+      padding: 6px 12px;
       border-radius: 30px;
-      border: 1px solid rgba(255,255,255,0.15);
-      backdrop-filter: blur(8px);
+      border: 1px solid #000;
+      backdrop-filter: blur(6px);
+      overflow-x: auto;
+      scrollbar-width: none;
+      max-width: 100%;
+      width: fit-content;
     }
+    .menu-bar::-webkit-scrollbar { display: none; }
 
     .menu-sep {
-      width: 1px; height: 16px;
-      background: rgba(255,255,255,0.25);
-      margin: 0 5px;
+      width: 1px; height: 15px;
+      background: #000;
+      opacity: 0.2;
+      margin: 0 4px;
       flex-shrink: 0;
     }
 
+    /* Primary buttons (view + group) */
     .nav-btn {
       background: transparent;
       border: 1px solid transparent;
-      color: rgba(255,255,255,0.6);
-      padding: 3px 12px;
+      color: rgba(0,0,0,0.45);
+      padding: 3px 11px;
       font-family: inherit;
       font-size: 11px;
-      font-weight: 600;
+      font-weight: 700;
       letter-spacing: 0.07em;
       text-transform: uppercase;
       cursor: pointer;
       border-radius: 4px;
-      transition: color .15s, border-color .15s, background .15s;
+      transition: color .12s, border-color .12s, background .12s;
+      white-space: nowrap;
+      flex-shrink: 0;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+    .nav-btn:hover  { color: #000; border-color: rgba(0,0,0,0.3); }
+    .nav-btn.active { color: #000; background: #000; color: #fff; border-color: #000; }
+
+    /* Tick-filter bar (secondary row) */
+    .tick-bar {
+      display: flex;
+      gap: 5px;
+      align-items: center;
+      pointer-events: auto;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .tick-bar::-webkit-scrollbar { display: none; }
+
+    .tick-lbl {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .09em;
+      text-transform: uppercase;
+      color: rgba(0,0,0,0.4);
+      flex-shrink: 0;
+      margin-right: 2px;
+    }
+
+    .tick-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 3px 10px 3px 8px;
+      border: 1px solid rgba(0,0,0,0.25);
+      border-radius: 30px;
+      background: rgba(255,255,255,0.88);
+      color: rgba(0,0,0,0.5);
+      font-family: inherit;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .05em;
+      cursor: pointer;
+      user-select: none;
+      -webkit-user-select: none;
+      white-space: nowrap;
+      flex-shrink: 0;
+      transition: color .12s, border-color .12s, background .12s;
+      backdrop-filter: blur(4px);
+    }
+    .tick-btn:hover { border-color: #000; color: #000; }
+    .tick-btn.active {
+      border-color: #000;
+      color: #000;
+      background: rgba(255,255,255,0.95);
+    }
+    .tick-box {
+      width: 13px; height: 13px;
+      border: 1.5px solid currentColor;
+      border-radius: 3px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 9px;
+      flex-shrink: 0;
+    }
+
+    /* ── Count badge ──────────────────────────────────── */
+    #count-badge {
+      position: fixed;
+      top: 14px; right: 14px;
+      z-index: 101;
+      background: rgba(255,255,255,0.92);
+      border: 1px solid rgba(0,0,0,0.2);
+      border-radius: 20px;
+      padding: 4px 10px;
+      font-size: 11px;
+      color: rgba(0,0,0,0.5);
+      backdrop-filter: blur(4px);
+      pointer-events: none;
       white-space: nowrap;
     }
-    .nav-btn:hover  { color: #fff; border-color: rgba(255,255,255,0.35); }
-    .nav-btn.active { color: #fff; border-color: rgba(255,255,255,0.55); background: rgba(255,255,255,0.12); }
 
-    /* ── Bottom slider / fit ────────────────────────── */
+    /* ── Bottom controls ──────────────────────────────── */
     #slider-container {
       position: fixed;
-      bottom: 18px; left: 18px;
+      bottom: 16px; left: 16px;
       z-index: 100;
       display: flex;
       flex-direction: row;
       align-items: center;
-      gap: 10px;
+      gap: 9px;
       pointer-events: auto;
-      background: rgba(0,0,0,0.65);
-      padding: 7px 13px;
+      background: rgba(255,255,255,0.92);
+      padding: 6px 12px;
       border-radius: 10px;
-      border: 1px solid rgba(255,255,255,0.15);
-      backdrop-filter: blur(8px);
+      border: 1px solid rgba(0,0,0,0.18);
+      backdrop-filter: blur(6px);
     }
-
     #slider-label {
-      font-size: 10px;
-      font-weight: 600;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,0.6);
+      font-size: 10px; font-weight: 700;
+      letter-spacing: .08em; text-transform: uppercase;
+      color: rgba(0,0,0,0.5);
+      white-space: nowrap;
     }
-
     input[type=range] {
       -webkit-appearance: none;
-      width: 90px; height: 3px;
-      background: rgba(255,255,255,0.2);
-      border-radius: 2px;
-      outline: none;
+      width: 80px; height: 2px;
+      background: rgba(0,0,0,0.18);
+      border-radius: 2px; outline: none;
     }
     input[type=range]::-webkit-slider-thumb {
       -webkit-appearance: none;
-      width: 10px; height: 10px;
+      width: 11px; height: 11px;
       border-radius: 50%;
-      background: #ffffff;
-      cursor: pointer;
+      background: #000; cursor: pointer;
     }
-
     #fit-btn {
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: 0.07em;
-      text-transform: uppercase;
-      padding: 3px 10px;
-      border: 1px solid rgba(255,255,255,0.4);
-      background: rgba(255,255,255,0.08);
-      color: rgba(255,255,255,0.8);
-      cursor: pointer;
-      border-radius: 4px;
-      transition: background .15s;
+      font-size: 10px; font-weight: 700;
+      letter-spacing: .07em; text-transform: uppercase;
+      padding: 3px 9px;
+      border: 1px solid rgba(0,0,0,0.3);
+      background: transparent;
+      color: rgba(0,0,0,0.6);
+      cursor: pointer; border-radius: 4px;
+      transition: background .12s;
+      white-space: nowrap;
     }
-    #fit-btn:hover { background: rgba(255,255,255,0.22); color: #fff; }
+    #fit-btn:hover { background: #000; color: #fff; border-color: #000; }
 
-    /* ── Count badge ────────────────────────────────── */
-    #count-badge {
-      position: fixed;
-      top: 18px; right: 18px;
-      z-index: 100;
-      background: rgba(0,0,0,0.65);
-      border: 1px solid rgba(255,255,255,0.15);
-      border-radius: 20px;
-      padding: 5px 12px;
-      font-size: 11px;
-      color: rgba(255,255,255,0.6);
-      backdrop-filter: blur(8px);
-      pointer-events: none;
+    /* ── 3D Container ─────────────────────────────────── */
+    #container {
+      position: absolute; inset: 0;
+      z-index: 1;
+      pointer-events: auto;
+      touch-action: none;
     }
 
-    /* ── 3D Card ────────────────────────────────────── */
+    /* ── 3D Cards ─────────────────────────────────────── */
     .element-card {
       width: 160px; height: 160px;
       cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      display: flex; align-items: center; justify-content: center;
       pointer-events: auto;
-      user-select: none;
-      backface-visibility: visible;
-      -webkit-backface-visibility: visible;
+      user-select: none; -webkit-user-select: none;
+      backface-visibility: visible; -webkit-backface-visibility: visible;
       transform-style: preserve-3d;
-      transition: transform .2s;
+      transition: transform .18s;
       border-radius: 4px;
       overflow: hidden;
-      background: #1c1c1c;
-      border: 1px solid rgba(255,255,255,0.08);
+      background: #fff;
+      border: 1px solid rgba(0,0,0,0.15);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
     }
-    .element-card:hover { transform: scale(1.13); z-index: 1000; }
+    .element-card:hover { transform: scale(1.12); z-index: 999; }
     .element-card img {
       width: 100%; height: 100%;
-      object-fit: cover;           /* square crop */
+      object-fit: cover;
       display: block;
       user-select: none;
       -webkit-user-drag: none;
       pointer-events: none;
     }
 
-    /* ── Group labels ───────────────────────────────── */
+    /* ── Group Labels ─────────────────────────────────── */
     .group-label-wrap {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      pointer-events: none;
-      user-select: none;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      pointer-events: none; user-select: none;
       text-align: center;
-      opacity: 0;
-      transform: scale(0.8);
-      transition: opacity .9s ease, transform .9s ease;
+      opacity: 0; transform: scale(0.8);
+      transition: opacity .8s ease, transform .8s ease;
     }
     .group-label-wrap.visible { opacity: 1; transform: scale(1); }
     .group-label-main {
-      font-size: 64px;
-      font-weight: 900;
-      line-height: 0.9;
-      color: rgba(255,255,255,0.88);
-      text-transform: uppercase;
-      letter-spacing: -0.02em;
+      font-size: 64px; font-weight: 900;
+      line-height: 0.9; color: rgba(0,0,0,0.82);
+      text-transform: uppercase; letter-spacing: -0.02em;
     }
     .group-label-sub {
-      font-size: 12px;
-      font-weight: 500;
-      color: rgba(255,255,255,0.45);
+      font-size: 11px; font-weight: 600;
+      color: #fff;
       margin-top: 10px;
-      text-transform: uppercase;
-      letter-spacing: 0.18em;
-      padding: 2px 10px;
+      text-transform: uppercase; letter-spacing: .18em;
+      padding: 3px 12px;
+      background: rgba(0,0,0,0.72);
     }
 
-    /* ── Loader ─────────────────────────────────────── */
+    /* ── Loader ───────────────────────────────────────── */
     #loader {
       position: fixed; inset: 0;
-      background: #0a0a0a;
-      z-index: 99999;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      transition: opacity .5s ease-out;
+      background: #fff; z-index: 99999;
+      display: flex; flex-direction: column;
+      justify-content: center; align-items: center;
+      transition: opacity .4s ease-out;
     }
-    #loader-text  { font-size: 22px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.85); font-weight: 700; }
-    #loader-sub   { font-size: 11px; color: rgba(255,255,255,0.4); margin-top: 8px; letter-spacing: 0.1em; }
+    #loader-title { font-size: 20px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+    #loader-sub   { font-size: 11px; color: rgba(0,0,0,0.4); margin-top: 6px; letter-spacing: .08em; }
 
-    #container { position: absolute; inset: 0; z-index: 1; pointer-events: auto; touch-action: none; }
-
-    /* ── Modal overlay ──────────────────────────────── */
+    /* ── Modal overlay ────────────────────────────────── */
     #modal-overlay {
-      opacity: 0;
-      visibility: hidden;
-      transition: opacity .3s, visibility .3s;
-      position: fixed; inset: 0;
-      z-index: 200;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 3%;
+      opacity: 0; visibility: hidden;
+      transition: opacity .25s, visibility .25s;
+      position: fixed; inset: 0; z-index: 200;
+      display: flex; align-items: center; justify-content: center;
+      padding: 16px;
       pointer-events: none;
     }
     #modal-overlay.open { opacity: 1; visibility: visible; pointer-events: auto; }
 
     #modal-backdrop {
       position: absolute; inset: 0;
-      background: rgba(0,0,0,0.82);
-      backdrop-filter: blur(6px);
+      background: rgba(0,0,0,0.55);
+      backdrop-filter: blur(5px);
       cursor: pointer;
     }
 
     #modal {
       position: relative; z-index: 10;
-      background: #ffffff;
-      color: #000000;
-      border: 1px solid #000000;
+      background: #fff; color: #000;
+      border: 1px solid #000;
       border-radius: 4px;
-      width: min(960px, 95vw);
-      height: min(620px, 88vh);
-      display: flex;
-      flex-direction: column;
+      width: min(960px, 96vw);
+      height: min(620px, 92vh);
+      display: flex; flex-direction: column;
       overflow: hidden;
     }
 
     #modal-close {
-      position: absolute; top: 11px; right: 13px; z-index: 20;
-      background: none;
-      border: 1px solid #000;
-      border-radius: 50%;
-      width: 28px; height: 28px;
-      cursor: pointer; font-size: 14px;
+      position: absolute; top: 10px; right: 12px; z-index: 20;
+      background: none; border: 1px solid #000; border-radius: 50%;
+      width: 27px; height: 27px; cursor: pointer; font-size: 13px;
       display: flex; align-items: center; justify-content: center;
-      color: #000; transition: background .15s, color .15s;
+      color: #000; transition: background .12s, color .12s;
     }
     #modal-close:hover { background: #000; color: #fff; }
 
-    /* Modal body = left image area + right info panel */
     #modal-body { display: flex; flex: 1; overflow: hidden; }
 
-    /* Left */
+    /* Left: image viewer */
     #modal-left {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      background: #f4f4f4;
+      flex: 1; min-width: 0;
+      display: flex; flex-direction: column;
+      background: #f5f5f5;
       border-right: 1px solid #000;
-      min-width: 0;
     }
     #modal-main-img-wrap {
-      flex: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      flex: 1; min-height: 0;
+      display: flex; align-items: center; justify-content: center;
       overflow: hidden;
-      min-height: 0;
     }
-    /* Default: crop (cover). Last image: contain */
-    #modal-main-img-wrap img {
-      display: block;
-      transition: opacity .15s;
-    }
-    #modal-main-img-wrap img.img-cover {
-      width: 100%; height: 100%;
-      object-fit: cover;
-    }
-    #modal-main-img-wrap img.img-contain {
-      max-width: 100%; max-height: 100%;
-      object-fit: contain;
-    }
+    #modal-main-img-wrap img { display: block; transition: opacity .1s; }
+    #modal-main-img-wrap img.img-cover   { width: 100%; height: 100%; object-fit: cover; }
+    #modal-main-img-wrap img.img-contain { max-width: 100%; max-height: 100%; object-fit: contain; }
 
     /* Carousel */
     #modal-carousel {
-      display: flex;
-      gap: 6px;
-      padding: 8px 10px;
+      display: flex; gap: 5px;
+      padding: 7px 9px;
       border-top: 1px solid #000;
       overflow-x: auto;
-      background: #fff;
-      flex-shrink: 0;
-      scrollbar-width: thin;
-      scrollbar-color: #999 transparent;
+      background: #fff; flex-shrink: 0;
+      scrollbar-width: thin; scrollbar-color: #aaa transparent;
     }
     .c-thumb {
-      width: 52px; height: 52px;
-      flex-shrink: 0;
-      border: 1px solid #ccc;
-      border-radius: 3px;
-      overflow: hidden;
-      cursor: pointer;
-      opacity: .55;
-      transition: opacity .15s, border-color .15s;
+      width: 50px; height: 50px; flex-shrink: 0;
+      border: 1px solid #ccc; border-radius: 3px;
+      overflow: hidden; cursor: pointer;
+      opacity: .5; transition: opacity .12s, border-color .12s;
     }
     .c-thumb:hover { opacity: .8; }
-    .c-thumb.active { opacity: 1; border-color: #000; border-width: 2px; }
+    .c-thumb.active { opacity: 1; border: 2px solid #000; }
     .c-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
-    /* Right */
+    /* Right: info panel */
     #modal-right {
-      width: 300px;
-      flex-shrink: 0;
-      display: flex;
-      flex-direction: column;
-      padding: 20px 18px;
+      width: 295px; flex-shrink: 0;
+      display: flex; flex-direction: column;
+      padding: 18px 16px; gap: 11px;
       overflow-y: auto;
-      gap: 12px;
-      scrollbar-width: thin;
-      scrollbar-color: #ccc transparent;
+      scrollbar-width: thin; scrollbar-color: #ccc transparent;
     }
 
-    #modal-title { font-size: 15px; font-weight: 700; line-height: 1.4; padding-right: 32px; }
+    #modal-title { font-size: 14px; font-weight: 700; line-height: 1.4; padding-right: 28px; }
     .oos-badge   { color: #aaa; font-size: 12px; font-weight: 400; }
-    #modal-price { font-size: 21px; font-weight: 700; }
+    #modal-price { font-size: 20px; font-weight: 800; }
 
-    #modal-description {
-      font-size: 11.5px;
-      line-height: 1.65;
-      color: #555;
+    #modal-desc {
+      font-size: 11.5px; line-height: 1.65;
+      color: #555; max-height: 80px;
+      overflow-y: auto;
+      scrollbar-width: thin; scrollbar-color: #ddd transparent;
     }
 
-    .divider { height: 1px; background: #e0e0e0; flex-shrink: 0; }
+    .divider { height: 1px; background: #eee; flex-shrink: 0; }
 
+    .info-group { display: flex; flex-direction: column; gap: 7px; }
     .info-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      gap: 8px;
-      font-size: 12px;
+      display: flex; justify-content: space-between;
+      align-items: baseline; gap: 8px; font-size: 12px;
     }
     .info-row .lbl {
       font-size: 10px; font-weight: 700;
@@ -370,79 +389,122 @@
     .info-row .val { font-weight: 500; text-align: right; }
 
     /* Color selector */
-    .color-sel-lbl {
+    .color-lbl {
       font-size: 10px; font-weight: 700;
       letter-spacing: .08em; text-transform: uppercase;
       color: #999; margin-bottom: 6px;
     }
     #color-selector { display: flex; flex-wrap: wrap; gap: 6px; }
     .color-ball {
-      width: 22px; height: 22px;
-      border-radius: 50%;
-      border: 2px solid transparent;
-      cursor: pointer;
-      flex-shrink: 0;
-      box-shadow: 0 0 0 1px rgba(0,0,0,0.2);
-      transition: transform .15s, box-shadow .15s;
+      width: 22px; height: 22px; border-radius: 50%;
+      border: 2.5px solid transparent;
+      cursor: pointer; flex-shrink: 0;
+      box-shadow: 0 0 0 1px rgba(0,0,0,0.18);
+      transition: transform .12s, box-shadow .12s;
     }
-    .color-ball:hover { transform: scale(1.2); }
+    .color-ball:hover { transform: scale(1.18); }
     .color-ball.active { box-shadow: 0 0 0 2.5px #000; }
-    .color-ball.oos    { opacity: .35; }
+    .color-ball.oos    { opacity: .3; }
 
     #modal-visit {
-      display: block;
-      text-align: center;
-      padding: 9px;
-      border: 1px solid #000;
-      border-radius: 3px;
-      text-decoration: none;
-      color: #000;
+      display: block; text-align: center;
+      padding: 9px; border: 1px solid #000; border-radius: 3px;
+      text-decoration: none; color: #000;
       font-size: 12px; font-weight: 600;
-      transition: background .15s, color .15s;
-      flex-shrink: 0;
+      transition: background .12s, color .12s; flex-shrink: 0;
     }
     #modal-visit:hover { background: #000; color: #fff; }
+
+    /* ═══════════════════════════════════════════
+       MOBILE — ≤ 639 px
+    ═══════════════════════════════════════════ */
+    @media (max-width: 639px) {
+      /* Smaller cards */
+      .element-card { width: 100px; height: 100px; }
+
+      /* Smaller labels */
+      .group-label-main { font-size: 38px; }
+      .group-label-sub  { font-size: 10px; }
+
+      /* Full-screen popup */
+      #modal-overlay { padding: 0; align-items: flex-end; }
+      #modal {
+        width: 100%; height: 92dvh;
+        border-radius: 12px 12px 0 0;
+        border-left: none; border-right: none; border-bottom: none;
+      }
+      #modal-body { flex-direction: column; }
+      #modal-left {
+        flex: none; height: 50%;
+        border-right: none; border-bottom: 1px solid #000;
+      }
+      #modal-right { width: 100%; flex: 1; padding: 14px 14px 20px; }
+
+      /* Thinner tick bar */
+      .tick-lbl { display: none; }
+
+      /* Bottom controls compact */
+      #slider-container {
+        bottom: 12px; left: 12px;
+        padding: 5px 10px; gap: 7px;
+      }
+      input[type=range] { width: 60px; }
+      #fit-btn { display: none; }
+
+      /* Count badge smaller */
+      #count-badge { top: 12px; right: 12px; padding: 3px 8px; font-size: 10px; }
+    }
   </style>
 </head>
 <body>
 
 <!-- Loader -->
 <div id="loader">
-  <div id="loader-text">Olivio &amp; Co</div>
+  <div id="loader-title">Olivio &amp; Co</div>
   <div id="loader-sub">Loading products…</div>
 </div>
 
 <!-- Top UI -->
-<div id="ui-container">
-  <div class="menu-bar">
+<div id="ui-top">
+  <!-- Primary menu: view modes + group modes -->
+  <div class="menu-bar" id="main-menu">
     <button class="nav-btn active" data-type="view" data-val="grid">Grid</button>
     <button class="nav-btn"        data-type="view" data-val="sphere">Sphere</button>
     <button class="nav-btn"        data-type="view" data-val="chaos">Chaos</button>
-
     <div class="menu-sep"></div>
-
     <button class="nav-btn active" data-type="group" data-val="all">All</button>
     <button class="nav-btn"        data-type="group" data-val="age">Age</button>
     <button class="nav-btn"        data-type="group" data-val="shape">Shape</button>
     <button class="nav-btn"        data-type="group" data-val="type">Type</button>
-    <button class="nav-btn"        data-type="group" data-val="oos">Out of Stock</button>
+    <button class="nav-btn"        data-type="group" data-val="lens">Lens</button>
+  </div>
+
+  <!-- Secondary tick-filters -->
+  <div class="tick-bar" id="tick-bar">
+    <span class="tick-lbl">Filter:</span>
+    <button class="tick-btn" data-tick="in-stock">
+      <span class="tick-box"></span>In Stock
+    </button>
+    <button class="tick-btn" data-tick="out-stock">
+      <span class="tick-box"></span>Out of Stock
+    </button>
   </div>
 </div>
 
 <!-- Count -->
-<div id="count-badge">0 products</div>
+<div id="count-badge">— products</div>
 
 <!-- Slider + Fit -->
 <div id="slider-container">
   <span id="slider-label">Rotate</span>
   <input type="range" id="rotate-slider" min="-2" max="2" step="0.1" value="0">
-  <button id="fit-btn">Fit View</button>
+  <button id="fit-btn">Fit</button>
 </div>
 
-<!-- Three.js container -->
+<!-- 3D canvas -->
 <div id="container"></div>
 
-<!-- Modal -->
+<!-- Modal / popup -->
 <div id="modal-overlay" role="dialog" aria-modal="true">
   <div id="modal-backdrop"></div>
   <div id="modal">
@@ -462,18 +524,17 @@
         <div id="modal-title"></div>
         <div id="modal-price"></div>
         <div class="divider"></div>
-        <div id="modal-description"></div>
+        <div id="modal-desc"></div>
         <div class="divider"></div>
-        <div id="modal-meta"></div>
+        <div class="info-group" id="modal-meta"></div>
         <div class="divider"></div>
         <div>
-          <div class="color-sel-lbl">Colors</div>
+          <div class="color-lbl">Colors</div>
           <div id="color-selector"></div>
         </div>
         <div class="divider"></div>
         <a id="modal-visit" href="#" target="_blank" rel="noopener">View on store →</a>
       </div>
-
     </div>
   </div>
 </div>
@@ -482,19 +543,19 @@
 <script type="importmap">
 {
   "imports": {
-    "three":          "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
-    "three/addons/":  "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+    "three":         "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
   }
 }
 </script>
 
 <script type="module">
-import * as THREE                    from 'three';
-import { OrbitControls }             from 'three/addons/controls/OrbitControls.js';
-import { CSS3DRenderer, CSS3DObject }from 'three/addons/renderers/CSS3DRenderer.js';
-import TWEEN                         from 'three/addons/libs/tween.module.js';
+import * as THREE                     from 'three';
+import { OrbitControls }              from 'three/addons/controls/OrbitControls.js';
+import { CSS3DRenderer, CSS3DObject } from 'three/addons/renderers/CSS3DRenderer.js';
+import TWEEN                          from 'three/addons/libs/tween.module.js';
 
-// ── Color helpers ─────────────────────────────────────────────────────────────
+// ── Color map ─────────────────────────────────────────────────────────────────
 const COLOR_MAP = {
   'Apricot':'#FBCEB1','Art Brush':'#8B4513','Azure Blue':'#007FFF','Begonia Red':'#FA6E79',
   'Berry Mist':'#8E4585','Blue':'#2563EB','Blueberry':'#4F2877','Cactus Green':'#58A55C',
@@ -519,13 +580,10 @@ const COLOR_MAP = {
   'Tranquil Gray':'#9B9B9B','Tranquil Lavender':'#A89DC6','Vacation Yellow':'#FFDD57',
   'Vanilla Brownie':'#C8A97E','Waffle Special':'#D4A574','Wild Flower':'#C06080'
 };
-
-// All known color names sorted longest-first (for greedy title stripping)
 const COLOR_NAMES = Object.keys(COLOR_MAP).sort((a,b) => b.length - a.length);
+const colorCSS = name => COLOR_MAP[name] || '#cccccc';
 
-function colorCSS(name) { return COLOR_MAP[name] || '#cccccc'; }
-
-// ── Shopify image URL helper ──────────────────────────────────────────────────
+// ── Shopify URL helper ────────────────────────────────────────────────────────
 function shopifyImg(url, w) {
   if (!url) return '';
   try {
@@ -537,31 +595,48 @@ function shopifyImg(url, w) {
   }
 }
 
+// ── XSS helper ───────────────────────────────────────────────────────────────
+const esc = s => String(s)
+  .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+  .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+
 // ── Metadata extraction ───────────────────────────────────────────────────────
 const AGES   = ['Baby','Toddler','Kids','Junior','Adult'];
 const SHAPES = new Set(['Oval','Round','Creative Shield','Full-Rim','Half-Rim']);
-const TYPES  = new Set(['Polarised','Non-Polarised']);
+const LENS_TYPES = new Set(['Polarised','Non-Polarised']);
+
+// Product type from title (order matters: longer patterns first)
+function extractProductType(title) {
+  const t = title.toLowerCase();
+  if (t.includes('sport sunglasses')) return 'Sport Sunglasses';
+  if (t.includes('ski goggles') || t.includes('ski goggle')) return 'Ski Goggles';
+  if (t.includes('screen glasses') || t.includes('screen glass')) return 'Screen Glasses';
+  if (t.includes('accessories') || t.includes('accessory')) return 'Accessories';
+  if (t.includes('sunglasses') || t.includes('sunglass')) return 'Sunglasses';
+  return 'Other';
+}
 
 function extractMeta(p) {
   const tl = (p.title || '').toLowerCase();
   let age = '';
   for (const a of AGES) { if (tl.includes(a.toLowerCase())) { age = a; break; } }
 
-  const shapes = new Set(), types = new Set();
+  const shapes = new Set(), lenses = new Set();
   let color = '';
   for (const v of (p.variants || [])) {
     const parts = (v.title || '').split('/').map(s => s.trim());
     if (!color) color = v.color || parts[0] || '';
-    if (parts[1] && SHAPES.has(parts[1])) shapes.add(parts[1]);
-    if (parts[1] && TYPES.has(parts[1]))  types.add(parts[1]);
-    if (parts[2] && TYPES.has(parts[2]))  types.add(parts[2]);
+    if (parts[1] && SHAPES.has(parts[1]))     shapes.add(parts[1]);
+    if (parts[1] && LENS_TYPES.has(parts[1])) lenses.add(parts[1]);
+    if (parts[2] && LENS_TYPES.has(parts[2])) lenses.add(parts[2]);
   }
 
-  const available = (p.variants || []).some(v => v.available);
-  return { age, shapes: [...shapes], types: [...types], color, available };
+  const available  = (p.variants || []).some(v => v.available);
+  const productType = extractProductType(p.title || '');
+  return { age, shapes:[...shapes], lenses:[...lenses], color, available, productType };
 }
 
-// ── Base model name (strip color from title) ──────────────────────────────────
+// Base model = title without color name
 function baseModelOf(title) {
   for (const c of COLOR_NAMES) {
     const idx = title.toLowerCase().indexOf(c.toLowerCase());
@@ -572,27 +647,26 @@ function baseModelOf(title) {
   return title.trim();
 }
 
-// ── XSS helper ────────────────────────────────────────────────────────────────
-function esc(s) {
-  return String(s)
-    .replace(/&/g,'&amp;').replace(/</g,'&lt;')
-    .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
+// ═════════════════════════════════════════════════════════════════════════════
+// App state
+// ═════════════════════════════════════════════════════════════════════════════
+const state = {
+  view:     'grid',
+  group:    'all',
+  tickIn:   false,   // show only in-stock
+  tickOut:  false,   // show only out-of-stock
+};
 
-// ═════════════════════════════════════════════════════════════════════════════
-// State & Three.js globals
-// ═════════════════════════════════════════════════════════════════════════════
-const state = { view: 'grid', group: 'all' };
 let camera, scene, renderer, controls;
-let objects       = [];   // CSS3DObject[]
-let labels        = [];   // CSS3DObject[] (group headings)
-let chaosOffsets  = [];
-let isDragging    = false;
+let objects      = [];   // CSS3DObject[]
+let labels       = [];   // group label CSS3DObject[]
+let chaosOffsets = [];
+let isDragging   = false;
 let autoRotateSpeed = 0;
 let globalRotation  = 0;
 
-let products     = [];           // enriched product objects
-let colorSiblings = {};          // baseModel → [products...]
+let products      = [];
+let colorSiblings = {};  // baseModel → [products…]
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Load data
@@ -606,7 +680,6 @@ fetch('https://decentralize-dfw.github.io/olivioandco/mega_products.json')
       _base: baseModelOf(p.title)
     }));
 
-    // Build color siblings map
     for (const p of products) {
       if (!colorSiblings[p._base]) colorSiblings[p._base] = [];
       colorSiblings[p._base].push(p);
@@ -615,26 +688,25 @@ fetch('https://decentralize-dfw.github.io/olivioandco/mega_products.json')
     init();
     animate();
 
-    // Remove loader
     const loader = document.getElementById('loader');
     loader.style.opacity = '0';
-    setTimeout(() => loader.remove(), 500);
+    setTimeout(() => loader.remove(), 400);
   })
   .catch(() => {
-    document.getElementById('loader-sub').textContent = 'Failed to load — check network connection.';
+    document.getElementById('loader-sub').textContent =
+      'Failed to load — check network.';
   });
 
 // ─────────────────────────────────────────────────────────────────────────────
-// THREE.js init
+// Three.js init
 // ─────────────────────────────────────────────────────────────────────────────
 function init() {
   const container = document.getElementById('container');
-  const aspect    = window.innerWidth / window.innerHeight;
-  const FRUST     = 3500;
+  const FRUST = 3500;
+  const aspect = window.innerWidth / window.innerHeight;
 
   camera = new THREE.OrthographicCamera(
-    FRUST * aspect / -2, FRUST * aspect / 2,
-    FRUST / 2, FRUST / -2, 1, 10000
+    FRUST*aspect/-2, FRUST*aspect/2, FRUST/2, FRUST/-2, 1, 10000
   );
   camera.position.set(2000, 1000, 2000);
   camera.lookAt(0, 0, 0);
@@ -647,21 +719,22 @@ function init() {
   container.appendChild(renderer.domElement);
 
   controls = new OrbitControls(camera, renderer.domElement);
-  controls.enableDamping  = true;
-  controls.dampingFactor  = 0.05;
-  controls.minZoom        = 0.05;
-  controls.maxZoom        = 6;
-  controls.minPolarAngle  = 0.1;
-  controls.maxPolarAngle  = Math.PI - 0.1;
+  controls.enableDamping = true;
+  controls.dampingFactor = 0.05;
+  controls.minZoom       = 0.04;
+  controls.maxZoom       = 6;
+  controls.minPolarAngle = 0.05;
+  controls.maxPolarAngle = Math.PI - 0.05;
 
   window.addEventListener('mousedown',  () => { isDragging = true; });
   window.addEventListener('mouseup',    () => { isDragging = false; });
-  window.addEventListener('touchstart', () => { isDragging = true; });
-  window.addEventListener('touchend',   () => { isDragging = false; });
+  window.addEventListener('touchstart', () => { isDragging = true;  }, { passive:true });
+  window.addEventListener('touchend',   () => { isDragging = false; }, { passive:true });
 
   buildScene();
   window.addEventListener('resize', onWindowResize);
   setupMenuButtons();
+  setupTickButtons();
   setupSlider();
   setupFitButton();
   setupModal();
@@ -689,18 +762,22 @@ function buildScene() {
     el.addEventListener('mouseleave', () => { controls.enabled = true; });
     el.addEventListener('click', e => { e.stopPropagation(); openModal(p); });
 
+    const startX = (Math.random()-.5) * 1400;
+    const startY = (Math.random()-.5) * 1400;
+    const startZ = (Math.random()-.5) * 1400;
+
     const obj = new CSS3DObject(el);
-    obj.position.set(
-      Math.random() * 1500 - 750,
-      Math.random() * 1500 - 750,
-      Math.random() * 1500 - 750
-    );
+    obj.position.set(startX, startY, startZ);
+
+    // IMPORTANT: center is ALWAYS a valid Vector3 (never null)
     obj.userData = {
-      center:      new THREE.Vector3(0,0,0),
-      offset:      new THREE.Vector3(obj.position.x, obj.position.y, obj.position.z),
-      rotation:    new THREE.Euler(0,0,0),
+      active:      true,
+      center:      new THREE.Vector3(0, 0, 0),
+      offset:      new THREE.Vector3(startX, startY, startZ),
+      rotation:    new THREE.Euler(0, 0, 0),
       sphereCenter:null
     };
+
     scene.add(obj);
     objects.push(obj);
 
@@ -716,32 +793,45 @@ function buildScene() {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Layout helpers
+// Which product indices are visible (after tick-filters)
 // ─────────────────────────────────────────────────────────────────────────────
-function activeIndices() {
-  // OOS mode: only show out-of-stock items
-  if (state.group === 'oos') {
-    return products.map((_,i)=>i).filter(i => !products[i]._meta.available);
-  }
-  return products.map((_,i)=>i);
+function visibleIndices() {
+  // stock tick filter
+  const wantIn  = state.tickIn;
+  const wantOut = state.tickOut;
+  const filterStock = wantIn || wantOut;
+
+  return products.map((_,i) => i).filter(i => {
+    if (filterStock) {
+      const avail = products[i]._meta.available;
+      if (wantIn  && avail)  return true;
+      if (wantOut && !avail) return true;
+      return false;
+    }
+    return true;
+  });
 }
 
+// Group key for a product index under current group mode
 function groupKey(i) {
   const m = products[i]._meta;
   switch (state.group) {
-    case 'age':   return m.age   || 'Other';
-    case 'shape': return m.shapes[0] || 'Other';
-    case 'type':  return m.types[0]  || 'Other';
-    case 'oos':   return 'Out of Stock';
+    case 'age':   return m.age          || 'Other';
+    case 'shape': return m.shapes[0]    || 'Other';
+    case 'type':  return m.productType  || 'Other';
+    case 'lens':  return m.lenses[0]    || 'Other';
     default:      return '__ALL__';
   }
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+// Labels
+// ─────────────────────────────────────────────────────────────────────────────
 function removeLabels() {
   const old = [...labels]; labels = [];
   old.forEach(l => {
-    l.element.classList.remove('visible');
-    setTimeout(() => { if (l.parent) scene.remove(l); }, 900);
+    if (l.element) l.element.classList.remove('visible');
+    setTimeout(() => { if (l.parent) scene.remove(l); }, 800);
   });
 }
 
@@ -769,7 +859,7 @@ function createLabel(text, sub, x, y, z) {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Main layout updater
+// Main layout update — positions every card in 3D space
 // ─────────────────────────────────────────────────────────────────────────────
 function updateLayout() {
   TWEEN.removeAll();
@@ -777,60 +867,58 @@ function updateLayout() {
 
   objects.forEach(o => { o.userData.rotation.set(0,0,0); o.userData.sphereCenter = null; });
 
-  const active  = new Set(activeIndices());
-  const allIdx  = objects.map((_,i)=>i);
+  const visible = new Set(visibleIndices());
 
-  // Hide inactive items
-  allIdx.forEach(i => {
-    if (!active.has(i)) {
-      new TWEEN.Tween(objects[i].position)
-        .to({y: 15000}, 2000)
-        .easing(TWEEN.Easing.Exponential.InOut)
-        .start();
-      objects[i].userData.center = null;
+  // Hide inactive items — reset center+offset to a far position so they never
+  // appear in scene, then mark inactive (no center-null to avoid null errors)
+  const FAR_Y = 18000;
+  objects.forEach((obj, i) => {
+    if (!visible.has(i)) {
+      obj.userData.active = false;
+      obj.userData.center.set(0, FAR_Y, 0);
+      obj.userData.offset.set(0, 0, 0);
     }
   });
 
-  // Build groups
+  // Build groups from visible items
   const groups = {};
-  for (const i of active) {
+  for (const i of visible) {
     const k = groupKey(i);
     if (!groups[k]) groups[k] = [];
     groups[k].push(i);
   }
 
-  const isGrouped  = ['age','shape','type'].includes(state.group);
-  const groupKeys  = Object.keys(groups).sort();
-  const ITEM_SPC   = 185;
-  const LABEL_Y    = 900;
+  const isGrouped = ['age','shape','type','lens'].includes(state.group);
+  const groupKeys = Object.keys(groups).sort();
+  const ITEM_SPC  = 185;
+  const LABEL_Y   = 900;
 
-  // Update count badge
+  // Update count
   document.getElementById('count-badge').textContent =
-    active.size + ' product' + (active.size !== 1 ? 's' : '');
+    visible.size + ' product' + (visible.size !== 1 ? 's' : '');
 
   groupKeys.forEach((key, gIdx) => {
     const idxs = groups[key];
     let cx = 0, cy = 0, cz = 0;
 
-    const sphereR       = Math.max(Math.sqrt(idxs.length) * 65, 220);
-    const clusterSpc    = Math.max(2400, (groupKeys.length * 1300) / (2 * Math.PI));
+    const sphereR    = Math.max(Math.sqrt(idxs.length) * 65, 200);
+    const clusterSpc = Math.max(2400, (groupKeys.length * 1300) / (Math.PI * 2));
 
-    // Cluster center
+    // Cluster center position
     if (isGrouped) {
       if (state.view === 'grid') {
         const zSpc   = 2600;
         const totalZ = (groupKeys.length - 1) * zSpc;
-        cx = 0;
         cz = (totalZ / 2) - (gIdx * zSpc);
       } else {
         const angle = (gIdx / groupKeys.length) * Math.PI * 2;
         cx = Math.cos(angle) * clusterSpc;
         cz = Math.sin(angle) * clusterSpc;
       }
-      createLabel(key, state.group, cx, LABEL_Y, cz);
+      createLabel(key, state.group.toUpperCase(), cx, LABEL_Y, cz);
     }
 
-    // ── GRID layout ──────────────────────────────────────────────────────────
+    // ── GRID ─────────────────────────────────────────────────────────────────
     if (state.view === 'grid') {
       const cols = Math.ceil(Math.sqrt(idxs.length));
       idxs.forEach((objIdx, i) => {
@@ -838,15 +926,25 @@ function updateLayout() {
         const col = i % cols;
         const ox  = (col - (cols-1)/2) * ITEM_SPC;
         const oy  = 420 - row * ITEM_SPC;
-        const oz  = 0;
         const obj = objects[objIdx];
-        new TWEEN.Tween(obj.userData.center).to({x:cx,y:cy,z:cz},2500).easing(TWEEN.Easing.Exponential.InOut).start();
-        new TWEEN.Tween(obj.userData.offset).to({x:ox,y:oy,z:oz},2500).easing(TWEEN.Easing.Exponential.InOut).start();
-        new TWEEN.Tween(obj.userData.rotation).to({x:0,y:0,z:0},2500).easing(TWEEN.Easing.Exponential.InOut).start();
+
+        // If previously hidden, snap center to cluster so it doesn't fly from FAR_Y
+        if (!obj.userData.active) {
+          obj.userData.center.set(cx, cy, cz);
+          obj.userData.offset.set(0, 0, 0);
+        }
+        obj.userData.active = true;
+
+        new TWEEN.Tween(obj.userData.center)
+          .to({x:cx,y:cy,z:cz}, 2400).easing(TWEEN.Easing.Exponential.InOut).start();
+        new TWEEN.Tween(obj.userData.offset)
+          .to({x:ox,y:oy,z:0}, 2400).easing(TWEEN.Easing.Exponential.InOut).start();
+        new TWEEN.Tween(obj.userData.rotation)
+          .to({x:0,y:0,z:0}, 2400).easing(TWEEN.Easing.Exponential.InOut).start();
       });
     }
 
-    // ── SPHERE layout ────────────────────────────────────────────────────────
+    // ── SPHERE ───────────────────────────────────────────────────────────────
     else if (state.view === 'sphere') {
       const sphereCY = 420 - sphereR;
       idxs.forEach((objIdx, i) => {
@@ -856,33 +954,53 @@ function updateLayout() {
         const oy = sphereR * Math.sin(phi) * Math.sin(theta);
         const oz = sphereR * Math.cos(phi);
         const obj = objects[objIdx];
+
+        if (!obj.userData.active) {
+          obj.userData.center.set(cx, cy, cz);
+          obj.userData.offset.set(0, 0, 0);
+        }
+        obj.userData.active = true;
         obj.userData.sphereCenter = new THREE.Vector3(cx, sphereCY, cz);
-        new TWEEN.Tween(obj.userData.center).to({x:cx,y:cy,z:cz},2500).easing(TWEEN.Easing.Exponential.InOut).start();
-        new TWEEN.Tween(obj.userData.offset).to({x:ox,y:oy+sphereCY,z:oz},2500).easing(TWEEN.Easing.Exponential.InOut).start();
-        new TWEEN.Tween(obj.userData.rotation).to({x:0,y:0,z:0},2500).easing(TWEEN.Easing.Exponential.InOut).start();
+
+        new TWEEN.Tween(obj.userData.center)
+          .to({x:cx,y:cy,z:cz}, 2400).easing(TWEEN.Easing.Exponential.InOut).start();
+        new TWEEN.Tween(obj.userData.offset)
+          .to({x:ox,y:oy+sphereCY,z:oz}, 2400).easing(TWEEN.Easing.Exponential.InOut).start();
+        new TWEEN.Tween(obj.userData.rotation)
+          .to({x:0,y:0,z:0}, 2400).easing(TWEEN.Easing.Exponential.InOut).start();
       });
     }
 
-    // ── CHAOS layout ─────────────────────────────────────────────────────────
+    // ── CHAOS ────────────────────────────────────────────────────────────────
     else {
       const spread = 800;
       idxs.forEach(objIdx => {
+        const obj = objects[objIdx];
+        if (!obj.userData.active) {
+          obj.userData.center.set(cx, cy, cz);
+          obj.userData.offset.set(0, 0, 0);
+        }
+        obj.userData.active = true;
+
         const ox = (Math.random()-.5)*spread;
         const oy = (Math.random()-.5)*spread;
         const oz = (Math.random()-.5)*spread;
-        const rx = (Math.random()-.5)*.5;
-        const rz = (Math.random()-.5)*.5;
-        const obj = objects[objIdx];
-        new TWEEN.Tween(obj.userData.center).to({x:cx,y:cy,z:cz},2500).easing(TWEEN.Easing.Exponential.InOut).start();
-        new TWEEN.Tween(obj.userData.offset).to({x:ox,y:oy,z:oz},2500).easing(TWEEN.Easing.Exponential.InOut).start();
-        new TWEEN.Tween(obj.userData.rotation).to({x:rx,y:0,z:rz},2500).easing(TWEEN.Easing.Exponential.InOut).start();
+        const rx = (Math.random()-.5)*.45;
+        const rz = (Math.random()-.5)*.45;
+
+        new TWEEN.Tween(obj.userData.center)
+          .to({x:cx,y:cy,z:cz}, 2400).easing(TWEEN.Easing.Exponential.InOut).start();
+        new TWEEN.Tween(obj.userData.offset)
+          .to({x:ox,y:oy,z:oz}, 2400).easing(TWEEN.Easing.Exponential.InOut).start();
+        new TWEEN.Tween(obj.userData.rotation)
+          .to({x:rx,y:0,z:rz}, 2400).easing(TWEEN.Easing.Exponential.InOut).start();
       });
     }
   });
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Animation loop
+// Render loop
 // ─────────────────────────────────────────────────────────────────────────────
 const _vh = new THREE.Vector3();
 
@@ -895,20 +1013,21 @@ function animate() {
   const time = Date.now() * 0.002;
 
   objects.forEach((obj, i) => {
-    if (!obj.userData.center) return;
+    if (!obj.userData.active) return;
+
     const off = obj.userData.offset.clone();
     off.applyAxisAngle(new THREE.Vector3(0,1,0), globalRotation);
     const pos = new THREE.Vector3().copy(obj.userData.center).add(off);
 
     if (state.view === 'chaos') {
       const c = chaosOffsets[i];
-      pos.x += Math.sin(time + c.t) * 50;
-      pos.y += Math.cos(time*.9 + c.t) * 50;
-      pos.z += Math.sin(time*.7 + c.t) * 50;
+      pos.x += Math.sin(time + c.t) * 45;
+      pos.y += Math.cos(time*.9 + c.t) * 45;
+      pos.z += Math.sin(time*.7 + c.t) * 45;
       obj.position.copy(pos);
-      obj.rotation.x = obj.userData.rotation.x + Math.sin(time*.5)*.2;
+      obj.rotation.x = obj.userData.rotation.x + Math.sin(time*.5)*.18;
       obj.rotation.y = obj.userData.rotation.y + globalRotation;
-      obj.rotation.z = obj.userData.rotation.z + Math.cos(time*.3)*.2;
+      obj.rotation.z = obj.userData.rotation.z + Math.cos(time*.3)*.18;
     } else if (state.view === 'sphere') {
       obj.position.copy(pos);
       if (obj.userData.sphereCenter) {
@@ -925,7 +1044,7 @@ function animate() {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Menu / slider / fit button
+// Menu buttons
 // ─────────────────────────────────────────────────────────────────────────────
 function setupMenuButtons() {
   document.querySelectorAll('.nav-btn').forEach(btn => {
@@ -933,11 +1052,31 @@ function setupMenuButtons() {
       const type = e.currentTarget.dataset.type;
       const val  = e.currentTarget.dataset.val;
       if (!type) return;
-      e.currentTarget.closest('.menu-bar')
-        .querySelectorAll(`.nav-btn[data-type="${type}"]`)
+      // Deactivate siblings
+      document.querySelectorAll(`.nav-btn[data-type="${type}"]`)
         .forEach(b => b.classList.remove('active'));
       e.currentTarget.classList.add('active');
       state[type] = val;
+      updateLayout();
+    });
+  });
+}
+
+function setupTickButtons() {
+  document.querySelectorAll('.tick-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const tick = btn.dataset.tick;
+      btn.classList.toggle('active');
+      const box = btn.querySelector('.tick-box');
+      if (btn.classList.contains('active')) {
+        box.textContent = '✓';
+        if (tick === 'in-stock')  state.tickIn  = true;
+        if (tick === 'out-stock') state.tickOut = true;
+      } else {
+        box.textContent = '';
+        if (tick === 'in-stock')  state.tickIn  = false;
+        if (tick === 'out-stock') state.tickOut = false;
+      }
       updateLayout();
     });
   });
@@ -953,17 +1092,17 @@ function setupFitButton() {
   document.getElementById('fit-btn').addEventListener('click', () => {
     let maxD = 0;
     objects.forEach(o => {
-      if (o.userData.center) {
+      if (o.userData.active) {
         const d = o.userData.center.length() + o.userData.offset.length();
         if (d > maxD) maxD = d;
       }
     });
     maxD += 350;
-    const FRUST = 3500;
-    let zoom = FRUST / (maxD * 1.5);
-    zoom = Math.max(0.05, Math.min(zoom, 6));
+    const FRUST   = 3500;
+    let zoom = FRUST / (maxD * 1.55);
+    zoom = Math.max(0.04, Math.min(zoom, 6));
     new TWEEN.Tween(camera)
-      .to({zoom}, 1000)
+      .to({zoom}, 900)
       .easing(TWEEN.Easing.Cubic.Out)
       .onUpdate(() => camera.updateProjectionMatrix())
       .start();
@@ -971,12 +1110,12 @@ function setupFitButton() {
 }
 
 function onWindowResize() {
-  const aspect = window.innerWidth / window.innerHeight;
   const FRUST  = 3500;
-  camera.left   = -FRUST * aspect / 2;
-  camera.right  =  FRUST * aspect / 2;
-  camera.top    =  FRUST / 2;
-  camera.bottom = -FRUST / 2;
+  const aspect = window.innerWidth / window.innerHeight;
+  camera.left   = -FRUST*aspect/2;
+  camera.right  =  FRUST*aspect/2;
+  camera.top    =  FRUST/2;
+  camera.bottom = -FRUST/2;
   camera.updateProjectionMatrix();
   renderer.setSize(window.innerWidth, window.innerHeight);
 }
@@ -984,13 +1123,12 @@ function onWindowResize() {
 // ─────────────────────────────────────────────────────────────────────────────
 // Modal
 // ─────────────────────────────────────────────────────────────────────────────
-let _modalImages   = [];
-let _currentImgIdx = 0;
+let _imgs = [];
 
 function setupModal() {
   document.getElementById('modal-close')  .addEventListener('click', closeModal);
   document.getElementById('modal-backdrop').addEventListener('click', closeModal);
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+  document.addEventListener('keydown', e => { if (e.key==='Escape') closeModal(); });
 }
 
 function openModal(p) {
@@ -1000,12 +1138,9 @@ function openModal(p) {
 }
 
 function populateModal(p) {
-  const m      = p._meta;
-  const images = (p.images || []).filter(Boolean);
-  const isOos  = !m.available;
-
-  _modalImages   = images;
-  _currentImgIdx = 0;
+  const m     = p._meta;
+  _imgs       = (p.images || []).filter(Boolean);
+  const isOos = !m.available;
 
   // Title
   document.getElementById('modal-title').innerHTML =
@@ -1015,45 +1150,43 @@ function populateModal(p) {
   document.getElementById('modal-price').textContent = '€' + Number(p.price).toFixed(2);
 
   // Description
-  document.getElementById('modal-description').textContent = p.description || '';
+  document.getElementById('modal-desc').textContent = p.description || '';
 
-  // Meta rows
+  // Meta
   document.getElementById('modal-meta').innerHTML = `
-    <div class="info-row"><span class="lbl">Age</span><span class="val">${esc(m.age || '—')}</span></div>
-    <div class="info-row"><span class="lbl">Shape</span><span class="val">${esc(m.shapes.join(', ') || '—')}</span></div>
-    <div class="info-row"><span class="lbl">Lens</span><span class="val">${esc(m.types.join(', ') || '—')}</span></div>
+    <div class="info-row"><span class="lbl">Type</span><span class="val">${esc(m.productType||'—')}</span></div>
+    <div class="info-row"><span class="lbl">Age</span><span class="val">${esc(m.age||'—')}</span></div>
+    <div class="info-row"><span class="lbl">Shape</span><span class="val">${esc(m.shapes.join(', ')||'—')}</span></div>
+    <div class="info-row"><span class="lbl">Lens</span><span class="val">${esc(m.lenses.join(', ')||'—')}</span></div>
     <div class="info-row">
       <span class="lbl">Stock</span>
       <span class="val" style="color:${m.available?'#000':'#aaa'}">${m.available?'In Stock':'Out of Stock'}</span>
     </div>`;
 
-  // Color selector (sibling products)
+  // Color selector
   buildColorSelector(p);
 
-  // Visit link
+  // Visit
   document.getElementById('modal-visit').href = p.url || '#';
 
   // Carousel + main image
-  buildCarousel(images);
-  if (images.length > 0) setMainImage(0);
+  buildCarousel(_imgs);
+  if (_imgs.length) setMainImage(0);
 }
 
-function buildColorSelector(activeProduct) {
+function buildColorSelector(activeP) {
   const cs       = document.getElementById('color-selector');
   cs.innerHTML   = '';
-  const siblings = colorSiblings[activeProduct._base] || [activeProduct];
+  const siblings = colorSiblings[activeP._base] || [activeP];
 
   for (const sib of siblings) {
-    const ball = document.createElement('div');
+    const ball     = document.createElement('div');
     ball.className = 'color-ball'
-      + (sib.id === activeProduct.id ? ' active' : '')
-      + (!sib._meta.available ? ' oos' : '');
+      + (sib.id === activeP.id ? ' active' : '')
+      + (!sib._meta.available   ? ' oos'    : '');
     ball.style.background = colorCSS(sib._meta.color);
     ball.title = sib._meta.color + (!sib._meta.available ? ' (Out of Stock)' : '');
-
-    if (sib.id !== activeProduct.id) {
-      ball.addEventListener('click', () => populateModal(sib));
-    }
+    if (sib.id !== activeP.id) ball.addEventListener('click', () => populateModal(sib));
     cs.appendChild(ball);
   }
 }
@@ -1063,11 +1196,10 @@ function buildCarousel(images) {
   car.innerHTML = '';
   images.forEach((src, i) => {
     const thumb = document.createElement('div');
-    thumb.className = 'c-thumb' + (i === 0 ? ' active' : '');
-    const img   = document.createElement('img');
-    img.src     = shopifyImg(src, 120);
-    img.alt     = '';
-    img.loading = 'lazy';
+    thumb.className = 'c-thumb' + (i===0 ? ' active' : '');
+    const img = document.createElement('img');
+    img.src = shopifyImg(src, 120);
+    img.alt = ''; img.loading = 'lazy';
     thumb.appendChild(img);
     thumb.addEventListener('click', () => setMainImage(i));
     car.appendChild(thumb);
@@ -1075,16 +1207,12 @@ function buildCarousel(images) {
 }
 
 function setMainImage(idx) {
-  _currentImgIdx = idx;
-  const mainImg  = document.getElementById('modal-main-img');
-  const isLast   = idx === _modalImages.length - 1 && _modalImages.length > 1;
-
-  // Last image → natural ratio (contain); others → square-crop (cover)
+  const mainImg = document.getElementById('modal-main-img');
+  // Last image of product → natural ratio (contain). All others → square crop (cover).
+  const isLast  = idx === _imgs.length - 1 && _imgs.length > 1;
   mainImg.className = isLast ? 'img-contain' : 'img-cover';
-  mainImg.src = shopifyImg(_modalImages[idx], IMAGE_WIDTH);
-
-  document.querySelectorAll('.c-thumb').forEach((t,i) =>
-    t.classList.toggle('active', i === idx));
+  mainImg.src = shopifyImg(_imgs[idx], IMAGE_WIDTH);
+  document.querySelectorAll('.c-thumb').forEach((t,i) => t.classList.toggle('active', i===idx));
 }
 
 function closeModal() {
