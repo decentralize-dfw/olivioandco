@@ -35,10 +35,10 @@
 
         /* --- THEME SETTINGS --- */
         :root {
-            --ui-color: #FF006A; 
-            --bg-color: black;
-            --modal-bg: #ffb8d5;
-            --card-bg: transparent; 
+            --ui-color: #000000;
+            --bg-color: #ffffff;
+            --modal-bg: #ffffff;
+            --card-bg: transparent;
             
             /* Font Assignments Updated */
             --font-headers: 'Telegrama Raw', sans-serif;       /* Menu & Headers */
@@ -79,7 +79,7 @@
             background-color: rgba(0, 0, 0, 0.5); 
             padding: 6px 12px; /* Reduced padding */
             border-radius: 30px; /* Smaller radius */
-            border: 1px solid rgba(255, 0, 106, 0.3);
+            border: 1px solid rgba(0, 0, 0, 0.2);
             backdrop-filter: blur(5px);
         }
 
@@ -99,8 +99,8 @@
             letter-spacing: 0.5px;
             cursor: pointer; transition: all 0.2s ease; border-radius: 0.25rem; opacity: 0.7;
         }
-        .nav-btn:hover { opacity: 1; border-color: var(--ui-color); text-shadow: 0 0 8px var(--ui-color); }
-        .nav-btn.active { background-color: rgba(255, 0, 106, 0.1); color: var(--ui-color); border-color: var(--ui-color); opacity: 1; }
+        .nav-btn:hover { opacity: 1; border-color: var(--ui-color); text-shadow: none; }
+        .nav-btn.active { background-color: rgba(0, 0, 0, 0.08); color: var(--ui-color); border-color: var(--ui-color); opacity: 1; }
 
         /* --- SLIDER & FIT BUTTON --- */
         #slider-container {
@@ -111,10 +111,10 @@
             background-color: rgba(0, 0, 0, 0.5);
             padding: 8px 16px; /* Slightly reduced */
             border-radius: 10px;
-            border: 1px solid rgba(255, 0, 106, 0.3);
+            border: 1px solid rgba(0, 0, 0, 0.2);
             backdrop-filter: blur(5px);
         }
-        
+
         .slider-wrapper {
             display: flex; flex-direction: column; align-items: center; gap: 2px;
         }
@@ -124,7 +124,7 @@
             font-size: 0.7rem; text-transform: uppercase; font-weight: bold; opacity: 0.8; color: var(--ui-color);
         }
         input[type=range] {
-            -webkit-appearance: none; width: 100px; height: 3px; background: rgba(255, 0, 106, 0.3);
+            -webkit-appearance: none; width: 100px; height: 3px; background: rgba(0, 0, 0, 0.2);
             border-radius: 2px; outline: none;
         }
         input[type=range]::-webkit-slider-thumb {
@@ -134,20 +134,20 @@
         
         #fit-btn {
             font-family: var(--font-headers);
-            font-size: 0.7rem; 
-            font-weight: bold; 
+            font-size: 0.7rem;
+            font-weight: bold;
             text-transform: uppercase;
             padding: 3px 10px;
-            border: 1px solid var(--ui-color); 
-            background: rgba(0,0,0,0.4);
+            border: 1px solid var(--ui-color);
+            background: rgba(0,0,0,0.05);
             color: var(--ui-color);
-            height: 26px; 
+            height: 26px;
             display: flex; align-items: center; justify-content: center;
             cursor: pointer;
             border-radius: 4px;
             transition: background 0.2s;
         }
-        #fit-btn:hover { background: var(--ui-color); color: black; }
+        #fit-btn:hover { background: var(--ui-color); color: white; }
 
         /* --- 3D ELEMENTS --- */
         .element-card {
@@ -178,24 +178,24 @@
         .group-label-container.visible { opacity: 1 !important; transform: scale(1); }
 
         .group-label-main {
-            font-family: var(--font-3d); 
-            font-size: 70px; /* Reduced by 50% (was 140px) */
+            font-family: var(--font-3d);
+            font-size: 70px;
             line-height: 0.9;
             color: var(--ui-color);
             text-transform: uppercase;
-            text-shadow: 0 0 20px rgba(0,0,0,0.8);
+            text-shadow: none;
         }
-        
+
         .group-label-sub {
-            font-family: var(--font-body); 
-            font-size: 28px; /* Slightly increased (was 24px) */
+            font-family: var(--font-body);
+            font-size: 28px;
             font-style: italic;
             font-weight: 300;
-            color: #fff;
+            color: #ffffff;
             margin-top: 2px;
             text-transform: uppercase;
             letter-spacing: 2px;
-            background: rgba(255, 0, 106, 0.8);
+            background: rgba(0, 0, 0, 0.75);
             padding: 2px 10px;
         }
 
@@ -215,7 +215,7 @@
         #modal-content {
             position: relative; z-index: 50; width: 100%; height: 100%;
             border: 1px solid var(--ui-color); border-radius: 8px;
-            box-shadow: 0 20px 50px rgba(255, 0, 106, 0.2);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
             display: flex; flex-direction: column; overflow: hidden;
             background-color: var(--modal-bg); color: var(--ui-color);
         }
@@ -269,10 +269,17 @@
             font-size: 3rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ui-color); font-weight: bold;
         }
 
-        #container { 
+        #container {
             position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 1; pointer-events: auto;
-            touch-action: none; 
+            touch-action: none;
         }
+
+        /* Keep modal close button legible on dark background */
+        #modal-close-btn { color: white !important; }
+
+        /* Modal info text: black on white */
+        #modal-left-col, #modal-right-col { color: #000000; }
+        .modal-label, .modal-value, .modal-desc { color: #000000; }
     </style>
 </head>
 <body>
@@ -4095,7 +4102,7 @@
             categoryPriorityList.forEach(key => {
                 if (allMetadata[key]) {
                     // Label (Font 1), Value (Font 2) - Side by Side
-                    leftHtml += `<div class="flex items-baseline border-b border-pink-900/30 pb-1 mb-1">
+                    leftHtml += `<div class="flex items-baseline border-b border-black/20 pb-1 mb-1">
                         <span class="modal-label w-36 mr-2 flex-shrink-0 opacity-70 uppercase tracking-widest text-xs">${key}:</span> 
                         <span class="modal-value">${allMetadata[key]}</span>
                     </div>`;
