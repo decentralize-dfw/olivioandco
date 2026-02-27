@@ -16,7 +16,6 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    /* ── Base ─────────────────────────────────────────── */
     html, body {
       height: 100%; width: 100%;
       background: #ffffff;
@@ -28,132 +27,119 @@
       -webkit-tap-highlight-color: transparent;
     }
 
-    /* ── Top UI ───────────────────────────────────────── */
+    /* ────────────────────────────────────────────────────────
+       TOP UI
+    ──────────────────────────────────────────────────────── */
     #ui-top {
       position: fixed;
       top: 0; left: 0; right: 0;
       z-index: 100;
-      padding: 12px 16px 8px;
+      padding: 12px 16px 0;
       display: flex;
       flex-direction: column;
-      gap: 7px;
+      gap: 6px;
       pointer-events: none;
     }
 
-    /* Main menu bar */
+    /* ── Primary menu bar ── */
     .menu-bar {
       display: flex;
       flex-wrap: nowrap;
-      gap: 4px;
+      gap: 3px;
       align-items: center;
       pointer-events: auto;
-      background: rgba(255,255,255,0.92);
-      padding: 6px 12px;
+      background: rgba(255,255,255,0.94);
+      padding: 5px 11px;
       border-radius: 30px;
       border: 1px solid #000;
       backdrop-filter: blur(6px);
       overflow-x: auto;
       scrollbar-width: none;
-      max-width: 100%;
       width: fit-content;
+      max-width: calc(100vw - 100px); /* leave room for count on desktop */
     }
     .menu-bar::-webkit-scrollbar { display: none; }
 
     .menu-sep {
-      width: 1px; height: 15px;
-      background: #000;
-      opacity: 0.2;
-      margin: 0 4px;
-      flex-shrink: 0;
+      width: 1px; height: 14px;
+      background: rgba(0,0,0,0.2);
+      margin: 0 3px; flex-shrink: 0;
     }
 
-    /* Primary buttons (view + group) */
     .nav-btn {
       background: transparent;
       border: 1px solid transparent;
-      color: rgba(0,0,0,0.45);
-      padding: 3px 11px;
+      color: rgba(0,0,0,0.42);
+      padding: 2px 10px;
       font-family: inherit;
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.07em;
-      text-transform: uppercase;
-      cursor: pointer;
-      border-radius: 4px;
+      font-size: 11px; font-weight: 700;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      cursor: pointer; border-radius: 4px;
       transition: color .12s, border-color .12s, background .12s;
-      white-space: nowrap;
-      flex-shrink: 0;
-      user-select: none;
-      -webkit-user-select: none;
+      white-space: nowrap; flex-shrink: 0;
+      user-select: none; -webkit-user-select: none;
     }
-    .nav-btn:hover  { color: #000; border-color: rgba(0,0,0,0.3); }
-    .nav-btn.active { color: #000; background: #000; color: #fff; border-color: #000; }
+    .nav-btn:hover  { color: #000; border-color: rgba(0,0,0,0.28); }
+    .nav-btn.active { background: #000; color: #fff; border-color: #000; }
 
-    /* Tick-filter bar (secondary row) */
-    .tick-bar {
+    /* ── Tick-filter bar ── */
+    #tick-bar {
       display: flex;
+      flex-wrap: nowrap;
       gap: 5px;
       align-items: center;
       pointer-events: auto;
-      flex-wrap: nowrap;
       overflow-x: auto;
       scrollbar-width: none;
+      padding-bottom: 8px;
     }
-    .tick-bar::-webkit-scrollbar { display: none; }
+    #tick-bar::-webkit-scrollbar { display: none; }
+    #tick-bar:empty { display: none; }
 
-    .tick-lbl {
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: .09em;
-      text-transform: uppercase;
-      color: rgba(0,0,0,0.4);
-      flex-shrink: 0;
-      margin-right: 2px;
+    .tick-sep {
+      width: 1px; height: 14px;
+      background: rgba(0,0,0,0.18);
+      flex-shrink: 0; margin: 0 2px;
     }
 
     .tick-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
+      display: inline-flex; align-items: center; gap: 5px;
       padding: 3px 10px 3px 8px;
-      border: 1px solid rgba(0,0,0,0.25);
+      border: 1px solid rgba(0,0,0,0.22);
       border-radius: 30px;
-      background: rgba(255,255,255,0.88);
-      color: rgba(0,0,0,0.5);
+      background: rgba(255,255,255,0.9);
+      color: rgba(0,0,0,0.48);
       font-family: inherit;
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: .05em;
-      cursor: pointer;
-      user-select: none;
-      -webkit-user-select: none;
-      white-space: nowrap;
-      flex-shrink: 0;
+      font-size: 11px; font-weight: 600;
+      letter-spacing: .04em;
+      cursor: pointer; white-space: nowrap; flex-shrink: 0;
+      user-select: none; -webkit-user-select: none;
       transition: color .12s, border-color .12s, background .12s;
       backdrop-filter: blur(4px);
     }
     .tick-btn:hover { border-color: #000; color: #000; }
     .tick-btn.active {
-      border-color: #000;
-      color: #000;
-      background: rgba(255,255,255,0.95);
+      border-color: #000; color: #000;
+      background: rgba(255,255,255,0.98);
     }
     .tick-box {
       width: 13px; height: 13px;
       border: 1.5px solid currentColor;
       border-radius: 3px;
       display: flex; align-items: center; justify-content: center;
-      font-size: 9px;
+      font-size: 9px; line-height: 1;
       flex-shrink: 0;
     }
 
-    /* ── Count badge ──────────────────────────────────── */
+    /* ────────────────────────────────────────────────────────
+       PRODUCT COUNT BADGE
+    ──────────────────────────────────────────────────────── */
     #count-badge {
       position: fixed;
       top: 14px; right: 14px;
       z-index: 101;
       background: rgba(255,255,255,0.92);
-      border: 1px solid rgba(0,0,0,0.2);
+      border: 1px solid rgba(0,0,0,0.18);
       border-radius: 20px;
       padding: 4px 10px;
       font-size: 11px;
@@ -163,27 +149,24 @@
       white-space: nowrap;
     }
 
-    /* ── Bottom controls ──────────────────────────────── */
+    /* ────────────────────────────────────────────────────────
+       BOTTOM CONTROLS (Rotate slider + Fit)
+    ──────────────────────────────────────────────────────── */
     #slider-container {
       position: fixed;
       bottom: 16px; left: 16px;
       z-index: 100;
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      gap: 9px;
+      display: flex; flex-direction: row; align-items: center; gap: 9px;
       pointer-events: auto;
       background: rgba(255,255,255,0.92);
-      padding: 6px 12px;
-      border-radius: 10px;
+      padding: 6px 12px; border-radius: 10px;
       border: 1px solid rgba(0,0,0,0.18);
       backdrop-filter: blur(6px);
     }
     #slider-label {
       font-size: 10px; font-weight: 700;
       letter-spacing: .08em; text-transform: uppercase;
-      color: rgba(0,0,0,0.5);
-      white-space: nowrap;
+      color: rgba(0,0,0,0.5); white-space: nowrap;
     }
     input[type=range] {
       -webkit-appearance: none;
@@ -194,33 +177,32 @@
     input[type=range]::-webkit-slider-thumb {
       -webkit-appearance: none;
       width: 11px; height: 11px;
-      border-radius: 50%;
-      background: #000; cursor: pointer;
+      border-radius: 50%; background: #000; cursor: pointer;
     }
     #fit-btn {
       font-size: 10px; font-weight: 700;
       letter-spacing: .07em; text-transform: uppercase;
       padding: 3px 9px;
-      border: 1px solid rgba(0,0,0,0.3);
-      background: transparent;
-      color: rgba(0,0,0,0.6);
+      border: 1px solid rgba(0,0,0,0.28);
+      background: transparent; color: rgba(0,0,0,0.6);
       cursor: pointer; border-radius: 4px;
-      transition: background .12s;
-      white-space: nowrap;
+      transition: background .12s; white-space: nowrap;
     }
     #fit-btn:hover { background: #000; color: #fff; border-color: #000; }
 
-    /* ── 3D Container ─────────────────────────────────── */
+    /* ────────────────────────────────────────────────────────
+       3D CANVAS
+    ──────────────────────────────────────────────────────── */
     #container {
       position: absolute; inset: 0;
-      z-index: 1;
-      pointer-events: auto;
-      touch-action: none;
+      z-index: 1; pointer-events: auto; touch-action: none;
     }
 
-    /* ── 3D Cards ─────────────────────────────────────── */
+    /* ────────────────────────────────────────────────────────
+       3D CARDS
+    ──────────────────────────────────────────────────────── */
     .element-card {
-      width: 160px; height: 160px;
+      width: 155px; height: 155px;
       cursor: pointer;
       display: flex; align-items: center; justify-content: center;
       pointer-events: auto;
@@ -228,50 +210,45 @@
       backface-visibility: visible; -webkit-backface-visibility: visible;
       transform-style: preserve-3d;
       transition: transform .18s;
-      border-radius: 4px;
-      overflow: hidden;
+      border-radius: 4px; overflow: hidden;
       background: #fff;
-      border: 1px solid rgba(0,0,0,0.15);
+      border: 1px solid rgba(0,0,0,0.12);
       box-shadow: 0 2px 10px rgba(0,0,0,0.08);
     }
-    .element-card:hover { transform: scale(1.12); z-index: 999; }
+    .element-card:hover { transform: scale(1.1); z-index: 999; }
     .element-card img {
       width: 100%; height: 100%;
-      object-fit: cover;
-      display: block;
-      user-select: none;
-      -webkit-user-drag: none;
-      pointer-events: none;
+      object-fit: cover; display: block;
+      user-select: none; -webkit-user-drag: none; pointer-events: none;
     }
 
-    /* ── Group Labels ─────────────────────────────────── */
+    /* ────────────────────────────────────────────────────────
+       GROUP LABELS (3D floating text)
+    ──────────────────────────────────────────────────────── */
     .group-label-wrap {
       display: flex; flex-direction: column;
       align-items: center; justify-content: center;
-      pointer-events: none; user-select: none;
-      text-align: center;
+      pointer-events: none; user-select: none; text-align: center;
       opacity: 0; transform: scale(0.8);
       transition: opacity .8s ease, transform .8s ease;
     }
     .group-label-wrap.visible { opacity: 1; transform: scale(1); }
     .group-label-main {
-      font-size: 64px; font-weight: 900;
-      line-height: 0.9; color: rgba(0,0,0,0.82);
+      font-size: 62px; font-weight: 900;
+      line-height: 0.9; color: rgba(0,0,0,0.8);
       text-transform: uppercase; letter-spacing: -0.02em;
     }
     .group-label-sub {
-      font-size: 11px; font-weight: 600;
-      color: #fff;
-      margin-top: 10px;
-      text-transform: uppercase; letter-spacing: .18em;
-      padding: 3px 12px;
-      background: rgba(0,0,0,0.72);
+      font-size: 11px; font-weight: 600; color: #fff;
+      margin-top: 9px; text-transform: uppercase; letter-spacing: .18em;
+      padding: 3px 12px; background: rgba(0,0,0,0.7);
     }
 
-    /* ── Loader ───────────────────────────────────────── */
+    /* ────────────────────────────────────────────────────────
+       LOADER
+    ──────────────────────────────────────────────────────── */
     #loader {
-      position: fixed; inset: 0;
-      background: #fff; z-index: 99999;
+      position: fixed; inset: 0; background: #fff; z-index: 99999;
       display: flex; flex-direction: column;
       justify-content: center; align-items: center;
       transition: opacity .4s ease-out;
@@ -279,20 +256,21 @@
     #loader-title { font-size: 20px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
     #loader-sub   { font-size: 11px; color: rgba(0,0,0,0.4); margin-top: 6px; letter-spacing: .08em; }
 
-    /* ── Modal overlay ────────────────────────────────── */
+    /* ────────────────────────────────────────────────────────
+       MODAL / POPUP
+    ──────────────────────────────────────────────────────── */
     #modal-overlay {
       opacity: 0; visibility: hidden;
       transition: opacity .25s, visibility .25s;
       position: fixed; inset: 0; z-index: 200;
       display: flex; align-items: center; justify-content: center;
-      padding: 16px;
-      pointer-events: none;
+      padding: 16px; pointer-events: none;
     }
     #modal-overlay.open { opacity: 1; visibility: visible; pointer-events: auto; }
 
     #modal-backdrop {
       position: absolute; inset: 0;
-      background: rgba(0,0,0,0.55);
+      background: rgba(0,0,0,0.52);
       backdrop-filter: blur(5px);
       cursor: pointer;
     }
@@ -300,12 +278,10 @@
     #modal {
       position: relative; z-index: 10;
       background: #fff; color: #000;
-      border: 1px solid #000;
-      border-radius: 4px;
+      border: 1px solid #000; border-radius: 4px;
       width: min(960px, 96vw);
       height: min(620px, 92vh);
-      display: flex; flex-direction: column;
-      overflow: hidden;
+      display: flex; flex-direction: column; overflow: hidden;
     }
 
     #modal-close {
@@ -323,26 +299,23 @@
     #modal-left {
       flex: 1; min-width: 0;
       display: flex; flex-direction: column;
-      background: #f5f5f5;
-      border-right: 1px solid #000;
+      background: #f5f5f5; border-right: 1px solid #000;
     }
     #modal-main-img-wrap {
       flex: 1; min-height: 0;
       display: flex; align-items: center; justify-content: center;
       overflow: hidden;
     }
-    #modal-main-img-wrap img { display: block; transition: opacity .1s; }
+    #modal-main-img-wrap img { display: block; }
     #modal-main-img-wrap img.img-cover   { width: 100%; height: 100%; object-fit: cover; }
     #modal-main-img-wrap img.img-contain { max-width: 100%; max-height: 100%; object-fit: contain; }
 
     /* Carousel */
     #modal-carousel {
       display: flex; gap: 5px;
-      padding: 7px 9px;
-      border-top: 1px solid #000;
-      overflow-x: auto;
-      background: #fff; flex-shrink: 0;
-      scrollbar-width: thin; scrollbar-color: #aaa transparent;
+      padding: 7px 9px; border-top: 1px solid #000;
+      overflow-x: auto; background: #fff; flex-shrink: 0;
+      scrollbar-width: thin; scrollbar-color: #bbb transparent;
     }
     .c-thumb {
       width: 50px; height: 50px; flex-shrink: 0;
@@ -366,13 +339,7 @@
     #modal-title { font-size: 14px; font-weight: 700; line-height: 1.4; padding-right: 28px; }
     .oos-badge   { color: #aaa; font-size: 12px; font-weight: 400; }
     #modal-price { font-size: 20px; font-weight: 800; }
-
-    #modal-desc {
-      font-size: 11.5px; line-height: 1.65;
-      color: #555; max-height: 80px;
-      overflow-y: auto;
-      scrollbar-width: thin; scrollbar-color: #ddd transparent;
-    }
+    #modal-desc  { font-size: 11.5px; line-height: 1.65; color: #555; }
 
     .divider { height: 1px; background: #eee; flex-shrink: 0; }
 
@@ -397,8 +364,7 @@
     #color-selector { display: flex; flex-wrap: wrap; gap: 6px; }
     .color-ball {
       width: 22px; height: 22px; border-radius: 50%;
-      border: 2.5px solid transparent;
-      cursor: pointer; flex-shrink: 0;
+      border: 2.5px solid transparent; cursor: pointer; flex-shrink: 0;
       box-shadow: 0 0 0 1px rgba(0,0,0,0.18);
       transition: transform .12s, box-shadow .12s;
     }
@@ -415,62 +381,61 @@
     }
     #modal-visit:hover { background: #000; color: #fff; }
 
-    /* ═══════════════════════════════════════════
-       MOBILE — ≤ 639 px
-    ═══════════════════════════════════════════ */
+    /* ────────────────────────────────────────────────────────
+       MOBILE  ≤ 639 px
+    ──────────────────────────────────────────────────────── */
     @media (max-width: 639px) {
-      /* Smaller cards */
+      /* Smaller 3D cards */
       .element-card { width: 100px; height: 100px; }
-
-      /* Smaller labels */
-      .group-label-main { font-size: 38px; }
+      .group-label-main { font-size: 36px; }
       .group-label-sub  { font-size: 10px; }
 
-      /* Full-screen popup */
+      /* Menu takes full width, count moves to bottom-right */
+      .menu-bar { max-width: calc(100vw - 28px); }
+
+      /* Hide desktop count, show mobile count at bottom-right */
+      #count-badge {
+        top: auto; right: 14px;
+        bottom: 16px;                   /* same row as slider */
+      }
+
+      /* Compact bottom controls */
+      #slider-container { bottom: 16px; left: 14px; gap: 7px; padding: 5px 10px; }
+      input[type=range] { width: 65px; }
+      #fit-btn { display: none; }
+
+      /* Full-screen bottom-sheet popup */
       #modal-overlay { padding: 0; align-items: flex-end; }
       #modal {
         width: 100%; height: 92dvh;
-        border-radius: 12px 12px 0 0;
+        border-radius: 14px 14px 0 0;
         border-left: none; border-right: none; border-bottom: none;
       }
+      /* Stack: image on top, info below */
       #modal-body { flex-direction: column; }
       #modal-left {
-        flex: none; height: 50%;
+        flex: none; height: 48%;
         border-right: none; border-bottom: 1px solid #000;
       }
-      #modal-right { width: 100%; flex: 1; padding: 14px 14px 20px; }
-
-      /* Thinner tick bar */
-      .tick-lbl { display: none; }
-
-      /* Bottom controls compact */
-      #slider-container {
-        bottom: 12px; left: 12px;
-        padding: 5px 10px; gap: 7px;
-      }
-      input[type=range] { width: 60px; }
-      #fit-btn { display: none; }
-
-      /* Count badge smaller */
-      #count-badge { top: 12px; right: 12px; padding: 3px 8px; font-size: 10px; }
+      #modal-right { width: 100%; flex: 1; padding: 14px 14px 24px; }
     }
   </style>
 </head>
 <body>
 
-<!-- Loader -->
+<!-- ── Loader ────────────────────────────────────────────── -->
 <div id="loader">
   <div id="loader-title">Olivio &amp; Co</div>
   <div id="loader-sub">Loading products…</div>
 </div>
 
-<!-- Top UI -->
+<!-- ── Top UI ────────────────────────────────────────────── -->
 <div id="ui-top">
-  <!-- Primary menu: view modes + group modes -->
+  <!-- Primary: view modes + grouping -->
   <div class="menu-bar" id="main-menu">
-    <button class="nav-btn active" data-type="view" data-val="grid">Grid</button>
-    <button class="nav-btn"        data-type="view" data-val="sphere">Sphere</button>
-    <button class="nav-btn"        data-type="view" data-val="chaos">Chaos</button>
+    <button class="nav-btn active" data-type="view"  data-val="grid">Grid</button>
+    <button class="nav-btn"        data-type="view"  data-val="sphere">Sphere</button>
+    <button class="nav-btn"        data-type="view"  data-val="chaos">Chaos</button>
     <div class="menu-sep"></div>
     <button class="nav-btn active" data-type="group" data-val="all">All</button>
     <button class="nav-btn"        data-type="group" data-val="age">Age</button>
@@ -479,9 +444,14 @@
     <button class="nav-btn"        data-type="group" data-val="lens">Lens</button>
   </div>
 
-  <!-- Secondary tick-filters -->
-  <div class="tick-bar" id="tick-bar">
-    <span class="tick-lbl">Filter:</span>
+  <!--
+    Tick-filter bar — rebuilt dynamically.
+    Structure: [group-specific ticks...] [separator?] [In Stock] [Out of Stock]
+    Group ticks reset on group change; stock ticks persist.
+  -->
+  <div id="tick-bar">
+    <!-- group ticks injected here by JS -->
+    <div class="tick-sep" id="tick-stock-sep" style="display:none"></div>
     <button class="tick-btn" data-tick="in-stock">
       <span class="tick-box"></span>In Stock
     </button>
@@ -491,20 +461,20 @@
   </div>
 </div>
 
-<!-- Count -->
+<!-- ── Count badge ───────────────────────────────────────── -->
 <div id="count-badge">— products</div>
 
-<!-- Slider + Fit -->
+<!-- ── Bottom controls ──────────────────────────────────── -->
 <div id="slider-container">
   <span id="slider-label">Rotate</span>
   <input type="range" id="rotate-slider" min="-2" max="2" step="0.1" value="0">
   <button id="fit-btn">Fit</button>
 </div>
 
-<!-- 3D canvas -->
+<!-- ── 3D canvas ─────────────────────────────────────────── -->
 <div id="container"></div>
 
-<!-- Modal / popup -->
+<!-- ── Modal ─────────────────────────────────────────────── -->
 <div id="modal-overlay" role="dialog" aria-modal="true">
   <div id="modal-backdrop"></div>
   <div id="modal">
@@ -535,11 +505,12 @@
         <div class="divider"></div>
         <a id="modal-visit" href="#" target="_blank" rel="noopener">View on store →</a>
       </div>
+
     </div>
   </div>
 </div>
 
-<!-- Three.js import map -->
+<!-- ── Three.js import map ────────────────────────────────── -->
 <script type="importmap">
 {
   "imports": {
@@ -581,21 +552,14 @@ const COLOR_MAP = {
   'Vanilla Brownie':'#C8A97E','Waffle Special':'#D4A574','Wild Flower':'#C06080'
 };
 const COLOR_NAMES = Object.keys(COLOR_MAP).sort((a,b) => b.length - a.length);
-const colorCSS = name => COLOR_MAP[name] || '#cccccc';
+const colorCSS = n => COLOR_MAP[n] || '#cccccc';
 
-// ── Shopify URL helper ────────────────────────────────────────────────────────
+// ── Helpers ───────────────────────────────────────────────────────────────────
 function shopifyImg(url, w) {
   if (!url) return '';
-  try {
-    const u = new URL(url);
-    u.searchParams.set('width', String(w));
-    return u.toString();
-  } catch {
-    return url + (url.includes('?') ? '&' : '?') + 'width=' + w;
-  }
+  try { const u = new URL(url); u.searchParams.set('width', String(w)); return u.toString(); }
+  catch { return url + (url.includes('?') ? '&' : '?') + 'width=' + w; }
 }
-
-// ── XSS helper ───────────────────────────────────────────────────────────────
 const esc = s => String(s)
   .replace(/&/g,'&amp;').replace(/</g,'&lt;')
   .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
@@ -603,9 +567,8 @@ const esc = s => String(s)
 // ── Metadata extraction ───────────────────────────────────────────────────────
 const AGES   = ['Baby','Toddler','Kids','Junior','Adult'];
 const SHAPES = new Set(['Oval','Round','Creative Shield','Full-Rim','Half-Rim']);
-const LENS_TYPES = new Set(['Polarised','Non-Polarised']);
+const LENS_T = new Set(['Polarised','Non-Polarised']);
 
-// Product type from title (order matters: longer patterns first)
 function extractProductType(title) {
   const t = title.toLowerCase();
   if (t.includes('sport sunglasses')) return 'Sport Sunglasses';
@@ -624,195 +587,151 @@ function extractMeta(p) {
   const shapes = new Set(), lenses = new Set();
   let color = '';
   for (const v of (p.variants || [])) {
-    const parts = (v.title || '').split('/').map(s => s.trim());
-    if (!color) color = v.color || parts[0] || '';
-    if (parts[1] && SHAPES.has(parts[1]))     shapes.add(parts[1]);
-    if (parts[1] && LENS_TYPES.has(parts[1])) lenses.add(parts[1]);
-    if (parts[2] && LENS_TYPES.has(parts[2])) lenses.add(parts[2]);
+    const pts = (v.title || '').split('/').map(s => s.trim());
+    if (!color) color = v.color || pts[0] || '';
+    if (pts[1] && SHAPES.has(pts[1])) shapes.add(pts[1]);
+    if (pts[1] && LENS_T.has(pts[1])) lenses.add(pts[1]);
+    if (pts[2] && LENS_T.has(pts[2])) lenses.add(pts[2]);
   }
 
-  const available  = (p.variants || []).some(v => v.available);
+  const available   = (p.variants || []).some(v => v.available);
   const productType = extractProductType(p.title || '');
   return { age, shapes:[...shapes], lenses:[...lenses], color, available, productType };
 }
 
-// Base model = title without color name
 function baseModelOf(title) {
   for (const c of COLOR_NAMES) {
     const idx = title.toLowerCase().indexOf(c.toLowerCase());
-    if (idx !== -1) {
-      return (title.slice(0, idx) + title.slice(idx + c.length)).replace(/\s+/g,' ').trim();
-    }
+    if (idx !== -1)
+      return (title.slice(0,idx) + title.slice(idx+c.length)).replace(/\s+/g,' ').trim();
   }
   return title.trim();
 }
 
-// ═════════════════════════════════════════════════════════════════════════════
-// App state
-// ═════════════════════════════════════════════════════════════════════════════
+// ── Predefined tick values per group (ordered + filtered to existing products) ─
+const GROUP_TICK_ORDER = {
+  age:   ['Baby','Toddler','Kids','Junior','Adult'],
+  shape: ['Oval','Round','Creative Shield','Full-Rim','Half-Rim'],
+  type:  ['Sunglasses','Sport Sunglasses','Ski Goggles','Screen Glasses','Accessories'],
+  lens:  ['Polarised','Non-Polarised'],
+};
+
+// ════════════════════════════════════════════════════════════════════════════
+// Application state
+// ════════════════════════════════════════════════════════════════════════════
 const state = {
-  view:     'grid',
-  group:    'all',
-  tickIn:   false,   // show only in-stock
-  tickOut:  false,   // show only out-of-stock
+  view:       'grid',   // grid | sphere | chaos
+  group:      'all',    // all | age | shape | type | lens
+  tickValues: new Set(),// selected group-specific values (resets on group change)
+  tickIn:     false,    // stock filter — persistent
+  tickOut:    false,    // stock filter — persistent
 };
 
 let camera, scene, renderer, controls;
-let objects      = [];   // CSS3DObject[]
-let labels       = [];   // group label CSS3DObject[]
-let chaosOffsets = [];
-let isDragging   = false;
-let autoRotateSpeed = 0;
-let globalRotation  = 0;
+let objects = [], labels = [], chaosOffsets = [];
+let isDragging = false, autoRotateSpeed = 0, globalRotation = 0;
+let products = {}, colorSiblings = {};
 
-let products      = [];
-let colorSiblings = {};  // baseModel → [products…]
-
-// ─────────────────────────────────────────────────────────────────────────────
-// Load data
-// ─────────────────────────────────────────────────────────────────────────────
+// ════════════════════════════════════════════════════════════════════════════
+// Data load
+// ════════════════════════════════════════════════════════════════════════════
 fetch('https://decentralize-dfw.github.io/olivioandco/mega_products.json')
   .then(r => r.json())
   .then(data => {
-    products = data.map(p => ({
-      ...p,
-      _meta: extractMeta(p),
-      _base: baseModelOf(p.title)
-    }));
-
+    products = data.map(p => ({ ...p, _meta: extractMeta(p), _base: baseModelOf(p.title) }));
     for (const p of products) {
       if (!colorSiblings[p._base]) colorSiblings[p._base] = [];
       colorSiblings[p._base].push(p);
     }
-
     init();
     animate();
-
-    const loader = document.getElementById('loader');
-    loader.style.opacity = '0';
-    setTimeout(() => loader.remove(), 400);
+    const l = document.getElementById('loader');
+    l.style.opacity = '0';
+    setTimeout(() => l.remove(), 400);
   })
-  .catch(() => {
-    document.getElementById('loader-sub').textContent =
-      'Failed to load — check network.';
-  });
+  .catch(() => { document.getElementById('loader-sub').textContent = 'Failed to load — check network.'; });
 
-// ─────────────────────────────────────────────────────────────────────────────
+// ════════════════════════════════════════════════════════════════════════════
 // Three.js init
-// ─────────────────────────────────────────────────────────────────────────────
+// ════════════════════════════════════════════════════════════════════════════
 function init() {
   const container = document.getElementById('container');
-  const FRUST = 3500;
-  const aspect = window.innerWidth / window.innerHeight;
+  const FRUST = 3500, aspect = window.innerWidth / window.innerHeight;
 
   camera = new THREE.OrthographicCamera(
     FRUST*aspect/-2, FRUST*aspect/2, FRUST/2, FRUST/-2, 1, 10000
   );
   camera.position.set(2000, 1000, 2000);
-  camera.lookAt(0, 0, 0);
+  camera.lookAt(0,0,0);
 
   scene    = new THREE.Scene();
   renderer = new CSS3DRenderer();
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.domElement.style.position = 'absolute';
-  renderer.domElement.style.top = '0';
+  renderer.domElement.style.top      = '0';
   container.appendChild(renderer.domElement);
 
   controls = new OrbitControls(camera, renderer.domElement);
-  controls.enableDamping = true;
-  controls.dampingFactor = 0.05;
-  controls.minZoom       = 0.04;
-  controls.maxZoom       = 6;
-  controls.minPolarAngle = 0.05;
-  controls.maxPolarAngle = Math.PI - 0.05;
+  controls.enableDamping = true; controls.dampingFactor = 0.05;
+  controls.minZoom = 0.04; controls.maxZoom = 6;
+  controls.minPolarAngle = 0.05; controls.maxPolarAngle = Math.PI - 0.05;
 
-  window.addEventListener('mousedown',  () => { isDragging = true; });
+  window.addEventListener('mousedown',  () => { isDragging = true;  });
   window.addEventListener('mouseup',    () => { isDragging = false; });
-  window.addEventListener('touchstart', () => { isDragging = true;  }, { passive:true });
-  window.addEventListener('touchend',   () => { isDragging = false; }, { passive:true });
+  window.addEventListener('touchstart', () => { isDragging = true;  }, {passive:true});
+  window.addEventListener('touchend',   () => { isDragging = false; }, {passive:true});
 
   buildScene();
   window.addEventListener('resize', onWindowResize);
   setupMenuButtons();
-  setupTickButtons();
+  rebuildTickBar();       // initial tick bar (stock ticks only, no group ticks)
+  setupStaticTickBtns();  // attach handlers to the persistent stock ticks
   setupSlider();
   setupFitButton();
   setupModal();
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
+// ════════════════════════════════════════════════════════════════════════════
 // Build 3D cards
-// ─────────────────────────────────────────────────────────────────────────────
+// ════════════════════════════════════════════════════════════════════════════
 function buildScene() {
   objects.forEach(o => scene.remove(o));
-  objects = [];
-  chaosOffsets = [];
+  objects = []; chaosOffsets = [];
 
   for (const p of products) {
     const el  = document.createElement('div');
     el.className = 'element-card';
 
-    const img = document.createElement('img');
-    img.src      = p.images && p.images[0] ? shopifyImg(p.images[0], THUMBNAIL_WIDTH) : '';
-    img.draggable = false;
-    img.loading   = 'eager';
+    const img    = document.createElement('img');
+    img.src      = p.images?.[0] ? shopifyImg(p.images[0], THUMBNAIL_WIDTH) : '';
+    img.draggable = false; img.loading = 'eager';
     el.appendChild(img);
 
     el.addEventListener('mouseenter', () => { if (!isDragging) controls.enabled = false; });
     el.addEventListener('mouseleave', () => { controls.enabled = true; });
-    el.addEventListener('click', e => { e.stopPropagation(); openModal(p); });
+    el.addEventListener('click',      e  => { e.stopPropagation(); openModal(p); });
 
-    const startX = (Math.random()-.5) * 1400;
-    const startY = (Math.random()-.5) * 1400;
-    const startZ = (Math.random()-.5) * 1400;
-
+    const sx = (Math.random()-.5)*1400, sy = (Math.random()-.5)*1400, sz = (Math.random()-.5)*1400;
     const obj = new CSS3DObject(el);
-    obj.position.set(startX, startY, startZ);
-
-    // IMPORTANT: center is ALWAYS a valid Vector3 (never null)
+    obj.position.set(sx, sy, sz);
     obj.userData = {
       active:      true,
-      center:      new THREE.Vector3(0, 0, 0),
-      offset:      new THREE.Vector3(startX, startY, startZ),
-      rotation:    new THREE.Euler(0, 0, 0),
+      center:      new THREE.Vector3(0,0,0),
+      offset:      new THREE.Vector3(sx,sy,sz),
+      rotation:    new THREE.Euler(0,0,0),
       sphereCenter:null
     };
-
     scene.add(obj);
     objects.push(obj);
-
-    chaosOffsets.push({
-      x: (Math.random()-.5)*2,
-      y: (Math.random()-.5)*2,
-      z: (Math.random()-.5)*2,
-      t: Math.random()*100
-    });
+    chaosOffsets.push({ x:(Math.random()-.5)*2, y:(Math.random()-.5)*2, z:(Math.random()-.5)*2, t:Math.random()*100 });
   }
 
   updateLayout();
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// Which product indices are visible (after tick-filters)
-// ─────────────────────────────────────────────────────────────────────────────
-function visibleIndices() {
-  // stock tick filter
-  const wantIn  = state.tickIn;
-  const wantOut = state.tickOut;
-  const filterStock = wantIn || wantOut;
-
-  return products.map((_,i) => i).filter(i => {
-    if (filterStock) {
-      const avail = products[i]._meta.available;
-      if (wantIn  && avail)  return true;
-      if (wantOut && !avail) return true;
-      return false;
-    }
-    return true;
-  });
-}
-
-// Group key for a product index under current group mode
+// ════════════════════════════════════════════════════════════════════════════
+// Group key for a product
+// ════════════════════════════════════════════════════════════════════════════
 function groupKey(i) {
   const m = products[i]._meta;
   switch (state.group) {
@@ -824,9 +743,102 @@ function groupKey(i) {
   }
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// Labels
-// ─────────────────────────────────────────────────────────────────────────────
+// ════════════════════════════════════════════════════════════════════════════
+// Visible indices — combined group-tick + stock-tick filter
+// ════════════════════════════════════════════════════════════════════════════
+function visibleIndices() {
+  return products.map((_,i) => i).filter(i => {
+    // Group-specific tick filter (only when group ≠ all AND ticks are active)
+    if (state.tickValues.size > 0 && state.group !== 'all') {
+      if (!state.tickValues.has(groupKey(i))) return false;
+    }
+
+    // Stock filter
+    const wantIn = state.tickIn, wantOut = state.tickOut;
+    if (wantIn || wantOut) {
+      const avail = products[i]._meta.available;
+      if (wantIn  &&  avail) return true;
+      if (wantOut && !avail) return true;
+      return false;
+    }
+
+    return true;
+  });
+}
+
+// ════════════════════════════════════════════════════════════════════════════
+// Tick bar — rebuild group-specific part whenever group changes
+// ════════════════════════════════════════════════════════════════════════════
+function rebuildTickBar() {
+  // Remove all existing group tick buttons
+  document.querySelectorAll('.tick-btn[data-tick-group]').forEach(b => b.remove());
+  state.tickValues.clear();
+
+  const sep = document.getElementById('tick-stock-sep');
+
+  if (state.group === 'all') {
+    sep.style.display = 'none';
+    return;
+  }
+
+  // Which values exist in current product data for this group?
+  const existingValues = new Set(products.map((_,i) => groupKey(i)));
+  const ordered = (GROUP_TICK_ORDER[state.group] || []).filter(v => existingValues.has(v));
+
+  if (ordered.length === 0) { sep.style.display = 'none'; return; }
+
+  // Show separator between group ticks and stock ticks
+  sep.style.display = '';
+
+  const bar = document.getElementById('tick-bar');
+  // Insert group tick buttons BEFORE the separator
+  for (const val of ordered) {
+    const btn = document.createElement('button');
+    btn.className       = 'tick-btn';
+    btn.dataset.tick    = 'group-' + val;
+    btn.dataset.tickGroup = 'true';
+    btn.innerHTML = `<span class="tick-box"></span>${esc(val)}`;
+    btn.addEventListener('click', () => toggleGroupTick(btn, val));
+    bar.insertBefore(btn, sep);
+  }
+}
+
+function toggleGroupTick(btn, val) {
+  btn.classList.toggle('active');
+  const box = btn.querySelector('.tick-box');
+  if (btn.classList.contains('active')) {
+    box.textContent = '✓';
+    state.tickValues.add(val);
+  } else {
+    box.textContent = '';
+    state.tickValues.delete(val);
+  }
+  updateLayout();
+}
+
+// Set up the permanent stock tick buttons
+function setupStaticTickBtns() {
+  document.querySelector('[data-tick="in-stock"]').addEventListener('click', btn => {
+    const b = btn.currentTarget;
+    b.classList.toggle('active');
+    const box = b.querySelector('.tick-box');
+    state.tickIn = b.classList.contains('active');
+    box.textContent = state.tickIn ? '✓' : '';
+    updateLayout();
+  });
+  document.querySelector('[data-tick="out-stock"]').addEventListener('click', btn => {
+    const b = btn.currentTarget;
+    b.classList.toggle('active');
+    const box = b.querySelector('.tick-box');
+    state.tickOut = b.classList.contains('active');
+    box.textContent = state.tickOut ? '✓' : '';
+    updateLayout();
+  });
+}
+
+// ════════════════════════════════════════════════════════════════════════════
+// Labels (3D floating group headings)
+// ════════════════════════════════════════════════════════════════════════════
 function removeLabels() {
   const old = [...labels]; labels = [];
   old.forEach(l => {
@@ -836,42 +848,31 @@ function removeLabels() {
 }
 
 function createLabel(text, sub, x, y, z) {
-  const wrap = document.createElement('div');
-  wrap.className = 'group-label-wrap';
-
-  const main = document.createElement('div');
-  main.className = 'group-label-main';
-  main.textContent = text;
+  const wrap = document.createElement('div'); wrap.className = 'group-label-wrap';
+  const main = document.createElement('div'); main.className = 'group-label-main'; main.textContent = text;
   wrap.appendChild(main);
-
   if (sub) {
-    const s = document.createElement('div');
-    s.className = 'group-label-sub';
-    s.textContent = sub;
+    const s = document.createElement('div'); s.className = 'group-label-sub'; s.textContent = sub;
     wrap.appendChild(s);
   }
-
   const obj = new CSS3DObject(wrap);
   obj.position.set(x, y, z);
-  scene.add(obj);
-  labels.push(obj);
+  scene.add(obj); labels.push(obj);
   setTimeout(() => wrap.classList.add('visible'), 50);
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// Main layout update — positions every card in 3D space
-// ─────────────────────────────────────────────────────────────────────────────
+// ════════════════════════════════════════════════════════════════════════════
+// Layout update — positions every card in 3D space
+// ════════════════════════════════════════════════════════════════════════════
 function updateLayout() {
   TWEEN.removeAll();
   removeLabels();
-
   objects.forEach(o => { o.userData.rotation.set(0,0,0); o.userData.sphereCenter = null; });
 
-  const visible = new Set(visibleIndices());
+  const visible   = new Set(visibleIndices());
+  const FAR_Y     = 18000;
 
-  // Hide inactive items — reset center+offset to a far position so they never
-  // appear in scene, then mark inactive (no center-null to avoid null errors)
-  const FAR_Y = 18000;
+  // Park invisible items far away (no null — center stays a valid Vector3)
   objects.forEach((obj, i) => {
     if (!visible.has(i)) {
       obj.userData.active = false;
@@ -880,7 +881,7 @@ function updateLayout() {
     }
   });
 
-  // Build groups from visible items
+  // Build groups
   const groups = {};
   for (const i of visible) {
     const k = groupKey(i);
@@ -888,12 +889,11 @@ function updateLayout() {
     groups[k].push(i);
   }
 
-  const isGrouped = ['age','shape','type','lens'].includes(state.group);
-  const groupKeys = Object.keys(groups).sort();
-  const ITEM_SPC  = 185;
-  const LABEL_Y   = 900;
+  const isGrouped  = ['age','shape','type','lens'].includes(state.group);
+  const groupKeys  = Object.keys(groups).sort();
+  const ITEM_SPC   = 185, LABEL_Y = 900;
 
-  // Update count
+  // Update count badge
   document.getElementById('count-badge').textContent =
     visible.size + ' product' + (visible.size !== 1 ? 's' : '');
 
@@ -901,19 +901,16 @@ function updateLayout() {
     const idxs = groups[key];
     let cx = 0, cy = 0, cz = 0;
 
-    const sphereR    = Math.max(Math.sqrt(idxs.length) * 65, 200);
-    const clusterSpc = Math.max(2400, (groupKeys.length * 1300) / (Math.PI * 2));
+    const sphereR    = Math.max(Math.sqrt(idxs.length)*65, 200);
+    const clusterSpc = Math.max(2400, (groupKeys.length*1300) / (Math.PI*2));
 
-    // Cluster center position
     if (isGrouped) {
       if (state.view === 'grid') {
-        const zSpc   = 2600;
-        const totalZ = (groupKeys.length - 1) * zSpc;
-        cz = (totalZ / 2) - (gIdx * zSpc);
+        const zSpc = 2600, totalZ = (groupKeys.length-1)*zSpc;
+        cz = (totalZ/2) - (gIdx*zSpc);
       } else {
-        const angle = (gIdx / groupKeys.length) * Math.PI * 2;
-        cx = Math.cos(angle) * clusterSpc;
-        cz = Math.sin(angle) * clusterSpc;
+        const angle = (gIdx/groupKeys.length)*Math.PI*2;
+        cx = Math.cos(angle)*clusterSpc; cz = Math.sin(angle)*clusterSpc;
       }
       createLabel(key, state.group.toUpperCase(), cx, LABEL_Y, cz);
     }
@@ -922,25 +919,13 @@ function updateLayout() {
     if (state.view === 'grid') {
       const cols = Math.ceil(Math.sqrt(idxs.length));
       idxs.forEach((objIdx, i) => {
-        const row = Math.floor(i / cols);
-        const col = i % cols;
-        const ox  = (col - (cols-1)/2) * ITEM_SPC;
-        const oy  = 420 - row * ITEM_SPC;
         const obj = objects[objIdx];
-
-        // If previously hidden, snap center to cluster so it doesn't fly from FAR_Y
-        if (!obj.userData.active) {
-          obj.userData.center.set(cx, cy, cz);
-          obj.userData.offset.set(0, 0, 0);
-        }
+        if (!obj.userData.active) { obj.userData.center.set(cx,cy,cz); obj.userData.offset.set(0,0,0); }
         obj.userData.active = true;
-
-        new TWEEN.Tween(obj.userData.center)
-          .to({x:cx,y:cy,z:cz}, 2400).easing(TWEEN.Easing.Exponential.InOut).start();
-        new TWEEN.Tween(obj.userData.offset)
-          .to({x:ox,y:oy,z:0}, 2400).easing(TWEEN.Easing.Exponential.InOut).start();
-        new TWEEN.Tween(obj.userData.rotation)
-          .to({x:0,y:0,z:0}, 2400).easing(TWEEN.Easing.Exponential.InOut).start();
+        const ox = (i%cols - (cols-1)/2)*ITEM_SPC, oy = 420 - Math.floor(i/cols)*ITEM_SPC;
+        new TWEEN.Tween(obj.userData.center).to({x:cx,y:cy,z:cz},2300).easing(TWEEN.Easing.Exponential.InOut).start();
+        new TWEEN.Tween(obj.userData.offset).to({x:ox,y:oy,z:0}, 2300).easing(TWEEN.Easing.Exponential.InOut).start();
+        new TWEEN.Tween(obj.userData.rotation).to({x:0,y:0,z:0}, 2300).easing(TWEEN.Easing.Exponential.InOut).start();
       });
     }
 
@@ -948,26 +933,17 @@ function updateLayout() {
     else if (state.view === 'sphere') {
       const sphereCY = 420 - sphereR;
       idxs.forEach((objIdx, i) => {
-        const phi   = Math.acos(-1 + (2*i) / idxs.length);
-        const theta = Math.sqrt(idxs.length * Math.PI) * phi;
-        const ox = sphereR * Math.sin(phi) * Math.cos(theta);
-        const oy = sphereR * Math.sin(phi) * Math.sin(theta);
-        const oz = sphereR * Math.cos(phi);
         const obj = objects[objIdx];
-
-        if (!obj.userData.active) {
-          obj.userData.center.set(cx, cy, cz);
-          obj.userData.offset.set(0, 0, 0);
-        }
+        if (!obj.userData.active) { obj.userData.center.set(cx,cy,cz); obj.userData.offset.set(0,0,0); }
         obj.userData.active = true;
-        obj.userData.sphereCenter = new THREE.Vector3(cx, sphereCY, cz);
-
-        new TWEEN.Tween(obj.userData.center)
-          .to({x:cx,y:cy,z:cz}, 2400).easing(TWEEN.Easing.Exponential.InOut).start();
-        new TWEEN.Tween(obj.userData.offset)
-          .to({x:ox,y:oy+sphereCY,z:oz}, 2400).easing(TWEEN.Easing.Exponential.InOut).start();
-        new TWEEN.Tween(obj.userData.rotation)
-          .to({x:0,y:0,z:0}, 2400).easing(TWEEN.Easing.Exponential.InOut).start();
+        const phi = Math.acos(-1+(2*i)/idxs.length), theta = Math.sqrt(idxs.length*Math.PI)*phi;
+        const ox = sphereR*Math.sin(phi)*Math.cos(theta);
+        const oy = sphereR*Math.sin(phi)*Math.sin(theta);
+        const oz = sphereR*Math.cos(phi);
+        obj.userData.sphereCenter = new THREE.Vector3(cx,sphereCY,cz);
+        new TWEEN.Tween(obj.userData.center).to({x:cx,y:cy,z:cz}, 2300).easing(TWEEN.Easing.Exponential.InOut).start();
+        new TWEEN.Tween(obj.userData.offset).to({x:ox,y:oy+sphereCY,z:oz}, 2300).easing(TWEEN.Easing.Exponential.InOut).start();
+        new TWEEN.Tween(obj.userData.rotation).to({x:0,y:0,z:0}, 2300).easing(TWEEN.Easing.Exponential.InOut).start();
       });
     }
 
@@ -976,54 +952,39 @@ function updateLayout() {
       const spread = 800;
       idxs.forEach(objIdx => {
         const obj = objects[objIdx];
-        if (!obj.userData.active) {
-          obj.userData.center.set(cx, cy, cz);
-          obj.userData.offset.set(0, 0, 0);
-        }
+        if (!obj.userData.active) { obj.userData.center.set(cx,cy,cz); obj.userData.offset.set(0,0,0); }
         obj.userData.active = true;
-
-        const ox = (Math.random()-.5)*spread;
-        const oy = (Math.random()-.5)*spread;
-        const oz = (Math.random()-.5)*spread;
-        const rx = (Math.random()-.5)*.45;
-        const rz = (Math.random()-.5)*.45;
-
-        new TWEEN.Tween(obj.userData.center)
-          .to({x:cx,y:cy,z:cz}, 2400).easing(TWEEN.Easing.Exponential.InOut).start();
-        new TWEEN.Tween(obj.userData.offset)
-          .to({x:ox,y:oy,z:oz}, 2400).easing(TWEEN.Easing.Exponential.InOut).start();
-        new TWEEN.Tween(obj.userData.rotation)
-          .to({x:rx,y:0,z:rz}, 2400).easing(TWEEN.Easing.Exponential.InOut).start();
+        const ox=(Math.random()-.5)*spread, oy=(Math.random()-.5)*spread, oz=(Math.random()-.5)*spread;
+        const rx=(Math.random()-.5)*.45, rz=(Math.random()-.5)*.45;
+        new TWEEN.Tween(obj.userData.center).to({x:cx,y:cy,z:cz}, 2300).easing(TWEEN.Easing.Exponential.InOut).start();
+        new TWEEN.Tween(obj.userData.offset).to({x:ox,y:oy,z:oz}, 2300).easing(TWEEN.Easing.Exponential.InOut).start();
+        new TWEEN.Tween(obj.userData.rotation).to({x:rx,y:0,z:rz}, 2300).easing(TWEEN.Easing.Exponential.InOut).start();
       });
     }
   });
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// Render loop
-// ─────────────────────────────────────────────────────────────────────────────
+// ════════════════════════════════════════════════════════════════════════════
+// Animation loop
+// ════════════════════════════════════════════════════════════════════════════
 const _vh = new THREE.Vector3();
 
 function animate() {
   requestAnimationFrame(animate);
-  TWEEN.update();
-  controls.update();
+  TWEEN.update(); controls.update();
 
   globalRotation += autoRotateSpeed;
   const time = Date.now() * 0.002;
 
   objects.forEach((obj, i) => {
     if (!obj.userData.active) return;
-
     const off = obj.userData.offset.clone();
     off.applyAxisAngle(new THREE.Vector3(0,1,0), globalRotation);
     const pos = new THREE.Vector3().copy(obj.userData.center).add(off);
 
     if (state.view === 'chaos') {
       const c = chaosOffsets[i];
-      pos.x += Math.sin(time + c.t) * 45;
-      pos.y += Math.cos(time*.9 + c.t) * 45;
-      pos.z += Math.sin(time*.7 + c.t) * 45;
+      pos.x += Math.sin(time+c.t)*45; pos.y += Math.cos(time*.9+c.t)*45; pos.z += Math.sin(time*.7+c.t)*45;
       obj.position.copy(pos);
       obj.rotation.x = obj.userData.rotation.x + Math.sin(time*.5)*.18;
       obj.rotation.y = obj.userData.rotation.y + globalRotation;
@@ -1043,40 +1004,19 @@ function animate() {
   renderer.render(scene, camera);
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// Menu buttons
-// ─────────────────────────────────────────────────────────────────────────────
+// ════════════════════════════════════════════════════════════════════════════
+// Buttons & controls
+// ════════════════════════════════════════════════════════════════════════════
 function setupMenuButtons() {
   document.querySelectorAll('.nav-btn').forEach(btn => {
     btn.addEventListener('click', e => {
       const type = e.currentTarget.dataset.type;
       const val  = e.currentTarget.dataset.val;
       if (!type) return;
-      // Deactivate siblings
-      document.querySelectorAll(`.nav-btn[data-type="${type}"]`)
-        .forEach(b => b.classList.remove('active'));
+      document.querySelectorAll(`.nav-btn[data-type="${type}"]`).forEach(b => b.classList.remove('active'));
       e.currentTarget.classList.add('active');
       state[type] = val;
-      updateLayout();
-    });
-  });
-}
-
-function setupTickButtons() {
-  document.querySelectorAll('.tick-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const tick = btn.dataset.tick;
-      btn.classList.toggle('active');
-      const box = btn.querySelector('.tick-box');
-      if (btn.classList.contains('active')) {
-        box.textContent = '✓';
-        if (tick === 'in-stock')  state.tickIn  = true;
-        if (tick === 'out-stock') state.tickOut = true;
-      } else {
-        box.textContent = '';
-        if (tick === 'in-stock')  state.tickIn  = false;
-        if (tick === 'out-stock') state.tickOut = false;
-      }
+      if (type === 'group') rebuildTickBar(); // reset group ticks, keep stock ticks
       updateLayout();
     });
   });
@@ -1098,11 +1038,9 @@ function setupFitButton() {
       }
     });
     maxD += 350;
-    const FRUST   = 3500;
-    let zoom = FRUST / (maxD * 1.55);
+    let zoom = 3500 / (maxD * 1.55);
     zoom = Math.max(0.04, Math.min(zoom, 6));
-    new TWEEN.Tween(camera)
-      .to({zoom}, 900)
+    new TWEEN.Tween(camera).to({zoom}, 900)
       .easing(TWEEN.Easing.Cubic.Out)
       .onUpdate(() => camera.updateProjectionMatrix())
       .start();
@@ -1110,49 +1048,36 @@ function setupFitButton() {
 }
 
 function onWindowResize() {
-  const FRUST  = 3500;
-  const aspect = window.innerWidth / window.innerHeight;
-  camera.left   = -FRUST*aspect/2;
-  camera.right  =  FRUST*aspect/2;
-  camera.top    =  FRUST/2;
-  camera.bottom = -FRUST/2;
+  const FRUST = 3500, aspect = window.innerWidth / window.innerHeight;
+  camera.left   = -FRUST*aspect/2; camera.right  =  FRUST*aspect/2;
+  camera.top    =  FRUST/2;        camera.bottom = -FRUST/2;
   camera.updateProjectionMatrix();
   renderer.setSize(window.innerWidth, window.innerHeight);
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
+// ════════════════════════════════════════════════════════════════════════════
 // Modal
-// ─────────────────────────────────────────────────────────────────────────────
+// ════════════════════════════════════════════════════════════════════════════
 let _imgs = [];
 
 function setupModal() {
-  document.getElementById('modal-close')  .addEventListener('click', closeModal);
+  document.getElementById('modal-close')   .addEventListener('click', closeModal);
   document.getElementById('modal-backdrop').addEventListener('click', closeModal);
-  document.addEventListener('keydown', e => { if (e.key==='Escape') closeModal(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 }
 
-function openModal(p) {
-  populateModal(p);
-  document.getElementById('modal-overlay').classList.add('open');
-  document.body.style.overflow = 'hidden';
-}
+function openModal(p)   { populateModal(p); document.getElementById('modal-overlay').classList.add('open'); document.body.style.overflow='hidden'; }
+function closeModal()   { document.getElementById('modal-overlay').classList.remove('open'); document.body.style.overflow=''; }
 
 function populateModal(p) {
-  const m     = p._meta;
-  _imgs       = (p.images || []).filter(Boolean);
+  const m = p._meta; _imgs = (p.images||[]).filter(Boolean);
   const isOos = !m.available;
 
-  // Title
   document.getElementById('modal-title').innerHTML =
     esc(p.title) + (isOos ? ' <span class="oos-badge">(Out of Stock)</span>' : '');
-
-  // Price
   document.getElementById('modal-price').textContent = '€' + Number(p.price).toFixed(2);
+  document.getElementById('modal-desc').textContent  = p.description || '';
 
-  // Description
-  document.getElementById('modal-desc').textContent = p.description || '';
-
-  // Meta
   document.getElementById('modal-meta').innerHTML = `
     <div class="info-row"><span class="lbl">Type</span><span class="val">${esc(m.productType||'—')}</span></div>
     <div class="info-row"><span class="lbl">Age</span><span class="val">${esc(m.age||'—')}</span></div>
@@ -1163,43 +1088,32 @@ function populateModal(p) {
       <span class="val" style="color:${m.available?'#000':'#aaa'}">${m.available?'In Stock':'Out of Stock'}</span>
     </div>`;
 
-  // Color selector
   buildColorSelector(p);
-
-  // Visit
   document.getElementById('modal-visit').href = p.url || '#';
-
-  // Carousel + main image
   buildCarousel(_imgs);
   if (_imgs.length) setMainImage(0);
 }
 
 function buildColorSelector(activeP) {
-  const cs       = document.getElementById('color-selector');
-  cs.innerHTML   = '';
+  const cs = document.getElementById('color-selector'); cs.innerHTML = '';
   const siblings = colorSiblings[activeP._base] || [activeP];
-
   for (const sib of siblings) {
-    const ball     = document.createElement('div');
-    ball.className = 'color-ball'
-      + (sib.id === activeP.id ? ' active' : '')
-      + (!sib._meta.available   ? ' oos'    : '');
+    const ball = document.createElement('div');
+    ball.className = 'color-ball' + (sib.id===activeP.id?' active':'') + (!sib._meta.available?' oos':'');
     ball.style.background = colorCSS(sib._meta.color);
-    ball.title = sib._meta.color + (!sib._meta.available ? ' (Out of Stock)' : '');
+    ball.title = sib._meta.color + (!sib._meta.available?' (Out of Stock)':'');
     if (sib.id !== activeP.id) ball.addEventListener('click', () => populateModal(sib));
     cs.appendChild(ball);
   }
 }
 
 function buildCarousel(images) {
-  const car = document.getElementById('modal-carousel');
-  car.innerHTML = '';
+  const car = document.getElementById('modal-carousel'); car.innerHTML = '';
   images.forEach((src, i) => {
     const thumb = document.createElement('div');
-    thumb.className = 'c-thumb' + (i===0 ? ' active' : '');
+    thumb.className = 'c-thumb' + (i===0?' active':'');
     const img = document.createElement('img');
-    img.src = shopifyImg(src, 120);
-    img.alt = ''; img.loading = 'lazy';
+    img.src = shopifyImg(src, 120); img.alt = ''; img.loading = 'lazy';
     thumb.appendChild(img);
     thumb.addEventListener('click', () => setMainImage(i));
     car.appendChild(thumb);
@@ -1207,17 +1121,11 @@ function buildCarousel(images) {
 }
 
 function setMainImage(idx) {
-  const mainImg = document.getElementById('modal-main-img');
-  // Last image of product → natural ratio (contain). All others → square crop (cover).
-  const isLast  = idx === _imgs.length - 1 && _imgs.length > 1;
-  mainImg.className = isLast ? 'img-contain' : 'img-cover';
-  mainImg.src = shopifyImg(_imgs[idx], IMAGE_WIDTH);
+  const main   = document.getElementById('modal-main-img');
+  const isLast = idx === _imgs.length - 1 && _imgs.length > 1;
+  main.className = isLast ? 'img-contain' : 'img-cover';
+  main.src       = shopifyImg(_imgs[idx], IMAGE_WIDTH);
   document.querySelectorAll('.c-thumb').forEach((t,i) => t.classList.toggle('active', i===idx));
-}
-
-function closeModal() {
-  document.getElementById('modal-overlay').classList.remove('open');
-  document.body.style.overflow = '';
 }
 
 </script>
