@@ -1,0 +1,1097 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Olivio&amp;Co — Product Catalog 3D</title>
+
+  <!-- ═══════════════════════════════════════════
+       CONFIG — change only these two numbers
+  ═══════════════════════════════════════════ -->
+  <script>
+    const THUMBNAIL_WIDTH = 400;   // px — image on each 3D card
+    const IMAGE_WIDTH     = 1200;  // px — full-size image in popup
+  </script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      height: 100%;
+      background: #0a0a0a;
+      color: #ffffff;
+      font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+      font-size: 13px;
+      overflow: hidden;
+      touch-action: none;
+    }
+
+    /* ── UI Container (top) ──────────────────────────── */
+    #ui-container {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 14px 18px;
+      pointer-events: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      align-items: flex-start;
+    }
+
+    .menu-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      align-items: center;
+      pointer-events: auto;
+      background: rgba(0,0,0,0.65);
+      padding: 7px 13px;
+      border-radius: 30px;
+      border: 1px solid rgba(255,255,255,0.15);
+      backdrop-filter: blur(8px);
+    }
+
+    .menu-sep {
+      width: 1px; height: 16px;
+      background: rgba(255,255,255,0.25);
+      margin: 0 5px;
+      flex-shrink: 0;
+    }
+
+    .nav-btn {
+      background: transparent;
+      border: 1px solid transparent;
+      color: rgba(255,255,255,0.6);
+      padding: 3px 12px;
+      font-family: inherit;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      cursor: pointer;
+      border-radius: 4px;
+      transition: color .15s, border-color .15s, background .15s;
+      white-space: nowrap;
+    }
+    .nav-btn:hover  { color: #fff; border-color: rgba(255,255,255,0.35); }
+    .nav-btn.active { color: #fff; border-color: rgba(255,255,255,0.55); background: rgba(255,255,255,0.12); }
+
+    /* ── Bottom slider / fit ────────────────────────── */
+    #slider-container {
+      position: fixed;
+      bottom: 18px; left: 18px;
+      z-index: 100;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 10px;
+      pointer-events: auto;
+      background: rgba(0,0,0,0.65);
+      padding: 7px 13px;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.15);
+      backdrop-filter: blur(8px);
+    }
+
+    #slider-label {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.6);
+    }
+
+    input[type=range] {
+      -webkit-appearance: none;
+      width: 90px; height: 3px;
+      background: rgba(255,255,255,0.2);
+      border-radius: 2px;
+      outline: none;
+    }
+    input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: #ffffff;
+      cursor: pointer;
+    }
+
+    #fit-btn {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      border: 1px solid rgba(255,255,255,0.4);
+      background: rgba(255,255,255,0.08);
+      color: rgba(255,255,255,0.8);
+      cursor: pointer;
+      border-radius: 4px;
+      transition: background .15s;
+    }
+    #fit-btn:hover { background: rgba(255,255,255,0.22); color: #fff; }
+
+    /* ── Count badge ────────────────────────────────── */
+    #count-badge {
+      position: fixed;
+      top: 18px; right: 18px;
+      z-index: 100;
+      background: rgba(0,0,0,0.65);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 20px;
+      padding: 5px 12px;
+      font-size: 11px;
+      color: rgba(255,255,255,0.6);
+      backdrop-filter: blur(8px);
+      pointer-events: none;
+    }
+
+    /* ── 3D Card ────────────────────────────────────── */
+    .element-card {
+      width: 160px; height: 160px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: auto;
+      user-select: none;
+      backface-visibility: visible;
+      -webkit-backface-visibility: visible;
+      transform-style: preserve-3d;
+      transition: transform .2s;
+      border-radius: 4px;
+      overflow: hidden;
+      background: #1c1c1c;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+    .element-card:hover { transform: scale(1.13); z-index: 1000; }
+    .element-card img {
+      width: 100%; height: 100%;
+      object-fit: cover;           /* square crop */
+      display: block;
+      user-select: none;
+      -webkit-user-drag: none;
+      pointer-events: none;
+    }
+
+    /* ── Group labels ───────────────────────────────── */
+    .group-label-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+      user-select: none;
+      text-align: center;
+      opacity: 0;
+      transform: scale(0.8);
+      transition: opacity .9s ease, transform .9s ease;
+    }
+    .group-label-wrap.visible { opacity: 1; transform: scale(1); }
+    .group-label-main {
+      font-size: 64px;
+      font-weight: 900;
+      line-height: 0.9;
+      color: rgba(255,255,255,0.88);
+      text-transform: uppercase;
+      letter-spacing: -0.02em;
+    }
+    .group-label-sub {
+      font-size: 12px;
+      font-weight: 500;
+      color: rgba(255,255,255,0.45);
+      margin-top: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      padding: 2px 10px;
+    }
+
+    /* ── Loader ─────────────────────────────────────── */
+    #loader {
+      position: fixed; inset: 0;
+      background: #0a0a0a;
+      z-index: 99999;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      transition: opacity .5s ease-out;
+    }
+    #loader-text  { font-size: 22px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.85); font-weight: 700; }
+    #loader-sub   { font-size: 11px; color: rgba(255,255,255,0.4); margin-top: 8px; letter-spacing: 0.1em; }
+
+    #container { position: absolute; inset: 0; z-index: 1; pointer-events: auto; touch-action: none; }
+
+    /* ── Modal overlay ──────────────────────────────── */
+    #modal-overlay {
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity .3s, visibility .3s;
+      position: fixed; inset: 0;
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3%;
+      pointer-events: none;
+    }
+    #modal-overlay.open { opacity: 1; visibility: visible; pointer-events: auto; }
+
+    #modal-backdrop {
+      position: absolute; inset: 0;
+      background: rgba(0,0,0,0.82);
+      backdrop-filter: blur(6px);
+      cursor: pointer;
+    }
+
+    #modal {
+      position: relative; z-index: 10;
+      background: #ffffff;
+      color: #000000;
+      border: 1px solid #000000;
+      border-radius: 4px;
+      width: min(960px, 95vw);
+      height: min(620px, 88vh);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    #modal-close {
+      position: absolute; top: 11px; right: 13px; z-index: 20;
+      background: none;
+      border: 1px solid #000;
+      border-radius: 50%;
+      width: 28px; height: 28px;
+      cursor: pointer; font-size: 14px;
+      display: flex; align-items: center; justify-content: center;
+      color: #000; transition: background .15s, color .15s;
+    }
+    #modal-close:hover { background: #000; color: #fff; }
+
+    /* Modal body = left image area + right info panel */
+    #modal-body { display: flex; flex: 1; overflow: hidden; }
+
+    /* Left */
+    #modal-left {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background: #f4f4f4;
+      border-right: 1px solid #000;
+      min-width: 0;
+    }
+    #modal-main-img-wrap {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      min-height: 0;
+    }
+    /* Default: crop (cover). Last image: contain */
+    #modal-main-img-wrap img {
+      display: block;
+      transition: opacity .15s;
+    }
+    #modal-main-img-wrap img.img-cover {
+      width: 100%; height: 100%;
+      object-fit: cover;
+    }
+    #modal-main-img-wrap img.img-contain {
+      max-width: 100%; max-height: 100%;
+      object-fit: contain;
+    }
+
+    /* Carousel */
+    #modal-carousel {
+      display: flex;
+      gap: 6px;
+      padding: 8px 10px;
+      border-top: 1px solid #000;
+      overflow-x: auto;
+      background: #fff;
+      flex-shrink: 0;
+      scrollbar-width: thin;
+      scrollbar-color: #999 transparent;
+    }
+    .c-thumb {
+      width: 52px; height: 52px;
+      flex-shrink: 0;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      overflow: hidden;
+      cursor: pointer;
+      opacity: .55;
+      transition: opacity .15s, border-color .15s;
+    }
+    .c-thumb:hover { opacity: .8; }
+    .c-thumb.active { opacity: 1; border-color: #000; border-width: 2px; }
+    .c-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+    /* Right */
+    #modal-right {
+      width: 300px;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      padding: 20px 18px;
+      overflow-y: auto;
+      gap: 12px;
+      scrollbar-width: thin;
+      scrollbar-color: #ccc transparent;
+    }
+
+    #modal-title { font-size: 15px; font-weight: 700; line-height: 1.4; padding-right: 32px; }
+    .oos-badge   { color: #aaa; font-size: 12px; font-weight: 400; }
+    #modal-price { font-size: 21px; font-weight: 700; }
+
+    #modal-description {
+      font-size: 11.5px;
+      line-height: 1.65;
+      color: #555;
+    }
+
+    .divider { height: 1px; background: #e0e0e0; flex-shrink: 0; }
+
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 8px;
+      font-size: 12px;
+    }
+    .info-row .lbl {
+      font-size: 10px; font-weight: 700;
+      letter-spacing: .08em; text-transform: uppercase;
+      color: #999; flex-shrink: 0;
+    }
+    .info-row .val { font-weight: 500; text-align: right; }
+
+    /* Color selector */
+    .color-sel-lbl {
+      font-size: 10px; font-weight: 700;
+      letter-spacing: .08em; text-transform: uppercase;
+      color: #999; margin-bottom: 6px;
+    }
+    #color-selector { display: flex; flex-wrap: wrap; gap: 6px; }
+    .color-ball {
+      width: 22px; height: 22px;
+      border-radius: 50%;
+      border: 2px solid transparent;
+      cursor: pointer;
+      flex-shrink: 0;
+      box-shadow: 0 0 0 1px rgba(0,0,0,0.2);
+      transition: transform .15s, box-shadow .15s;
+    }
+    .color-ball:hover { transform: scale(1.2); }
+    .color-ball.active { box-shadow: 0 0 0 2.5px #000; }
+    .color-ball.oos    { opacity: .35; }
+
+    #modal-visit {
+      display: block;
+      text-align: center;
+      padding: 9px;
+      border: 1px solid #000;
+      border-radius: 3px;
+      text-decoration: none;
+      color: #000;
+      font-size: 12px; font-weight: 600;
+      transition: background .15s, color .15s;
+      flex-shrink: 0;
+    }
+    #modal-visit:hover { background: #000; color: #fff; }
+  </style>
+</head>
+<body>
+
+<!-- Loader -->
+<div id="loader">
+  <div id="loader-text">Olivio &amp; Co</div>
+  <div id="loader-sub">Loading products…</div>
+</div>
+
+<!-- Top UI -->
+<div id="ui-container">
+  <div class="menu-bar">
+    <button class="nav-btn active" data-type="view" data-val="grid">Grid</button>
+    <button class="nav-btn"        data-type="view" data-val="sphere">Sphere</button>
+    <button class="nav-btn"        data-type="view" data-val="chaos">Chaos</button>
+
+    <div class="menu-sep"></div>
+
+    <button class="nav-btn active" data-type="group" data-val="all">All</button>
+    <button class="nav-btn"        data-type="group" data-val="age">Age</button>
+    <button class="nav-btn"        data-type="group" data-val="shape">Shape</button>
+    <button class="nav-btn"        data-type="group" data-val="type">Type</button>
+    <button class="nav-btn"        data-type="group" data-val="oos">Out of Stock</button>
+  </div>
+</div>
+
+<!-- Count -->
+<div id="count-badge">0 products</div>
+
+<!-- Slider + Fit -->
+<div id="slider-container">
+  <span id="slider-label">Rotate</span>
+  <input type="range" id="rotate-slider" min="-2" max="2" step="0.1" value="0">
+  <button id="fit-btn">Fit View</button>
+</div>
+
+<!-- Three.js container -->
+<div id="container"></div>
+
+<!-- Modal -->
+<div id="modal-overlay" role="dialog" aria-modal="true">
+  <div id="modal-backdrop"></div>
+  <div id="modal">
+    <button id="modal-close" aria-label="Close">✕</button>
+    <div id="modal-body">
+
+      <!-- Image side -->
+      <div id="modal-left">
+        <div id="modal-main-img-wrap">
+          <img id="modal-main-img" src="" alt="" class="img-cover">
+        </div>
+        <div id="modal-carousel"></div>
+      </div>
+
+      <!-- Info side -->
+      <div id="modal-right">
+        <div id="modal-title"></div>
+        <div id="modal-price"></div>
+        <div class="divider"></div>
+        <div id="modal-description"></div>
+        <div class="divider"></div>
+        <div id="modal-meta"></div>
+        <div class="divider"></div>
+        <div>
+          <div class="color-sel-lbl">Colors</div>
+          <div id="color-selector"></div>
+        </div>
+        <div class="divider"></div>
+        <a id="modal-visit" href="#" target="_blank" rel="noopener">View on store →</a>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Three.js import map -->
+<script type="importmap">
+{
+  "imports": {
+    "three":          "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+    "three/addons/":  "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
+
+<script type="module">
+import * as THREE                    from 'three';
+import { OrbitControls }             from 'three/addons/controls/OrbitControls.js';
+import { CSS3DRenderer, CSS3DObject }from 'three/addons/renderers/CSS3DRenderer.js';
+import TWEEN                         from 'three/addons/libs/tween.module.js';
+
+// ── Color helpers ─────────────────────────────────────────────────────────────
+const COLOR_MAP = {
+  'Apricot':'#FBCEB1','Art Brush':'#8B4513','Azure Blue':'#007FFF','Begonia Red':'#FA6E79',
+  'Berry Mist':'#8E4585','Blue':'#2563EB','Blueberry':'#4F2877','Cactus Green':'#58A55C',
+  'Chocolate':'#7B3F00','Citrus Grove':'#B5A233','Citrus Yellow':'#F7D358','Cloud White':'#F5F5F5',
+  'Colorblock Coral':'#FF6F61','Colorblock Sand':'#C2B280','Colorblock Sea':'#2E8B97',
+  'Coral Blush':'#F4A494','Coral Fantasy':'#FF6B6B','Crane Flower Yellow':'#FFD700',
+  'Daisy Soda':'#FDE68A','Deep Sea':'#003153','Desert Sand':'#C2A06E','Fig Pink':'#C16B8A',
+  'Flamingo Pink':'#FC8EAC','Flamingo Soda':'#F9A8D4','Floral Reverie':'#E8A0BF',
+  'Gelato Summer':'#FEC8D8','Grapefruit Pink':'#F7786B','Ice Blue':'#B0E0E6',
+  'Jam On':'#960018','Jellyfish White':'#F0F0F0','Lava Black':'#1C1C1C','Lava Grey':'#808080',
+  'Lavender':'#B57EDC','Leopard Brown':'#8B6914','Leopard Pink':'#E75480','Lime Green':'#32CD32',
+  'Medallion Gold':'#CFB53B','Medallion Platinum':'#C0C0C0','Midnight Berry':'#3D0C52',
+  'Navy Blue':'#000080','Ocean Fantasy':'#006994','Olive Green':'#6B7C41','Pink':'#FFC0CB',
+  'Polar Blue':'#A2C4E8','Polar Gray':'#C8D2D6','Purple Coral':'#AD5E74','Raspberry':'#872657',
+  'Reef Blue':'#005A8E','Reef blue':'#005A8E','Retro Brown':'#6B4226','Rock Rose':'#CC6E8F',
+  'Sailing Blue':'#1E3A8A','Sand Beige':'#D4B896','Sand beige':'#D4B896',
+  'Sardine Coral':'#E8735A','Sea Anemone Green':'#3CB371','Shark White':'#F5F5F5',
+  'Shell Pink':'#FBB8C3','Shell Purple':'#C3A0D0','Sky Blue':'#87CEEB','Space Silver':'#B0B3BC',
+  'Squid Black':'#1C1C2E','Starfish Orange':'#FF7043','Starry Blue':'#1D3557',
+  'Sun Coral':'#FF6347','Sunrise Mist':'#FFD9A0','Sunrise Orange':'#FF7518',
+  'Sunshine Coral':'#FF8C69','Tortoiseshell':'#8B5E3C','Tranquil Blue':'#5B8DB8',
+  'Tranquil Gray':'#9B9B9B','Tranquil Lavender':'#A89DC6','Vacation Yellow':'#FFDD57',
+  'Vanilla Brownie':'#C8A97E','Waffle Special':'#D4A574','Wild Flower':'#C06080'
+};
+
+// All known color names sorted longest-first (for greedy title stripping)
+const COLOR_NAMES = Object.keys(COLOR_MAP).sort((a,b) => b.length - a.length);
+
+function colorCSS(name) { return COLOR_MAP[name] || '#cccccc'; }
+
+// ── Shopify image URL helper ──────────────────────────────────────────────────
+function shopifyImg(url, w) {
+  if (!url) return '';
+  try {
+    const u = new URL(url);
+    u.searchParams.set('width', String(w));
+    return u.toString();
+  } catch {
+    return url + (url.includes('?') ? '&' : '?') + 'width=' + w;
+  }
+}
+
+// ── Metadata extraction ───────────────────────────────────────────────────────
+const AGES   = ['Baby','Toddler','Kids','Junior','Adult'];
+const SHAPES = new Set(['Oval','Round','Creative Shield','Full-Rim','Half-Rim']);
+const TYPES  = new Set(['Polarised','Non-Polarised']);
+
+function extractMeta(p) {
+  const tl = (p.title || '').toLowerCase();
+  let age = '';
+  for (const a of AGES) { if (tl.includes(a.toLowerCase())) { age = a; break; } }
+
+  const shapes = new Set(), types = new Set();
+  let color = '';
+  for (const v of (p.variants || [])) {
+    const parts = (v.title || '').split('/').map(s => s.trim());
+    if (!color) color = v.color || parts[0] || '';
+    if (parts[1] && SHAPES.has(parts[1])) shapes.add(parts[1]);
+    if (parts[1] && TYPES.has(parts[1]))  types.add(parts[1]);
+    if (parts[2] && TYPES.has(parts[2]))  types.add(parts[2]);
+  }
+
+  const available = (p.variants || []).some(v => v.available);
+  return { age, shapes: [...shapes], types: [...types], color, available };
+}
+
+// ── Base model name (strip color from title) ──────────────────────────────────
+function baseModelOf(title) {
+  for (const c of COLOR_NAMES) {
+    const idx = title.toLowerCase().indexOf(c.toLowerCase());
+    if (idx !== -1) {
+      return (title.slice(0, idx) + title.slice(idx + c.length)).replace(/\s+/g,' ').trim();
+    }
+  }
+  return title.trim();
+}
+
+// ── XSS helper ────────────────────────────────────────────────────────────────
+function esc(s) {
+  return String(s)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ═════════════════════════════════════════════════════════════════════════════
+// State & Three.js globals
+// ═════════════════════════════════════════════════════════════════════════════
+const state = { view: 'grid', group: 'all' };
+let camera, scene, renderer, controls;
+let objects       = [];   // CSS3DObject[]
+let labels        = [];   // CSS3DObject[] (group headings)
+let chaosOffsets  = [];
+let isDragging    = false;
+let autoRotateSpeed = 0;
+let globalRotation  = 0;
+
+let products     = [];           // enriched product objects
+let colorSiblings = {};          // baseModel → [products...]
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Load data
+// ─────────────────────────────────────────────────────────────────────────────
+fetch('https://decentralize-dfw.github.io/olivioandco/mega_products.json')
+  .then(r => r.json())
+  .then(data => {
+    products = data.map(p => ({
+      ...p,
+      _meta: extractMeta(p),
+      _base: baseModelOf(p.title)
+    }));
+
+    // Build color siblings map
+    for (const p of products) {
+      if (!colorSiblings[p._base]) colorSiblings[p._base] = [];
+      colorSiblings[p._base].push(p);
+    }
+
+    init();
+    animate();
+
+    // Remove loader
+    const loader = document.getElementById('loader');
+    loader.style.opacity = '0';
+    setTimeout(() => loader.remove(), 500);
+  })
+  .catch(() => {
+    document.getElementById('loader-sub').textContent = 'Failed to load — check network connection.';
+  });
+
+// ─────────────────────────────────────────────────────────────────────────────
+// THREE.js init
+// ─────────────────────────────────────────────────────────────────────────────
+function init() {
+  const container = document.getElementById('container');
+  const aspect    = window.innerWidth / window.innerHeight;
+  const FRUST     = 3500;
+
+  camera = new THREE.OrthographicCamera(
+    FRUST * aspect / -2, FRUST * aspect / 2,
+    FRUST / 2, FRUST / -2, 1, 10000
+  );
+  camera.position.set(2000, 1000, 2000);
+  camera.lookAt(0, 0, 0);
+
+  scene    = new THREE.Scene();
+  renderer = new CSS3DRenderer();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.domElement.style.position = 'absolute';
+  renderer.domElement.style.top = '0';
+  container.appendChild(renderer.domElement);
+
+  controls = new OrbitControls(camera, renderer.domElement);
+  controls.enableDamping  = true;
+  controls.dampingFactor  = 0.05;
+  controls.minZoom        = 0.05;
+  controls.maxZoom        = 6;
+  controls.minPolarAngle  = 0.1;
+  controls.maxPolarAngle  = Math.PI - 0.1;
+
+  window.addEventListener('mousedown',  () => { isDragging = true; });
+  window.addEventListener('mouseup',    () => { isDragging = false; });
+  window.addEventListener('touchstart', () => { isDragging = true; });
+  window.addEventListener('touchend',   () => { isDragging = false; });
+
+  buildScene();
+  window.addEventListener('resize', onWindowResize);
+  setupMenuButtons();
+  setupSlider();
+  setupFitButton();
+  setupModal();
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Build 3D cards
+// ─────────────────────────────────────────────────────────────────────────────
+function buildScene() {
+  objects.forEach(o => scene.remove(o));
+  objects = [];
+  chaosOffsets = [];
+
+  for (const p of products) {
+    const el  = document.createElement('div');
+    el.className = 'element-card';
+
+    const img = document.createElement('img');
+    img.src      = p.images && p.images[0] ? shopifyImg(p.images[0], THUMBNAIL_WIDTH) : '';
+    img.draggable = false;
+    img.loading   = 'eager';
+    el.appendChild(img);
+
+    el.addEventListener('mouseenter', () => { if (!isDragging) controls.enabled = false; });
+    el.addEventListener('mouseleave', () => { controls.enabled = true; });
+    el.addEventListener('click', e => { e.stopPropagation(); openModal(p); });
+
+    const obj = new CSS3DObject(el);
+    obj.position.set(
+      Math.random() * 1500 - 750,
+      Math.random() * 1500 - 750,
+      Math.random() * 1500 - 750
+    );
+    obj.userData = {
+      center:      new THREE.Vector3(0,0,0),
+      offset:      new THREE.Vector3(obj.position.x, obj.position.y, obj.position.z),
+      rotation:    new THREE.Euler(0,0,0),
+      sphereCenter:null
+    };
+    scene.add(obj);
+    objects.push(obj);
+
+    chaosOffsets.push({
+      x: (Math.random()-.5)*2,
+      y: (Math.random()-.5)*2,
+      z: (Math.random()-.5)*2,
+      t: Math.random()*100
+    });
+  }
+
+  updateLayout();
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Layout helpers
+// ─────────────────────────────────────────────────────────────────────────────
+function activeIndices() {
+  // OOS mode: only show out-of-stock items
+  if (state.group === 'oos') {
+    return products.map((_,i)=>i).filter(i => !products[i]._meta.available);
+  }
+  return products.map((_,i)=>i);
+}
+
+function groupKey(i) {
+  const m = products[i]._meta;
+  switch (state.group) {
+    case 'age':   return m.age   || 'Other';
+    case 'shape': return m.shapes[0] || 'Other';
+    case 'type':  return m.types[0]  || 'Other';
+    case 'oos':   return 'Out of Stock';
+    default:      return '__ALL__';
+  }
+}
+
+function removeLabels() {
+  const old = [...labels]; labels = [];
+  old.forEach(l => {
+    l.element.classList.remove('visible');
+    setTimeout(() => { if (l.parent) scene.remove(l); }, 900);
+  });
+}
+
+function createLabel(text, sub, x, y, z) {
+  const wrap = document.createElement('div');
+  wrap.className = 'group-label-wrap';
+
+  const main = document.createElement('div');
+  main.className = 'group-label-main';
+  main.textContent = text;
+  wrap.appendChild(main);
+
+  if (sub) {
+    const s = document.createElement('div');
+    s.className = 'group-label-sub';
+    s.textContent = sub;
+    wrap.appendChild(s);
+  }
+
+  const obj = new CSS3DObject(wrap);
+  obj.position.set(x, y, z);
+  scene.add(obj);
+  labels.push(obj);
+  setTimeout(() => wrap.classList.add('visible'), 50);
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Main layout updater
+// ─────────────────────────────────────────────────────────────────────────────
+function updateLayout() {
+  TWEEN.removeAll();
+  removeLabels();
+
+  objects.forEach(o => { o.userData.rotation.set(0,0,0); o.userData.sphereCenter = null; });
+
+  const active  = new Set(activeIndices());
+  const allIdx  = objects.map((_,i)=>i);
+
+  // Hide inactive items
+  allIdx.forEach(i => {
+    if (!active.has(i)) {
+      new TWEEN.Tween(objects[i].position)
+        .to({y: 15000}, 2000)
+        .easing(TWEEN.Easing.Exponential.InOut)
+        .start();
+      objects[i].userData.center = null;
+    }
+  });
+
+  // Build groups
+  const groups = {};
+  for (const i of active) {
+    const k = groupKey(i);
+    if (!groups[k]) groups[k] = [];
+    groups[k].push(i);
+  }
+
+  const isGrouped  = ['age','shape','type'].includes(state.group);
+  const groupKeys  = Object.keys(groups).sort();
+  const ITEM_SPC   = 185;
+  const LABEL_Y    = 900;
+
+  // Update count badge
+  document.getElementById('count-badge').textContent =
+    active.size + ' product' + (active.size !== 1 ? 's' : '');
+
+  groupKeys.forEach((key, gIdx) => {
+    const idxs = groups[key];
+    let cx = 0, cy = 0, cz = 0;
+
+    const sphereR       = Math.max(Math.sqrt(idxs.length) * 65, 220);
+    const clusterSpc    = Math.max(2400, (groupKeys.length * 1300) / (2 * Math.PI));
+
+    // Cluster center
+    if (isGrouped) {
+      if (state.view === 'grid') {
+        const zSpc   = 2600;
+        const totalZ = (groupKeys.length - 1) * zSpc;
+        cx = 0;
+        cz = (totalZ / 2) - (gIdx * zSpc);
+      } else {
+        const angle = (gIdx / groupKeys.length) * Math.PI * 2;
+        cx = Math.cos(angle) * clusterSpc;
+        cz = Math.sin(angle) * clusterSpc;
+      }
+      createLabel(key, state.group, cx, LABEL_Y, cz);
+    }
+
+    // ── GRID layout ──────────────────────────────────────────────────────────
+    if (state.view === 'grid') {
+      const cols = Math.ceil(Math.sqrt(idxs.length));
+      idxs.forEach((objIdx, i) => {
+        const row = Math.floor(i / cols);
+        const col = i % cols;
+        const ox  = (col - (cols-1)/2) * ITEM_SPC;
+        const oy  = 420 - row * ITEM_SPC;
+        const oz  = 0;
+        const obj = objects[objIdx];
+        new TWEEN.Tween(obj.userData.center).to({x:cx,y:cy,z:cz},2500).easing(TWEEN.Easing.Exponential.InOut).start();
+        new TWEEN.Tween(obj.userData.offset).to({x:ox,y:oy,z:oz},2500).easing(TWEEN.Easing.Exponential.InOut).start();
+        new TWEEN.Tween(obj.userData.rotation).to({x:0,y:0,z:0},2500).easing(TWEEN.Easing.Exponential.InOut).start();
+      });
+    }
+
+    // ── SPHERE layout ────────────────────────────────────────────────────────
+    else if (state.view === 'sphere') {
+      const sphereCY = 420 - sphereR;
+      idxs.forEach((objIdx, i) => {
+        const phi   = Math.acos(-1 + (2*i) / idxs.length);
+        const theta = Math.sqrt(idxs.length * Math.PI) * phi;
+        const ox = sphereR * Math.sin(phi) * Math.cos(theta);
+        const oy = sphereR * Math.sin(phi) * Math.sin(theta);
+        const oz = sphereR * Math.cos(phi);
+        const obj = objects[objIdx];
+        obj.userData.sphereCenter = new THREE.Vector3(cx, sphereCY, cz);
+        new TWEEN.Tween(obj.userData.center).to({x:cx,y:cy,z:cz},2500).easing(TWEEN.Easing.Exponential.InOut).start();
+        new TWEEN.Tween(obj.userData.offset).to({x:ox,y:oy+sphereCY,z:oz},2500).easing(TWEEN.Easing.Exponential.InOut).start();
+        new TWEEN.Tween(obj.userData.rotation).to({x:0,y:0,z:0},2500).easing(TWEEN.Easing.Exponential.InOut).start();
+      });
+    }
+
+    // ── CHAOS layout ─────────────────────────────────────────────────────────
+    else {
+      const spread = 800;
+      idxs.forEach(objIdx => {
+        const ox = (Math.random()-.5)*spread;
+        const oy = (Math.random()-.5)*spread;
+        const oz = (Math.random()-.5)*spread;
+        const rx = (Math.random()-.5)*.5;
+        const rz = (Math.random()-.5)*.5;
+        const obj = objects[objIdx];
+        new TWEEN.Tween(obj.userData.center).to({x:cx,y:cy,z:cz},2500).easing(TWEEN.Easing.Exponential.InOut).start();
+        new TWEEN.Tween(obj.userData.offset).to({x:ox,y:oy,z:oz},2500).easing(TWEEN.Easing.Exponential.InOut).start();
+        new TWEEN.Tween(obj.userData.rotation).to({x:rx,y:0,z:rz},2500).easing(TWEEN.Easing.Exponential.InOut).start();
+      });
+    }
+  });
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Animation loop
+// ─────────────────────────────────────────────────────────────────────────────
+const _vh = new THREE.Vector3();
+
+function animate() {
+  requestAnimationFrame(animate);
+  TWEEN.update();
+  controls.update();
+
+  globalRotation += autoRotateSpeed;
+  const time = Date.now() * 0.002;
+
+  objects.forEach((obj, i) => {
+    if (!obj.userData.center) return;
+    const off = obj.userData.offset.clone();
+    off.applyAxisAngle(new THREE.Vector3(0,1,0), globalRotation);
+    const pos = new THREE.Vector3().copy(obj.userData.center).add(off);
+
+    if (state.view === 'chaos') {
+      const c = chaosOffsets[i];
+      pos.x += Math.sin(time + c.t) * 50;
+      pos.y += Math.cos(time*.9 + c.t) * 50;
+      pos.z += Math.sin(time*.7 + c.t) * 50;
+      obj.position.copy(pos);
+      obj.rotation.x = obj.userData.rotation.x + Math.sin(time*.5)*.2;
+      obj.rotation.y = obj.userData.rotation.y + globalRotation;
+      obj.rotation.z = obj.userData.rotation.z + Math.cos(time*.3)*.2;
+    } else if (state.view === 'sphere') {
+      obj.position.copy(pos);
+      if (obj.userData.sphereCenter) {
+        _vh.subVectors(obj.position, obj.userData.sphereCenter).add(obj.position);
+        obj.lookAt(_vh);
+      }
+    } else {
+      obj.position.copy(pos);
+      obj.rotation.set(0, globalRotation, 0);
+    }
+  });
+
+  renderer.render(scene, camera);
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Menu / slider / fit button
+// ─────────────────────────────────────────────────────────────────────────────
+function setupMenuButtons() {
+  document.querySelectorAll('.nav-btn').forEach(btn => {
+    btn.addEventListener('click', e => {
+      const type = e.currentTarget.dataset.type;
+      const val  = e.currentTarget.dataset.val;
+      if (!type) return;
+      e.currentTarget.closest('.menu-bar')
+        .querySelectorAll(`.nav-btn[data-type="${type}"]`)
+        .forEach(b => b.classList.remove('active'));
+      e.currentTarget.classList.add('active');
+      state[type] = val;
+      updateLayout();
+    });
+  });
+}
+
+function setupSlider() {
+  document.getElementById('rotate-slider').addEventListener('input', e => {
+    autoRotateSpeed = parseFloat(e.target.value) * 0.02;
+  });
+}
+
+function setupFitButton() {
+  document.getElementById('fit-btn').addEventListener('click', () => {
+    let maxD = 0;
+    objects.forEach(o => {
+      if (o.userData.center) {
+        const d = o.userData.center.length() + o.userData.offset.length();
+        if (d > maxD) maxD = d;
+      }
+    });
+    maxD += 350;
+    const FRUST = 3500;
+    let zoom = FRUST / (maxD * 1.5);
+    zoom = Math.max(0.05, Math.min(zoom, 6));
+    new TWEEN.Tween(camera)
+      .to({zoom}, 1000)
+      .easing(TWEEN.Easing.Cubic.Out)
+      .onUpdate(() => camera.updateProjectionMatrix())
+      .start();
+  });
+}
+
+function onWindowResize() {
+  const aspect = window.innerWidth / window.innerHeight;
+  const FRUST  = 3500;
+  camera.left   = -FRUST * aspect / 2;
+  camera.right  =  FRUST * aspect / 2;
+  camera.top    =  FRUST / 2;
+  camera.bottom = -FRUST / 2;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Modal
+// ─────────────────────────────────────────────────────────────────────────────
+let _modalImages   = [];
+let _currentImgIdx = 0;
+
+function setupModal() {
+  document.getElementById('modal-close')  .addEventListener('click', closeModal);
+  document.getElementById('modal-backdrop').addEventListener('click', closeModal);
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+}
+
+function openModal(p) {
+  populateModal(p);
+  document.getElementById('modal-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function populateModal(p) {
+  const m      = p._meta;
+  const images = (p.images || []).filter(Boolean);
+  const isOos  = !m.available;
+
+  _modalImages   = images;
+  _currentImgIdx = 0;
+
+  // Title
+  document.getElementById('modal-title').innerHTML =
+    esc(p.title) + (isOos ? ' <span class="oos-badge">(Out of Stock)</span>' : '');
+
+  // Price
+  document.getElementById('modal-price').textContent = '€' + Number(p.price).toFixed(2);
+
+  // Description
+  document.getElementById('modal-description').textContent = p.description || '';
+
+  // Meta rows
+  document.getElementById('modal-meta').innerHTML = `
+    <div class="info-row"><span class="lbl">Age</span><span class="val">${esc(m.age || '—')}</span></div>
+    <div class="info-row"><span class="lbl">Shape</span><span class="val">${esc(m.shapes.join(', ') || '—')}</span></div>
+    <div class="info-row"><span class="lbl">Lens</span><span class="val">${esc(m.types.join(', ') || '—')}</span></div>
+    <div class="info-row">
+      <span class="lbl">Stock</span>
+      <span class="val" style="color:${m.available?'#000':'#aaa'}">${m.available?'In Stock':'Out of Stock'}</span>
+    </div>`;
+
+  // Color selector (sibling products)
+  buildColorSelector(p);
+
+  // Visit link
+  document.getElementById('modal-visit').href = p.url || '#';
+
+  // Carousel + main image
+  buildCarousel(images);
+  if (images.length > 0) setMainImage(0);
+}
+
+function buildColorSelector(activeProduct) {
+  const cs       = document.getElementById('color-selector');
+  cs.innerHTML   = '';
+  const siblings = colorSiblings[activeProduct._base] || [activeProduct];
+
+  for (const sib of siblings) {
+    const ball = document.createElement('div');
+    ball.className = 'color-ball'
+      + (sib.id === activeProduct.id ? ' active' : '')
+      + (!sib._meta.available ? ' oos' : '');
+    ball.style.background = colorCSS(sib._meta.color);
+    ball.title = sib._meta.color + (!sib._meta.available ? ' (Out of Stock)' : '');
+
+    if (sib.id !== activeProduct.id) {
+      ball.addEventListener('click', () => populateModal(sib));
+    }
+    cs.appendChild(ball);
+  }
+}
+
+function buildCarousel(images) {
+  const car = document.getElementById('modal-carousel');
+  car.innerHTML = '';
+  images.forEach((src, i) => {
+    const thumb = document.createElement('div');
+    thumb.className = 'c-thumb' + (i === 0 ? ' active' : '');
+    const img   = document.createElement('img');
+    img.src     = shopifyImg(src, 120);
+    img.alt     = '';
+    img.loading = 'lazy';
+    thumb.appendChild(img);
+    thumb.addEventListener('click', () => setMainImage(i));
+    car.appendChild(thumb);
+  });
+}
+
+function setMainImage(idx) {
+  _currentImgIdx = idx;
+  const mainImg  = document.getElementById('modal-main-img');
+  const isLast   = idx === _modalImages.length - 1 && _modalImages.length > 1;
+
+  // Last image → natural ratio (contain); others → square-crop (cover)
+  mainImg.className = isLast ? 'img-contain' : 'img-cover';
+  mainImg.src = shopifyImg(_modalImages[idx], IMAGE_WIDTH);
+
+  document.querySelectorAll('.c-thumb').forEach((t,i) =>
+    t.classList.toggle('active', i === idx));
+}
+
+function closeModal() {
+  document.getElementById('modal-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+</script>
+</body>
+</html>
