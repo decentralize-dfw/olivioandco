@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Olivio&amp;Co — Product Catalog</title>
+
+  <!-- ═══════════════════════════════════════════
+       CONFIG — adjust these two values freely
+  ═══════════════════════════════════════════ -->
+  <script>
+    const THUMBNAIL_WIDTH = 400;   // px — grid card images
+    const IMAGE_WIDTH     = 1200;  // px — popup full-size images
+  </script>
+
+  <style>
+    /* ── Reset & Base ─────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --c-bg:      #ffffff;
+      --c-fg:      #000000;
+      --c-border:  #000000;
+      --c-muted:   #888888;
+      --c-hover:   #f0f0f0;
+      --c-active-bg:  #000000;
+      --c-active-fg:  #ffffff;
+      --radius: 3px;
+      --header-h: 56px;
+      --filter-h: 148px;
+    }
+
+    html, body {
+      height: 100%;
+      background: var(--c-bg);
+      color: var(--c-fg);
+      font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+      font-size: 13px;
+    }
+
+    /* ── Header ───────────────────────────────── */
+    #header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: var(--header-h);
+      background: var(--c-bg);
+      border-bottom: 1px solid var(--c-border);
+      display: flex;
+      align-items: center;
+      padding: 0 20px;
+      gap: 16px;
+      z-index: 100;
+    }
+    #header .brand {
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    #search-wrap {
+      flex: 1;
+      max-width: 360px;
+    }
+    #search-wrap input {
+      width: 100%;
+      height: 32px;
+      border: 1px solid var(--c-border);
+      border-radius: var(--radius);
+      padding: 0 10px;
+      font-size: 13px;
+      outline: none;
+      background: var(--c-bg);
+      color: var(--c-fg);
+    }
+    #count-label {
+      margin-left: auto;
+      color: var(--c-muted);
+      white-space: nowrap;
+      font-size: 12px;
+    }
+
+    /* ── Filter Panel ─────────────────────────── */
+    #filters {
+      position: fixed;
+      top: var(--header-h);
+      left: 0; right: 0;
+      height: var(--filter-h);
+      background: var(--c-bg);
+      border-bottom: 1px solid var(--c-border);
+      padding: 8px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      z-index: 99;
+      overflow: hidden;
+    }
+    .filter-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      min-height: 26px;
+    }
+    .filter-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      color: var(--c-muted);
+      min-width: 58px;
+      flex-shrink: 0;
+    }
+    .filter-tags {
+      display: flex;
+      gap: 5px;
+      overflow-x: auto;
+      flex-wrap: nowrap;
+      scrollbar-width: none;
+    }
+    .filter-tags::-webkit-scrollbar { display: none; }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 9px;
+      border: 1px solid var(--c-border);
+      border-radius: 99px;
+      cursor: pointer;
+      user-select: none;
+      white-space: nowrap;
+      font-size: 12px;
+      transition: background .1s, color .1s;
+      flex-shrink: 0;
+    }
+    .tag:hover { background: var(--c-hover); }
+    .tag.active {
+      background: var(--c-active-bg);
+      color: var(--c-active-fg);
+      border-color: var(--c-active-bg);
+    }
+    .tag .dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      border: 1px solid rgba(0,0,0,.2);
+      flex-shrink: 0;
+    }
+    .tag.active .dot { border-color: rgba(255,255,255,.4); }
+
+    /* ── Grid ─────────────────────────────────── */
+    #grid {
+      margin-top: calc(var(--header-h) + var(--filter-h));
+      padding: 20px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 16px;
+    }
+    .card {
+      border: 1px solid var(--c-border);
+      border-radius: var(--radius);
+      cursor: pointer;
+      overflow: hidden;
+      transition: box-shadow .15s;
+      background: var(--c-bg);
+    }
+    .card:hover { box-shadow: 0 4px 16px rgba(0,0,0,.15); }
+    .card-img-wrap {
+      aspect-ratio: 1 / 1;
+      overflow: hidden;
+      background: #f8f8f8;
+    }
+    .card-img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform .25s;
+    }
+    .card:hover .card-img-wrap img { transform: scale(1.04); }
+    .card-body {
+      padding: 10px 12px;
+      border-top: 1px solid var(--c-border);
+    }
+    .card-title {
+      font-size: 12px;
+      font-weight: 500;
+      line-height: 1.4;
+      margin-bottom: 4px;
+    }
+    .card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 4px;
+    }
+    .card-price { font-size: 13px; font-weight: 700; }
+    .badge {
+      font-size: 10px;
+      padding: 2px 6px;
+      border-radius: 99px;
+      border: 1px solid;
+    }
+    .badge-available   { border-color: #000; color: #000; }
+    .badge-unavailable { border-color: #ccc; color: #aaa; }
+
+    /* ── No Results ───────────────────────────── */
+    #no-results {
+      display: none;
+      grid-column: 1 / -1;
+      padding: 60px;
+      text-align: center;
+      color: var(--c-muted);
+      font-size: 14px;
+    }
+
+    /* ── Modal Overlay ────────────────────────── */
+    #modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.6);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+    }
+    #modal-overlay.open { display: flex; }
+
+    #modal {
+      background: var(--c-bg);
+      border: 1px solid var(--c-border);
+      border-radius: var(--radius);
+      width: min(900px, 96vw);
+      max-height: 92vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* close button */
+    #modal-close {
+      position: absolute;
+      top: 14px; right: 16px;
+      background: none;
+      border: 1px solid var(--c-border);
+      border-radius: 50%;
+      width: 30px; height: 30px;
+      cursor: pointer;
+      font-size: 16px;
+      display: flex; align-items: center; justify-content: center;
+      z-index: 10;
+    }
+    #modal-close:hover { background: var(--c-fg); color: var(--c-bg); }
+
+    /* modal body */
+    #modal-body {
+      display: flex;
+      gap: 0;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    /* left — image viewer */
+    #modal-left {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      border-right: 1px solid var(--c-border);
+      background: #f8f8f8;
+      min-width: 0;
+    }
+    #modal-main-img {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      min-height: 0;
+    }
+    #modal-main-img img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+
+    /* carousel */
+    #modal-carousel {
+      display: flex;
+      gap: 6px;
+      padding: 10px;
+      border-top: 1px solid var(--c-border);
+      overflow-x: auto;
+      background: var(--c-bg);
+      scrollbar-width: thin;
+      scrollbar-color: #ccc transparent;
+    }
+    .carousel-thumb {
+      width: 56px;
+      height: 56px;
+      border: 1px solid var(--c-border);
+      border-radius: var(--radius);
+      cursor: pointer;
+      overflow: hidden;
+      flex-shrink: 0;
+      opacity: .6;
+      transition: opacity .15s, border-color .15s;
+    }
+    .carousel-thumb:hover { opacity: .85; }
+    .carousel-thumb.active { opacity: 1; border-color: var(--c-fg); border-width: 2px; }
+    .carousel-thumb img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* right — info panel */
+    #modal-right {
+      width: 280px;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      padding: 24px 20px 20px;
+      overflow-y: auto;
+      gap: 14px;
+    }
+    #modal-title {
+      font-size: 16px;
+      font-weight: 700;
+      line-height: 1.4;
+      padding-right: 36px;
+    }
+    #modal-price {
+      font-size: 22px;
+      font-weight: 700;
+    }
+    .info-group { display: flex; flex-direction: column; gap: 6px; }
+    .info-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      font-size: 12px;
+    }
+    .info-row .lbl {
+      color: var(--c-muted);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    .info-row .val {
+      font-weight: 500;
+      text-align: right;
+    }
+    .info-row .val.avail-yes { color: #000; }
+    .info-row .val.avail-no  { color: #aaa; }
+
+    /* color swatch in modal */
+    .swatch {
+      display: inline-block;
+      width: 12px; height: 12px;
+      border-radius: 50%;
+      border: 1px solid rgba(0,0,0,.15);
+      vertical-align: middle;
+      margin-right: 4px;
+    }
+
+    .modal-divider {
+      height: 1px;
+      background: var(--c-border);
+      margin: 0;
+    }
+
+    #modal-visit {
+      display: block;
+      text-align: center;
+      padding: 10px;
+      border: 1px solid var(--c-border);
+      border-radius: var(--radius);
+      text-decoration: none;
+      color: var(--c-fg);
+      font-size: 13px;
+      font-weight: 600;
+      transition: background .15s, color .15s;
+    }
+    #modal-visit:hover {
+      background: var(--c-fg);
+      color: var(--c-bg);
+    }
+
+    #modal-variants { display: flex; flex-direction: column; gap: 4px; }
+    .variant-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      padding: 5px 8px;
+      border: 1px solid #eee;
+      border-radius: var(--radius);
+    }
+    .variant-row .v-color { font-weight: 600; }
+    .variant-row .v-type  { color: var(--c-muted); margin-left: auto; }
+    .variant-unavail { opacity: .4; text-decoration: line-through; }
+    .variants-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      color: var(--c-muted);
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════ HEADER ═══════════════ -->
+<div id="header">
+  <span class="brand">Olivio&amp;Co</span>
+  <div id="search-wrap">
+    <input type="text" id="search-input" placeholder="Search products…">
+  </div>
+  <span id="count-label">0 products</span>
+</div>
+
+<!-- ═══════════════ FILTERS ═══════════════ -->
+<div id="filters">
+  <div class="filter-row">
+    <span class="filter-label">Age</span>
+    <div class="filter-tags" id="tags-age"></div>
+  </div>
+  <div class="filter-row">
+    <span class="filter-label">Shape</span>
+    <div class="filter-tags" id="tags-shape"></div>
+  </div>
+  <div class="filter-row">
+    <span class="filter-label">Type</span>
+    <div class="filter-tags" id="tags-type"></div>
+  </div>
+  <div class="filter-row">
+    <span class="filter-label">Color</span>
+    <div class="filter-tags" id="tags-color"></div>
+  </div>
+  <div class="filter-row">
+    <span class="filter-label">Stock</span>
+    <div class="filter-tags" id="tags-stock"></div>
+  </div>
+</div>
+
+<!-- ═══════════════ GRID ═══════════════ -->
+<div id="grid">
+  <div id="no-results">No products match the selected filters.</div>
+</div>
+
+<!-- ═══════════════ MODAL ═══════════════ -->
+<div id="modal-overlay" role="dialog" aria-modal="true">
+  <div id="modal">
+    <button id="modal-close" aria-label="Close">✕</button>
+    <div id="modal-body">
+
+      <!-- image side -->
+      <div id="modal-left">
+        <div id="modal-main-img">
+          <img id="modal-img" src="" alt="">
+        </div>
+        <div id="modal-carousel"></div>
+      </div>
+
+      <!-- info side -->
+      <div id="modal-right">
+        <div id="modal-title"></div>
+        <div id="modal-price"></div>
+        <div class="modal-divider"></div>
+        <div class="info-group" id="modal-meta"></div>
+        <div class="modal-divider"></div>
+        <div>
+          <div class="variants-label" style="margin-bottom:6px">Variants</div>
+          <div id="modal-variants"></div>
+        </div>
+        <div class="modal-divider"></div>
+        <a id="modal-visit" href="#" target="_blank" rel="noopener">View on store →</a>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ DATA & LOGIC ═══════════════ -->
+<script>
+// ── Shopify image URL helper ──────────────────
+function shopifyImg(url, width) {
+  if (!url) return '';
+  try {
+    const u = new URL(url);
+    u.searchParams.set('width', String(width));
+    return u.toString();
+  } catch {
+    const sep = url.includes('?') ? '&' : '?';
+    return url + sep + 'width=' + width;
+  }
+}
+
+// ── Color name → approximate CSS color ───────
+const COLOR_MAP = {
+  'Apricot': '#FBCEB1', 'Art Brush': '#8B4513',
+  'Azure Blue': '#007FFF', 'Begonia Red': '#FA6E79',
+  'Berry Mist': '#8E4585', 'Blue': '#2563EB',
+  'Blueberry': '#4F2877', 'Cactus Green': '#58A55C',
+  'Chocolate': '#7B3F00', 'Citrus Grove': '#B5A233',
+  'Citrus Yellow': '#F7D358', 'Cloud White': '#F5F5F5',
+  'Colorblock Coral': '#FF6F61', 'Colorblock Sand': '#C2B280',
+  'Colorblock Sea': '#2E8B97', 'Coral Blush': '#F4A494',
+  'Coral Fantasy': '#FF6B6B', 'Crane Flower Yellow': '#FFD700',
+  'Daisy Soda': '#FDE68A', 'Deep Sea': '#003153',
+  'Desert Sand': '#C2A06E', 'Fig Pink': '#C16B8A',
+  'Flamingo Pink': '#FC8EAC', 'Flamingo Soda': '#F9A8D4',
+  'Floral Reverie': '#E8A0BF', 'Gelato Summer': '#FEC8D8',
+  'Grapefruit Pink': '#F7786B', 'Ice Blue': '#B0E0E6',
+  'Jam On': '#960018', 'Jellyfish White': '#F0F0F0',
+  'Lava Black': '#1C1C1C', 'Lava Grey': '#808080',
+  'Lavender': '#B57EDC', 'Leopard Brown': '#8B6914',
+  'Leopard Pink': '#E75480', 'Lime Green': '#32CD32',
+  'Medallion Gold': '#CFB53B', 'Medallion Platinum': '#C0C0C0',
+  'Midnight Berry': '#3D0C52', 'Navy Blue': '#000080',
+  'Ocean Fantasy': '#006994', 'Olive Green': '#6B7C41',
+  'Pink': '#FFC0CB', 'Polar Blue': '#A2C4E8',
+  'Polar Gray': '#C8D2D6', 'Purple Coral': '#AD5E74',
+  'Raspberry': '#872657', 'Reef Blue': '#005A8E',
+  'Reef blue': '#005A8E', 'Retro Brown': '#6B4226',
+  'Rock Rose': '#CC6E8F', 'Sailing Blue': '#1E3A8A',
+  'Sand Beige': '#D4B896', 'Sand beige': '#D4B896',
+  'Sardine Coral': '#E8735A', 'Sea Anemone Green': '#3CB371',
+  'Shark White': '#F5F5F5', 'Shell Pink': '#FBB8C3',
+  'Shell Purple': '#C3A0D0', 'Sky Blue': '#87CEEB',
+  'Space Silver': '#B0B3BC', 'Squid Black': '#1C1C2E',
+  'Starfish Orange': '#FF7043', 'Starry Blue': '#1D3557',
+  'Sun Coral': '#FF6347', 'Sunrise Mist': '#FFD9A0',
+  'Sunrise Orange': '#FF7518', 'Sunshine Coral': '#FF8C69',
+  'Tortoiseshell': '#8B5E3C', 'Tranquil Blue': '#5B8DB8',
+  'Tranquil Gray': '#9B9B9B', 'Tranquil Lavender': '#A89DC6',
+  'Vacation Yellow': '#FFDD57', 'Vanilla Brownie': '#C8A97E',
+  'Waffle Special': '#D4A574', 'Wild Flower': '#C06080'
+};
+
+function colorDot(colorName) {
+  const bg = COLOR_MAP[colorName] || '#ccc';
+  return `<span class="dot" style="background:${bg}"></span>`;
+}
+function swatchEl(colorName) {
+  const bg = COLOR_MAP[colorName] || '#ccc';
+  return `<span class="swatch" style="background:${bg}"></span>`;
+}
+
+// ── Extract structured metadata from a product ─
+const SHAPES_VALID    = new Set(['Oval','Round','Creative Shield','Full-Rim','Half-Rim']);
+const LENS_TYPES_VALID= new Set(['Polarised','Non-Polarised']);
+const AGES_VALID      = ['Baby','Toddler','Kids','Junior','Adult'];
+
+function extractMeta(product) {
+  const title = product.title || '';
+  const tl = title.toLowerCase();
+
+  // age from title
+  let age = '';
+  for (const a of AGES_VALID) {
+    if (tl.includes(a.toLowerCase())) { age = a; break; }
+  }
+
+  // colors, shapes, lens types from variants
+  const colors = new Set();
+  const shapes  = new Set();
+  const types   = new Set();
+
+  for (const v of (product.variants || [])) {
+    const parts = (v.title || '').split('/').map(s => s.trim());
+    if (parts[0]) colors.add(parts[0]);
+    if (parts[1] && SHAPES_VALID.has(parts[1]))     shapes.add(parts[1]);
+    if (parts[1] && LENS_TYPES_VALID.has(parts[1])) types.add(parts[1]);
+    if (parts[2] && LENS_TYPES_VALID.has(parts[2])) types.add(parts[2]);
+  }
+
+  const available = (product.variants || []).some(v => v.available);
+
+  return { age, colors: [...colors], shapes: [...shapes], types: [...types], available };
+}
+
+// ─────────────────────────────────────────────
+// Load data & build UI
+// ─────────────────────────────────────────────
+let products = [];
+let activeFilters = {
+  age: null, shape: null, type: null, color: null, stock: null
+};
+let searchQuery = '';
+
+fetch('https://decentralize-dfw.github.io/olivioandco/mega_products.json')
+  .then(r => r.json())
+  .then(data => {
+    products = data.map(p => ({ ...p, _meta: extractMeta(p) }));
+    buildFilters();
+    renderGrid();
+  });
+
+// ── Build filter tag rows ─────────────────────
+function buildFilters() {
+  // ages
+  buildTagRow('tags-age', 'age',
+    AGES_VALID.filter(a => products.some(p => p._meta.age === a)));
+
+  // shapes
+  buildTagRow('tags-shape', 'shape',
+    [...SHAPES_VALID].filter(s => products.some(p => p._meta.shapes.includes(s))));
+
+  // lens types
+  buildTagRow('tags-type', 'type',
+    [...LENS_TYPES_VALID].filter(t => products.some(p => p._meta.types.includes(t))));
+
+  // colors
+  const allColors = [...new Set(products.flatMap(p => p._meta.colors))].sort();
+  const colorRow = document.getElementById('tags-color');
+  const allColorTag = makeTag('All', null, 'color', true);
+  colorRow.appendChild(allColorTag);
+  for (const c of allColors) {
+    const t = document.createElement('span');
+    t.className = 'tag';
+    t.dataset.filter = 'color';
+    t.dataset.value  = c;
+    t.innerHTML = colorDot(c) + escHtml(c);
+    t.addEventListener('click', () => onTagClick(t, 'color', c));
+    colorRow.appendChild(t);
+  }
+
+  // stock
+  buildTagRow('tags-stock', 'stock', ['In Stock', 'Out of Stock'], ['true','false']);
+}
+
+function buildTagRow(containerId, filterKey, labels, values) {
+  const row = document.getElementById(containerId);
+  const allTag = makeTag('All', null, filterKey, true);
+  row.appendChild(allTag);
+  const vals = values || labels;
+  labels.forEach((lbl, i) => {
+    const t = makeTag(lbl, vals[i], filterKey, false);
+    row.appendChild(t);
+  });
+}
+
+function makeTag(label, value, filterKey, isAll) {
+  const t = document.createElement('span');
+  t.className = 'tag' + (isAll ? ' active' : '');
+  t.dataset.filter = filterKey;
+  t.dataset.value  = value ?? '__all__';
+  t.textContent = label;
+  t.addEventListener('click', () => onTagClick(t, filterKey, isAll ? null : value));
+  return t;
+}
+
+function onTagClick(el, filterKey, value) {
+  // deactivate siblings
+  document.querySelectorAll(`.tag[data-filter="${filterKey}"]`).forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  activeFilters[filterKey] = value;
+  renderGrid();
+}
+
+// ── Search ────────────────────────────────────
+document.getElementById('search-input').addEventListener('input', e => {
+  searchQuery = e.target.value.toLowerCase().trim();
+  renderGrid();
+});
+
+// ── Filter logic ──────────────────────────────
+function productMatches(p) {
+  const m = p._meta;
+  if (activeFilters.age   && m.age !== activeFilters.age)           return false;
+  if (activeFilters.shape && !m.shapes.includes(activeFilters.shape)) return false;
+  if (activeFilters.type  && !m.types.includes(activeFilters.type))   return false;
+  if (activeFilters.color && !m.colors.includes(activeFilters.color)) return false;
+  if (activeFilters.stock === 'true'  && !m.available)               return false;
+  if (activeFilters.stock === 'false' &&  m.available)               return false;
+  if (searchQuery) {
+    const hay = (p.title + ' ' + (p.description || '')).toLowerCase();
+    if (!hay.includes(searchQuery)) return false;
+  }
+  return true;
+}
+
+// ── Render grid ───────────────────────────────
+function renderGrid() {
+  const grid = document.getElementById('grid');
+  const noRes = document.getElementById('no-results');
+  // remove old cards
+  grid.querySelectorAll('.card').forEach(c => c.remove());
+
+  const visible = products.filter(productMatches);
+  document.getElementById('count-label').textContent =
+    visible.length + ' product' + (visible.length !== 1 ? 's' : '');
+
+  noRes.style.display = visible.length ? 'none' : 'block';
+
+  for (const p of visible) {
+    const card = buildCard(p);
+    grid.appendChild(card);
+  }
+}
+
+function buildCard(p) {
+  const m = p._meta;
+  const thumb = p.images && p.images[0] ? shopifyImg(p.images[0], THUMBNAIL_WIDTH) : '';
+
+  const card = document.createElement('div');
+  card.className = 'card';
+  card.innerHTML = `
+    <div class="card-img-wrap">
+      <img src="${escAttr(thumb)}" alt="${escAttr(p.title)}" loading="lazy">
+    </div>
+    <div class="card-body">
+      <div class="card-title">${escHtml(p.title)}</div>
+      <div class="card-footer">
+        <span class="card-price">€${Number(p.price).toFixed(2)}</span>
+        <span class="badge ${m.available ? 'badge-available' : 'badge-unavailable'}">
+          ${m.available ? 'In Stock' : 'Out of Stock'}
+        </span>
+      </div>
+    </div>`;
+  card.addEventListener('click', () => openModal(p));
+  return card;
+}
+
+// ── Modal ─────────────────────────────────────
+const overlay     = document.getElementById('modal-overlay');
+const modalImg    = document.getElementById('modal-img');
+const carousel    = document.getElementById('modal-carousel');
+const modalTitle  = document.getElementById('modal-title');
+const modalPrice  = document.getElementById('modal-price');
+const modalMeta   = document.getElementById('modal-meta');
+const modalVars   = document.getElementById('modal-variants');
+const modalVisit  = document.getElementById('modal-visit');
+
+document.getElementById('modal-close').addEventListener('click', closeModal);
+overlay.addEventListener('click', e => { if (e.target === overlay) closeModal(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+function openModal(p) {
+  const m = p._meta;
+  const images = (p.images || []).filter(Boolean);
+
+  // title & price
+  modalTitle.textContent = p.title;
+  modalPrice.textContent = '€' + Number(p.price).toFixed(2);
+
+  // meta rows
+  modalMeta.innerHTML = `
+    <div class="info-row">
+      <span class="lbl">Age</span>
+      <span class="val">${m.age || '—'}</span>
+    </div>
+    <div class="info-row">
+      <span class="lbl">Shape</span>
+      <span class="val">${m.shapes.join(', ') || '—'}</span>
+    </div>
+    <div class="info-row">
+      <span class="lbl">Lens</span>
+      <span class="val">${m.types.join(', ') || '—'}</span>
+    </div>
+    <div class="info-row">
+      <span class="lbl">Colors</span>
+      <span class="val">${m.colors.map(c => swatchEl(c) + escHtml(c)).join('<br>')}</span>
+    </div>
+    <div class="info-row">
+      <span class="lbl">Stock</span>
+      <span class="val ${m.available ? 'avail-yes' : 'avail-no'}">${m.available ? 'In Stock' : 'Out of Stock'}</span>
+    </div>`;
+
+  // variants
+  modalVars.innerHTML = '';
+  for (const v of (p.variants || [])) {
+    const parts = v.title.split('/').map(s => s.trim());
+    const color = parts[0] || '';
+    const shape = parts[1] || '';
+    const lens  = parts[2] || parts[1] || '';
+    const row = document.createElement('div');
+    row.className = 'variant-row' + (v.available ? '' : ' variant-unavail');
+    row.innerHTML = `
+      ${swatchEl(color)}
+      <span class="v-color">${escHtml(color)}</span>
+      ${shape && shape !== lens ? `<span>· ${escHtml(shape)}</span>` : ''}
+      <span class="v-type">${escHtml(LENS_TYPES_VALID.has(lens) ? lens : '')}</span>`;
+    modalVars.appendChild(row);
+  }
+
+  // link
+  modalVisit.href = p.url || '#';
+
+  // carousel
+  carousel.innerHTML = '';
+  images.forEach((src, i) => {
+    const th = document.createElement('div');
+    th.className = 'carousel-thumb' + (i === 0 ? ' active' : '');
+    th.innerHTML = `<img src="${escAttr(shopifyImg(src, 120))}" alt="" loading="lazy">`;
+    th.addEventListener('click', () => setModalImg(src, i));
+    carousel.appendChild(th);
+  });
+
+  // main image
+  if (images[0]) setModalImg(images[0], 0);
+
+  overlay.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function setModalImg(src, idx) {
+  modalImg.src = shopifyImg(src, IMAGE_WIDTH);
+  carousel.querySelectorAll('.carousel-thumb').forEach((t, i) => {
+    t.classList.toggle('active', i === idx);
+  });
+}
+
+function closeModal() {
+  overlay.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+// ── Tiny XSS helpers ──────────────────────────
+function escHtml(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function escAttr(s) { return escHtml(s); }
+</script>
+</body>
+</html>
