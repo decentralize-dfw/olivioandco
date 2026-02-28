@@ -1,0 +1,1203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Olivio&amp;Co — Product Catalog</title>
+
+  <!-- ═══════════════════════════════════════════
+       CONFIG — change only these two numbers
+  ═══════════════════════════════════════════ -->
+  <script>
+    const THUMBNAIL_WIDTH = 400;   // px — 3D card images
+    const IMAGE_WIDTH     = 1200;  // px — popup full-size images
+  </script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      height: 100%; width: 100%;
+      background: #ffffff;
+      color: #000000;
+      font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+      font-size: 13px;
+      overflow: hidden;
+      touch-action: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    /* ────────────────────────────────────────────────────────
+       TOP UI
+    ──────────────────────────────────────────────────────── */
+    #ui-top {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 12px 16px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      pointer-events: none;
+    }
+
+    /* ── Primary menu bar ── */
+    .menu-bar {
+      display: flex;
+      flex-wrap: nowrap;
+      gap: 3px;
+      align-items: center;
+      pointer-events: auto;
+      background: rgba(255,255,255,0.94);
+      padding: 5px 11px;
+      border-radius: 30px;
+      border: 1px solid #000;
+      backdrop-filter: blur(6px);
+      overflow-x: auto;
+      scrollbar-width: none;
+      align-self: flex-start;
+    }
+    .menu-bar::-webkit-scrollbar { display: none; }
+
+    .menu-sep {
+      width: 1px; height: 14px;
+      background: rgba(0,0,0,0.2);
+      margin: 0 3px; flex-shrink: 0;
+    }
+
+    .nav-btn {
+      background: transparent;
+      border: 1px solid transparent;
+      color: rgba(0,0,0,0.42);
+      padding: 2px 10px;
+      font-family: inherit;
+      font-size: 11px; font-weight: 700;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      cursor: pointer; border-radius: 4px;
+      transition: color .12s, border-color .12s, background .12s;
+      white-space: nowrap; flex-shrink: 0;
+      user-select: none; -webkit-user-select: none;
+    }
+    .nav-btn:hover  { color: #000; border-color: rgba(0,0,0,0.28); }
+    .nav-btn.active { background: #000; color: #fff; border-color: #000; }
+
+    /* ── Tick-filter bar ── */
+    #tick-bar {
+      display: flex;
+      flex-wrap: nowrap;
+      gap: 0;
+      align-items: center;
+      pointer-events: auto;
+      overflow-x: auto;
+      scrollbar-width: none;
+      padding-bottom: 8px;
+    }
+    #tick-bar::-webkit-scrollbar { display: none; }
+
+    /* Each category is a section */
+    .tick-section {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      flex-shrink: 0;
+      padding: 0 10px;
+      border-right: 1px solid rgba(0,0,0,0.15);
+    }
+    .tick-section:first-child { padding-left: 0; }
+    .tick-section:last-child  { border-right: none; }
+
+    .tick-section-label {
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: rgba(0,0,0,0.35);
+      white-space: nowrap;
+      padding-right: 1px;
+      flex-shrink: 0;
+    }
+
+    .tick-btn {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 3px 10px 3px 8px;
+      border: 1px solid rgba(0,0,0,0.22);
+      border-radius: 30px;
+      background: rgba(255,255,255,0.9);
+      color: rgba(0,0,0,0.48);
+      font-family: inherit;
+      font-size: 11px; font-weight: 600;
+      letter-spacing: .04em;
+      cursor: pointer; white-space: nowrap; flex-shrink: 0;
+      user-select: none; -webkit-user-select: none;
+      transition: color .12s, border-color .12s, background .12s;
+      backdrop-filter: blur(4px);
+    }
+    .tick-btn:hover { border-color: #000; color: #000; }
+    .tick-btn.active {
+      border-color: #000; color: #000;
+      background: rgba(255,255,255,0.98);
+    }
+    .tick-box {
+      width: 13px; height: 13px;
+      border: 1.5px solid currentColor;
+      border-radius: 3px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 9px; line-height: 1;
+      flex-shrink: 0;
+    }
+
+    /* ────────────────────────────────────────────────────────
+       PRODUCT COUNT BADGE
+    ──────────────────────────────────────────────────────── */
+    #count-badge {
+      position: fixed;
+      top: 14px; right: 14px;
+      z-index: 101;
+      background: rgba(255,255,255,0.92);
+      border: 1px solid rgba(0,0,0,0.18);
+      border-radius: 20px;
+      padding: 4px 10px;
+      font-size: 11px;
+      color: rgba(0,0,0,0.5);
+      backdrop-filter: blur(4px);
+      pointer-events: none;
+      white-space: nowrap;
+    }
+
+    /* ────────────────────────────────────────────────────────
+       BOTTOM CONTROLS (Rotate slider + Fit)
+    ──────────────────────────────────────────────────────── */
+    #slider-container {
+      position: fixed;
+      bottom: 16px; left: 16px;
+      z-index: 100;
+      display: flex; flex-direction: row; align-items: center; gap: 9px;
+      pointer-events: auto;
+      background: rgba(255,255,255,0.92);
+      padding: 6px 12px; border-radius: 10px;
+      border: 1px solid rgba(0,0,0,0.18);
+      backdrop-filter: blur(6px);
+    }
+    #slider-label {
+      font-size: 10px; font-weight: 700;
+      letter-spacing: .08em; text-transform: uppercase;
+      color: rgba(0,0,0,0.5); white-space: nowrap;
+    }
+    input[type=range] {
+      -webkit-appearance: none;
+      width: 80px; height: 2px;
+      background: rgba(0,0,0,0.18);
+      border-radius: 2px; outline: none;
+    }
+    input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 11px; height: 11px;
+      border-radius: 50%; background: #000; cursor: pointer;
+    }
+    #fit-btn {
+      font-size: 10px; font-weight: 700;
+      letter-spacing: .07em; text-transform: uppercase;
+      padding: 3px 9px;
+      border: 1px solid rgba(0,0,0,0.28);
+      background: transparent; color: rgba(0,0,0,0.6);
+      cursor: pointer; border-radius: 4px;
+      transition: background .12s; white-space: nowrap;
+    }
+    #fit-btn:hover { background: #000; color: #fff; border-color: #000; }
+
+    /* ────────────────────────────────────────────────────────
+       3D CANVAS
+    ──────────────────────────────────────────────────────── */
+    #container {
+      position: absolute; inset: 0;
+      z-index: 1; pointer-events: auto; touch-action: none;
+    }
+
+    /* ────────────────────────────────────────────────────────
+       3D CARDS
+    ──────────────────────────────────────────────────────── */
+    .element-card {
+      width: 155px; height: 155px;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      pointer-events: auto;
+      user-select: none; -webkit-user-select: none;
+      backface-visibility: visible; -webkit-backface-visibility: visible;
+      transform-style: preserve-3d;
+      transition: transform .18s;
+      border-radius: 4px; overflow: hidden;
+      background: #fff;
+      border: 1px solid rgba(0,0,0,0.12);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    }
+    .element-card:hover { transform: scale(1.1); z-index: 999; }
+    .element-card img {
+      width: 100%; height: 100%;
+      object-fit: cover; display: block;
+      user-select: none; -webkit-user-drag: none; pointer-events: none;
+    }
+
+    /* ────────────────────────────────────────────────────────
+       GROUP LABELS (3D floating text)
+    ──────────────────────────────────────────────────────── */
+    .group-label-wrap {
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      pointer-events: none; user-select: none; text-align: center;
+      opacity: 0; transform: scale(0.8);
+      transition: opacity .8s ease, transform .8s ease;
+    }
+    .group-label-wrap.visible { opacity: 1; transform: scale(1); }
+    .group-label-main {
+      font-size: 62px; font-weight: 900;
+      line-height: 0.9; color: rgba(0,0,0,0.8);
+      text-transform: uppercase; letter-spacing: -0.02em;
+    }
+    .group-label-sub {
+      font-size: 11px; font-weight: 600; color: #fff;
+      margin-top: 9px; text-transform: uppercase; letter-spacing: .18em;
+      padding: 3px 12px; background: rgba(0,0,0,0.7);
+    }
+
+    /* ────────────────────────────────────────────────────────
+       LOADER
+    ──────────────────────────────────────────────────────── */
+    #loader {
+      position: fixed; inset: 0; background: #fff; z-index: 99999;
+      display: flex; flex-direction: column;
+      justify-content: center; align-items: center;
+      transition: opacity .4s ease-out;
+    }
+    #loader-title { font-size: 20px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+    #loader-sub   { font-size: 11px; color: rgba(0,0,0,0.4); margin-top: 6px; letter-spacing: .08em; }
+
+    /* ────────────────────────────────────────────────────────
+       MODAL / POPUP
+    ──────────────────────────────────────────────────────── */
+    #modal-overlay {
+      opacity: 0; visibility: hidden;
+      transition: opacity .25s, visibility .25s;
+      position: fixed; inset: 0; z-index: 200;
+      display: flex; align-items: center; justify-content: center;
+      padding: 16px; pointer-events: none;
+    }
+    #modal-overlay.open { opacity: 1; visibility: visible; pointer-events: auto; }
+
+    #modal-backdrop {
+      position: absolute; inset: 0;
+      background: rgba(0,0,0,0.52);
+      backdrop-filter: blur(5px);
+      cursor: pointer;
+    }
+
+    #modal {
+      position: relative; z-index: 10;
+      background: #fff; color: #000;
+      border: 1px solid #000; border-radius: 4px;
+      width: min(960px, 96vw);
+      height: min(620px, 92vh);
+      display: flex; flex-direction: column; overflow: hidden;
+    }
+
+    #modal-close {
+      position: absolute; top: 10px; right: 12px; z-index: 20;
+      background: none; border: 1px solid #000; border-radius: 50%;
+      width: 27px; height: 27px; cursor: pointer; font-size: 13px;
+      display: flex; align-items: center; justify-content: center;
+      color: #000; transition: background .12s, color .12s;
+    }
+    #modal-close:hover { background: #000; color: #fff; }
+
+    #modal-body { display: flex; flex: 1; overflow: hidden; }
+
+    /* Left: image viewer */
+    #modal-left {
+      flex: 1; min-width: 0;
+      display: flex; flex-direction: column;
+      background: #f5f5f5; border-right: 1px solid #000;
+    }
+    #modal-main-img-wrap {
+      flex: 1; min-height: 0;
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden;
+    }
+    #modal-main-img-wrap img { display: block; }
+    #modal-main-img-wrap img.img-cover   { width: 100%; height: 100%; object-fit: cover; }
+    #modal-main-img-wrap img.img-contain { max-width: 100%; max-height: 100%; object-fit: contain; }
+
+    /* Carousel */
+    #modal-carousel {
+      display: flex; gap: 5px;
+      padding: 7px 9px; border-top: 1px solid #000;
+      overflow-x: auto; background: #fff; flex-shrink: 0;
+      scrollbar-width: thin; scrollbar-color: #bbb transparent;
+    }
+    .c-thumb {
+      width: 50px; height: 50px; flex-shrink: 0;
+      border: 1px solid #ccc; border-radius: 3px;
+      overflow: hidden; cursor: pointer;
+      opacity: .5; transition: opacity .12s, border-color .12s;
+    }
+    .c-thumb:hover { opacity: .8; }
+    .c-thumb.active { opacity: 1; border: 2px solid #000; }
+    .c-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+    /* Right: info panel */
+    #modal-right {
+      width: 295px; flex-shrink: 0;
+      display: flex; flex-direction: column;
+      padding: 18px 16px; gap: 11px;
+      overflow-y: auto;
+      scrollbar-width: thin; scrollbar-color: #ccc transparent;
+    }
+
+    #modal-title { font-size: 14px; font-weight: 700; line-height: 1.4; padding-right: 28px; }
+    .oos-badge   { color: #aaa; font-size: 12px; font-weight: 400; }
+    #modal-price { font-size: 20px; font-weight: 800; }
+    #modal-desc  { font-size: 11.5px; line-height: 1.65; color: #555; }
+
+    .divider { height: 1px; background: #eee; flex-shrink: 0; }
+
+    .info-group { display: flex; flex-direction: column; gap: 7px; }
+    .info-row {
+      display: flex; justify-content: space-between;
+      align-items: baseline; gap: 8px; font-size: 12px;
+    }
+    .info-row .lbl {
+      font-size: 10px; font-weight: 700;
+      letter-spacing: .08em; text-transform: uppercase;
+      color: #999; flex-shrink: 0;
+    }
+    .info-row .val { font-weight: 500; text-align: right; }
+
+    /* Color selector */
+    .color-lbl {
+      font-size: 10px; font-weight: 700;
+      letter-spacing: .08em; text-transform: uppercase;
+      color: #999; margin-bottom: 6px;
+    }
+    #color-selector { display: flex; flex-wrap: wrap; gap: 6px; }
+    .color-ball {
+      width: 22px; height: 22px; border-radius: 50%;
+      border: 2.5px solid transparent; cursor: pointer; flex-shrink: 0;
+      box-shadow: 0 0 0 1px rgba(0,0,0,0.18);
+      transition: transform .12s, box-shadow .12s;
+    }
+    .color-ball:hover { transform: scale(1.18); }
+    .color-ball.active { box-shadow: 0 0 0 2.5px #000; }
+    .color-ball.oos    { opacity: .3; }
+
+    #modal-visit {
+      display: block; text-align: center;
+      padding: 9px; border: 1px solid #000; border-radius: 3px;
+      text-decoration: none; color: #000;
+      font-size: 12px; font-weight: 600;
+      transition: background .12s, color .12s; flex-shrink: 0;
+    }
+    #modal-visit:hover { background: #000; color: #fff; }
+
+    /* ────────────────────────────────────────────────────────
+       MOBILE  ≤ 639 px
+    ──────────────────────────────────────────────────────── */
+    @media (max-width: 639px) {
+      /* Smaller 3D cards */
+      .element-card { width: 100px; height: 100px; }
+      .group-label-main { font-size: 36px; }
+      .group-label-sub  { font-size: 10px; }
+
+      /* Menu takes full width, count moves to bottom-right */
+      .menu-bar { max-width: calc(100vw - 28px); }
+
+      /* Hide desktop count, show mobile count at bottom-right */
+      #count-badge {
+        top: auto; right: 14px;
+        bottom: 16px;
+      }
+
+      /* Compact bottom controls */
+      #slider-container { bottom: 16px; left: 14px; gap: 7px; padding: 5px 10px; }
+      input[type=range] { width: 65px; }
+      #fit-btn { display: none; }
+
+      /* Full-screen bottom-sheet popup */
+      #modal-overlay { padding: 0; align-items: flex-end; }
+      #modal {
+        width: 100%; height: 92dvh;
+        border-radius: 14px 14px 0 0;
+        border-left: none; border-right: none; border-bottom: none;
+      }
+      /* Stack: image on top, info below */
+      #modal-body { flex-direction: column; }
+      #modal-left {
+        flex: none; height: 48%;
+        border-right: none; border-bottom: 1px solid #000;
+      }
+      #modal-right { width: 100%; flex: 1; padding: 14px 14px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── Loader ────────────────────────────────────────────── -->
+<div id="loader">
+  <div id="loader-title">Olivio &amp; Co</div>
+  <div id="loader-sub">Loading products…</div>
+</div>
+
+<!-- ── Top UI ────────────────────────────────────────────── -->
+<div id="ui-top">
+  <!-- Primary: view modes + grouping (clustering only) -->
+  <div class="menu-bar" id="main-menu">
+    <button class="nav-btn active" data-type="view"  data-val="grid">Grid</button>
+    <button class="nav-btn"        data-type="view"  data-val="sphere">Sphere</button>
+    <button class="nav-btn"        data-type="view"  data-val="chaos">Chaos</button>
+    <div class="menu-sep"></div>
+    <button class="nav-btn active" data-type="group" data-val="all">All</button>
+    <button class="nav-btn"        data-type="group" data-val="age">Age</button>
+    <button class="nav-btn"        data-type="group" data-val="shape">Shape</button>
+    <button class="nav-btn"        data-type="group" data-val="type">Type</button>
+    <button class="nav-btn"        data-type="group" data-val="lens">Lens</button>
+  </div>
+
+  <!--
+    Tick-filter bar — always shows ALL categories except the current clustering group.
+    Built dynamically by buildTickBar(). Stock section never resets.
+  -->
+  <div id="tick-bar"></div>
+</div>
+
+<!-- ── Count badge ───────────────────────────────────────── -->
+<div id="count-badge">— products</div>
+
+<!-- ── Bottom controls ──────────────────────────────────── -->
+<div id="slider-container">
+  <span id="slider-label">Rotate</span>
+  <input type="range" id="rotate-slider" min="-2" max="2" step="0.1" value="0">
+  <button id="fit-btn">Fit</button>
+</div>
+
+<!-- ── 3D canvas ─────────────────────────────────────────── -->
+<div id="container"></div>
+
+<!-- ── Modal ─────────────────────────────────────────────── -->
+<div id="modal-overlay" role="dialog" aria-modal="true">
+  <div id="modal-backdrop"></div>
+  <div id="modal">
+    <button id="modal-close" aria-label="Close">✕</button>
+    <div id="modal-body">
+
+      <!-- Image side -->
+      <div id="modal-left">
+        <div id="modal-main-img-wrap">
+          <img id="modal-main-img" src="" alt="" class="img-cover">
+        </div>
+        <div id="modal-carousel"></div>
+      </div>
+
+      <!-- Info side -->
+      <div id="modal-right">
+        <div id="modal-title"></div>
+        <div id="modal-price"></div>
+        <div class="divider"></div>
+        <div id="modal-desc"></div>
+        <div class="divider"></div>
+        <div class="info-group" id="modal-meta"></div>
+        <div class="divider"></div>
+        <div>
+          <div class="color-lbl">Colors</div>
+          <div id="color-selector"></div>
+        </div>
+        <div class="divider"></div>
+        <a id="modal-visit" href="#" target="_blank" rel="noopener">View on store →</a>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ── Three.js import map ────────────────────────────────── -->
+<script type="importmap">
+{
+  "imports": {
+    "three":         "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
+
+<script type="module">
+import * as THREE                     from 'three';
+import { OrbitControls }              from 'three/addons/controls/OrbitControls.js';
+import { CSS3DRenderer, CSS3DObject } from 'three/addons/renderers/CSS3DRenderer.js';
+import TWEEN                          from 'three/addons/libs/tween.module.js';
+
+// ── Color map ─────────────────────────────────────────────────────────────────
+const COLOR_MAP = {
+  'Apricot':'#FBCEB1','Art Brush':'#8B4513','Azure Blue':'#007FFF','Begonia Red':'#FA6E79',
+  'Berry Mist':'#8E4585','Blue':'#2563EB','Blueberry':'#4F2877','Cactus Green':'#58A55C',
+  'Chocolate':'#7B3F00','Citrus Grove':'#B5A233','Citrus Yellow':'#F7D358','Cloud White':'#F5F5F5',
+  'Colorblock Coral':'#FF6F61','Colorblock Sand':'#C2B280','Colorblock Sea':'#2E8B97',
+  'Coral Blush':'#F4A494','Coral Fantasy':'#FF6B6B','Crane Flower Yellow':'#FFD700',
+  'Daisy Soda':'#FDE68A','Deep Sea':'#003153','Desert Sand':'#C2A06E','Fig Pink':'#C16B8A',
+  'Flamingo Pink':'#FC8EAC','Flamingo Soda':'#F9A8D4','Floral Reverie':'#E8A0BF',
+  'Gelato Summer':'#FEC8D8','Grapefruit Pink':'#F7786B','Ice Blue':'#B0E0E6',
+  'Jam On':'#960018','Jellyfish White':'#F0F0F0','Lava Black':'#1C1C1C','Lava Grey':'#808080',
+  'Lavender':'#B57EDC','Leopard Brown':'#8B6914','Leopard Pink':'#E75480','Lime Green':'#32CD32',
+  'Medallion Gold':'#CFB53B','Medallion Platinum':'#C0C0C0','Midnight Berry':'#3D0C52',
+  'Navy Blue':'#000080','Ocean Fantasy':'#006994','Olive Green':'#6B7C41','Pink':'#FFC0CB',
+  'Polar Blue':'#A2C4E8','Polar Gray':'#C8D2D6','Purple Coral':'#AD5E74','Raspberry':'#872657',
+  'Reef Blue':'#005A8E','Reef blue':'#005A8E','Retro Brown':'#6B4226','Rock Rose':'#CC6E8F',
+  'Sailing Blue':'#1E3A8A','Sand Beige':'#D4B896','Sand beige':'#D4B896',
+  'Sardine Coral':'#E8735A','Sea Anemone Green':'#3CB371','Shark White':'#F5F5F5',
+  'Shell Pink':'#FBB8C3','Shell Purple':'#C3A0D0','Sky Blue':'#87CEEB','Space Silver':'#B0B3BC',
+  'Squid Black':'#1C1C2E','Starfish Orange':'#FF7043','Starry Blue':'#1D3557',
+  'Sun Coral':'#FF6347','Sunrise Mist':'#FFD9A0','Sunrise Orange':'#FF7518',
+  'Sunshine Coral':'#FF8C69','Tortoiseshell':'#8B5E3C','Tranquil Blue':'#5B8DB8',
+  'Tranquil Gray':'#9B9B9B','Tranquil Lavender':'#A89DC6','Vacation Yellow':'#FFDD57',
+  'Vanilla Brownie':'#C8A97E','Waffle Special':'#D4A574','Wild Flower':'#C06080'
+};
+const COLOR_NAMES = Object.keys(COLOR_MAP).sort((a,b) => b.length - a.length);
+const colorCSS = n => COLOR_MAP[n] || '#cccccc';
+
+// ── Helpers ───────────────────────────────────────────────────────────────────
+function shopifyImg(url, w) {
+  if (!url) return '';
+  try { const u = new URL(url); u.searchParams.set('width', String(w)); return u.toString(); }
+  catch { return url + (url.includes('?') ? '&' : '?') + 'width=' + w; }
+}
+const esc = s => String(s)
+  .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+  .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+
+// ── Metadata extraction ───────────────────────────────────────────────────────
+const AGES   = ['Baby','Toddler','Kids','Junior','Adult'];
+const SHAPES = new Set(['Oval','Round','Creative Shield','Full-Rim','Half-Rim']);
+const LENS_T = new Set(['Polarised','Non-Polarised']);
+
+function extractProductType(title) {
+  const t = title.toLowerCase();
+  if (t.includes('sport sunglasses')) return 'Sport Sunglasses';
+  if (t.includes('ski goggles') || t.includes('ski goggle')) return 'Ski Goggles';
+  if (t.includes('screen glasses') || t.includes('screen glass')) return 'Screen Glasses';
+  if (t.includes('accessories') || t.includes('accessory')) return 'Accessories';
+  if (t.includes('sunglasses') || t.includes('sunglass')) return 'Sunglasses';
+  return 'Other';
+}
+
+function extractMeta(p) {
+  const varTitles = (p.variants || []).map(v => v.title || '');
+  const allText   = (p.title + ' ' + varTitles.join(' ')).toLowerCase();
+
+  const age    = AGES.find(a => allText.includes(a.toLowerCase())) || null;
+  const shapes = varTitles.flatMap(t => t.split(/[\s,/]+/).filter(w => SHAPES.has(w)));
+  const uniqueShapes = [...new Set(shapes.length ? shapes : [])];
+  const lenses = varTitles.flatMap(t => [...LENS_T].filter(l => t.includes(l)));
+  const uniqueLenses = [...new Set(lenses)];
+
+  let color = null;
+  for (const c of COLOR_NAMES) {
+    if (p.title.toLowerCase().includes(c.toLowerCase())) { color = c; break; }
+  }
+
+  const available = (p.variants || []).some(v => v.available);
+  const productType = extractProductType(p.title);
+
+  return { age, shapes: uniqueShapes, lenses: uniqueLenses, color, available, productType };
+}
+
+function baseModelOf(title) {
+  for (const c of COLOR_NAMES) {
+    const idx = title.toLowerCase().indexOf(c.toLowerCase());
+    if (idx !== -1)
+      return (title.slice(0,idx) + title.slice(idx+c.length)).replace(/\s+/g,' ').trim();
+  }
+  return title.trim();
+}
+
+// ════════════════════════════════════════════════════════════════════════════
+// Tick bar definition — ordered list of filter sections
+// ════════════════════════════════════════════════════════════════════════════
+const TICK_DEFS = [
+  { key: 'age',   label: 'Age',   values: ['Baby','Toddler','Kids','Junior','Adult'] },
+  { key: 'shape', label: 'Shape', values: ['Oval','Round','Creative Shield','Full-Rim','Half-Rim'] },
+  { key: 'type',  label: 'Type',  values: ['Sunglasses','Sport Sunglasses','Ski Goggles','Screen Glasses','Accessories'] },
+  { key: 'lens',  label: 'Lens',  values: ['Polarised','Non-Polarised'] },
+  { key: 'stock', label: 'Stock', values: [{ label: 'In Stock', val: 'in' }, { label: 'Out of Stock', val: 'out' }] },
+];
+
+// ════════════════════════════════════════════════════════════════════════════
+// Application state
+// ════════════════════════════════════════════════════════════════════════════
+const state = {
+  view:  'grid',  // grid | sphere | chaos
+  group: 'all',   // all | age | shape | type | lens  — spatial clustering only
+  ticks: {
+    age:   new Set(),   // selected Age values — resets on group change
+    shape: new Set(),   // selected Shape values — resets on group change
+    type:  new Set(),   // selected Type values — resets on group change
+    lens:  new Set(),   // selected Lens values — resets on group change
+    stock: new Set(),   // 'in' | 'out' — PERSISTENT, never resets
+  },
+};
+
+let camera, scene, renderer, controls;
+let objects = [], labels = [], chaosOffsets = [];
+let isDragging = false, autoRotateSpeed = 0, globalRotation = 0;
+let products = {}, colorSiblings = {};
+
+// ════════════════════════════════════════════════════════════════════════════
+// Data load
+// ════════════════════════════════════════════════════════════════════════════
+fetch('https://decentralize-dfw.github.io/olivioandco/mega_products.json')
+  .then(r => r.json())
+  .then(data => {
+    products = data.map(p => ({ ...p, _meta: extractMeta(p), _base: baseModelOf(p.title) }));
+    for (const p of products) {
+      if (!colorSiblings[p._base]) colorSiblings[p._base] = [];
+      colorSiblings[p._base].push(p);
+    }
+    init();
+    animate();
+    const l = document.getElementById('loader');
+    l.style.opacity = '0';
+    setTimeout(() => l.remove(), 400);
+  })
+  .catch(() => { document.getElementById('loader-sub').textContent = 'Failed to load — check network.'; });
+
+// ════════════════════════════════════════════════════════════════════════════
+// Three.js init
+// ════════════════════════════════════════════════════════════════════════════
+function init() {
+  const container = document.getElementById('container');
+  const FRUST = 3500, aspect = window.innerWidth / window.innerHeight;
+
+  camera = new THREE.OrthographicCamera(
+    FRUST*aspect/-2, FRUST*aspect/2, FRUST/2, FRUST/-2, 1, 10000
+  );
+  camera.position.set(2000, 1000, 2000);
+  camera.lookAt(0,0,0);
+
+  scene    = new THREE.Scene();
+  renderer = new CSS3DRenderer();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.domElement.style.position = 'absolute';
+  renderer.domElement.style.top      = '0';
+  container.appendChild(renderer.domElement);
+
+  controls = new OrbitControls(camera, renderer.domElement);
+  controls.enableDamping = true; controls.dampingFactor = 0.05;
+  controls.minZoom = 0.04; controls.maxZoom = 6;
+  controls.minPolarAngle = 0.05; controls.maxPolarAngle = Math.PI - 0.05;
+
+  window.addEventListener('mousedown',  () => { isDragging = true;  });
+  window.addEventListener('mouseup',    () => { isDragging = false; });
+  window.addEventListener('touchstart', () => { isDragging = true;  }, {passive:true});
+  window.addEventListener('touchend',   () => { isDragging = false; }, {passive:true});
+
+  buildScene();
+  window.addEventListener('resize', onWindowResize);
+  setupMenuButtons();
+  buildTickBar();   // build the full tick bar (all categories)
+  setupSlider();
+  setupFitButton();
+  setupModal();
+}
+
+// ════════════════════════════════════════════════════════════════════════════
+// Build 3D cards
+// ════════════════════════════════════════════════════════════════════════════
+function buildScene() {
+  objects.forEach(o => scene.remove(o));
+  objects = []; chaosOffsets = [];
+
+  for (const p of products) {
+    const el  = document.createElement('div');
+    el.className = 'element-card';
+
+    const img    = document.createElement('img');
+    img.src      = p.images?.[0] ? shopifyImg(p.images[0], THUMBNAIL_WIDTH) : '';
+    img.draggable = false; img.loading = 'eager';
+    el.appendChild(img);
+
+    el.addEventListener('mouseenter', () => { if (!isDragging) controls.enabled = false; });
+    el.addEventListener('mouseleave', () => { controls.enabled = true; });
+    el.addEventListener('click',      e  => { e.stopPropagation(); openModal(p); });
+
+    const sx = (Math.random()-.5)*1400, sy = (Math.random()-.5)*1400, sz = (Math.random()-.5)*1400;
+    const obj = new CSS3DObject(el);
+    obj.position.set(sx, sy, sz);
+    obj.userData = {
+      active:      true,
+      center:      new THREE.Vector3(0,0,0),
+      offset:      new THREE.Vector3(sx,sy,sz),
+      rotation:    new THREE.Euler(0,0,0),
+      sphereCenter: null,
+    };
+    scene.add(obj);
+    objects.push(obj);
+    chaosOffsets.push({ x:(Math.random()-.5)*2, y:(Math.random()-.5)*2, z:(Math.random()-.5)*2, t:Math.random()*100 });
+  }
+
+  updateLayout();
+}
+
+// ════════════════════════════════════════════════════════════════════════════
+// Group key — used only for spatial clustering
+// ════════════════════════════════════════════════════════════════════════════
+function groupKey(i) {
+  const m = products[i]._meta;
+  switch (state.group) {
+    case 'age':   return m.age          || 'Other';
+    case 'shape': return m.shapes[0]    || 'Other';
+    case 'type':  return m.productType  || 'Other';
+    case 'lens':  return m.lenses[0]    || 'Other';
+    default:      return '__ALL__';
+  }
+}
+
+// ════════════════════════════════════════════════════════════════════════════
+// Visible indices — checks ALL tick categories independently
+// Within each category: OR logic (any selected value matches)
+// Across categories: AND logic (must pass all active categories)
+// ════════════════════════════════════════════════════════════════════════════
+function visibleIndices() {
+  return products.map((_,i) => i).filter(i => {
+    const m = products[i]._meta;
+
+    // Age filter
+    const ta = state.ticks.age;
+    if (ta.size > 0 && !ta.has(m.age || 'Other')) return false;
+
+    // Shape filter (product may have multiple shapes)
+    const ts = state.ticks.shape;
+    if (ts.size > 0 && !m.shapes.some(s => ts.has(s))) return false;
+
+    // Type filter
+    const tt = state.ticks.type;
+    if (tt.size > 0 && !tt.has(m.productType || 'Other')) return false;
+
+    // Lens filter (product may have multiple lens types)
+    const tl = state.ticks.lens;
+    if (tl.size > 0 && !m.lenses.some(l => tl.has(l))) return false;
+
+    // Stock filter
+    const tk = state.ticks.stock;
+    if (tk.size > 0) {
+      const avail    = m.available;
+      const wantIn   = tk.has('in');
+      const wantOut  = tk.has('out');
+      if (wantIn && wantOut) return true;   // both ticked = show all
+      if (wantIn  && !avail) return false;  // want in-stock only, this is OOS
+      if (wantOut &&  avail) return false;  // want OOS only, this is in-stock
+    }
+
+    return true;
+  });
+}
+
+// ════════════════════════════════════════════════════════════════════════════
+// Tick bar — builds ALL filter sections except the current clustering group
+// ════════════════════════════════════════════════════════════════════════════
+function buildTickBar() {
+  const bar = document.getElementById('tick-bar');
+  bar.innerHTML = '';
+
+  for (const def of TICK_DEFS) {
+    // Hide the section whose dimension is currently being used for spatial clustering
+    if (def.key !== 'stock' && def.key === state.group) continue;
+
+    // For non-stock categories, only include values that actually exist in the data
+    let values = def.values;
+    if (def.key !== 'stock') {
+      const existing = new Set();
+      products.forEach(p => {
+        const m = p._meta;
+        if      (def.key === 'age')   existing.add(m.age || 'Other');
+        else if (def.key === 'shape') m.shapes.forEach(s => existing.add(s));
+        else if (def.key === 'type')  existing.add(m.productType || 'Other');
+        else if (def.key === 'lens')  m.lenses.forEach(l => existing.add(l));
+      });
+      values = def.values.filter(v => existing.has(v));
+      if (values.length === 0) continue;
+    }
+
+    const section = document.createElement('div');
+    section.className = 'tick-section';
+    section.id = 'ts-' + def.key;
+
+    const lbl = document.createElement('span');
+    lbl.className = 'tick-section-label';
+    lbl.textContent = def.label;
+    section.appendChild(lbl);
+
+    for (const valDef of values) {
+      const btnLabel = def.key === 'stock' ? valDef.label : valDef;
+      const btnVal   = def.key === 'stock' ? valDef.val   : valDef;
+
+      const btn = document.createElement('button');
+      btn.className = 'tick-btn';
+      btn.dataset.category = def.key;
+      btn.dataset.val = btnVal;
+
+      const isActive = state.ticks[def.key].has(btnVal);
+      if (isActive) btn.classList.add('active');
+      btn.innerHTML = `<span class="tick-box">${isActive ? '✓' : ''}</span>${esc(btnLabel)}`;
+      btn.addEventListener('click', () => toggleTick(def.key, btnVal, btn));
+      section.appendChild(btn);
+    }
+
+    bar.appendChild(section);
+  }
+}
+
+function toggleTick(category, val, btn) {
+  const set = state.ticks[category];
+  if (set.has(val)) {
+    set.delete(val);
+    btn.classList.remove('active');
+    btn.querySelector('.tick-box').textContent = '';
+  } else {
+    set.add(val);
+    btn.classList.add('active');
+    btn.querySelector('.tick-box').textContent = '✓';
+  }
+  updateLayout();
+}
+
+// ════════════════════════════════════════════════════════════════════════════
+// Labels (3D floating group headings)
+// ════════════════════════════════════════════════════════════════════════════
+function removeLabels() {
+  const old = [...labels]; labels = [];
+  old.forEach(l => {
+    if (l.element) l.element.classList.remove('visible');
+    setTimeout(() => { if (l.parent) scene.remove(l); }, 800);
+  });
+}
+
+function createLabel(text, sub, x, y, z) {
+  const wrap = document.createElement('div'); wrap.className = 'group-label-wrap';
+  const main = document.createElement('div'); main.className = 'group-label-main'; main.textContent = text;
+  wrap.appendChild(main);
+  if (sub) {
+    const s = document.createElement('div'); s.className = 'group-label-sub'; s.textContent = sub;
+    wrap.appendChild(s);
+  }
+  const obj = new CSS3DObject(wrap);
+  obj.position.set(x, y, z);
+  scene.add(obj); labels.push(obj);
+  setTimeout(() => wrap.classList.add('visible'), 50);
+}
+
+// ════════════════════════════════════════════════════════════════════════════
+// Layout update — positions every card in 3D space
+// ════════════════════════════════════════════════════════════════════════════
+function updateLayout() {
+  TWEEN.removeAll();
+  removeLabels();
+  objects.forEach(o => { o.userData.rotation.set(0,0,0); o.userData.sphereCenter = null; });
+
+  const visible = new Set(visibleIndices());
+  const FAR_Y   = 18000;
+
+  // Tween invisible items OUT (fly up to FAR_Y)
+  objects.forEach((obj, i) => {
+    if (!visible.has(i)) {
+      const wasActive = obj.userData.active;
+      obj.userData.active = false;
+      if (wasActive) {
+        // Animate out — fly toward FAR_Y
+        new TWEEN.Tween(obj.userData.center)
+          .to({ x: 0, y: FAR_Y, z: 0 }, 900)
+          .easing(TWEEN.Easing.Exponential.In)
+          .start();
+        new TWEEN.Tween(obj.userData.offset)
+          .to({ x: 0, y: 0, z: 0 }, 900)
+          .easing(TWEEN.Easing.Exponential.In)
+          .start();
+      } else {
+        // Already hidden — ensure it's parked (no tween needed)
+        obj.userData.center.set(0, FAR_Y, 0);
+        obj.userData.offset.set(0, 0, 0);
+      }
+    }
+  });
+
+  // Build groups for visible items
+  const groups = {};
+  for (const i of visible) {
+    const k = groupKey(i);
+    if (!groups[k]) groups[k] = [];
+    groups[k].push(i);
+  }
+
+  const isGrouped  = ['age','shape','type','lens'].includes(state.group);
+  const groupKeys  = Object.keys(groups).sort();
+  const ITEM_SPC   = 185, LABEL_Y = 900;
+
+  // Update count badge
+  document.getElementById('count-badge').textContent =
+    visible.size + ' product' + (visible.size !== 1 ? 's' : '');
+
+  groupKeys.forEach((key, gIdx) => {
+    const idxs = groups[key];
+    let cx = 0, cy = 0, cz = 0;
+
+    const sphereR    = Math.max(Math.sqrt(idxs.length)*65, 200);
+    const clusterSpc = Math.max(2400, (groupKeys.length*1300) / (Math.PI*2));
+
+    if (isGrouped) {
+      if (state.view === 'grid') {
+        const zSpc = 2600, totalZ = (groupKeys.length-1)*zSpc;
+        cz = (totalZ/2) - (gIdx*zSpc);
+      } else {
+        const angle = (gIdx/groupKeys.length)*Math.PI*2;
+        cx = Math.cos(angle)*clusterSpc; cz = Math.sin(angle)*clusterSpc;
+      }
+      createLabel(key, state.group.toUpperCase(), cx, LABEL_Y, cz);
+    }
+
+    // ── GRID ─────────────────────────────────────────────────────────────────
+    if (state.view === 'grid') {
+      const cols = Math.ceil(Math.sqrt(idxs.length));
+      idxs.forEach((objIdx, i) => {
+        const obj = objects[objIdx];
+        // If item was hidden, start its entrance from above the cluster
+        if (!obj.userData.active) {
+          obj.userData.center.set(cx, FAR_Y, cz);
+          obj.userData.offset.set(0, 0, 0);
+        }
+        obj.userData.active = true;
+        const ox = (i%cols - (cols-1)/2)*ITEM_SPC, oy = 420 - Math.floor(i/cols)*ITEM_SPC;
+        new TWEEN.Tween(obj.userData.center).to({x:cx,y:cy,z:cz},2300).easing(TWEEN.Easing.Exponential.InOut).start();
+        new TWEEN.Tween(obj.userData.offset).to({x:ox,y:oy,z:0}, 2300).easing(TWEEN.Easing.Exponential.InOut).start();
+        new TWEEN.Tween(obj.userData.rotation).to({x:0,y:0,z:0}, 2300).easing(TWEEN.Easing.Exponential.InOut).start();
+      });
+    }
+
+    // ── SPHERE ───────────────────────────────────────────────────────────────
+    else if (state.view === 'sphere') {
+      const sphereCY = 420 - sphereR;
+      idxs.forEach((objIdx, i) => {
+        const obj = objects[objIdx];
+        if (!obj.userData.active) {
+          obj.userData.center.set(cx, FAR_Y, cz);
+          obj.userData.offset.set(0, 0, 0);
+        }
+        obj.userData.active = true;
+        const phi = Math.acos(-1+(2*i)/idxs.length), theta = Math.sqrt(idxs.length*Math.PI)*phi;
+        const ox = sphereR*Math.sin(phi)*Math.cos(theta);
+        const oy = sphereR*Math.sin(phi)*Math.sin(theta);
+        const oz = sphereR*Math.cos(phi);
+        obj.userData.sphereCenter = new THREE.Vector3(cx,sphereCY,cz);
+        new TWEEN.Tween(obj.userData.center).to({x:cx,y:cy,z:cz}, 2300).easing(TWEEN.Easing.Exponential.InOut).start();
+        new TWEEN.Tween(obj.userData.offset).to({x:ox,y:oy+sphereCY,z:oz}, 2300).easing(TWEEN.Easing.Exponential.InOut).start();
+        new TWEEN.Tween(obj.userData.rotation).to({x:0,y:0,z:0}, 2300).easing(TWEEN.Easing.Exponential.InOut).start();
+      });
+    }
+
+    // ── CHAOS ────────────────────────────────────────────────────────────────
+    else {
+      const spread = 800;
+      idxs.forEach(objIdx => {
+        const obj = objects[objIdx];
+        if (!obj.userData.active) {
+          obj.userData.center.set(cx, FAR_Y, cz);
+          obj.userData.offset.set(0, 0, 0);
+        }
+        obj.userData.active = true;
+        const ox=(Math.random()-.5)*spread, oy=(Math.random()-.5)*spread, oz=(Math.random()-.5)*spread;
+        const rx=(Math.random()-.5)*.45, rz=(Math.random()-.5)*.45;
+        new TWEEN.Tween(obj.userData.center).to({x:cx,y:cy,z:cz}, 2300).easing(TWEEN.Easing.Exponential.InOut).start();
+        new TWEEN.Tween(obj.userData.offset).to({x:ox,y:oy,z:oz}, 2300).easing(TWEEN.Easing.Exponential.InOut).start();
+        new TWEEN.Tween(obj.userData.rotation).to({x:rx,y:0,z:rz}, 2300).easing(TWEEN.Easing.Exponential.InOut).start();
+      });
+    }
+  });
+}
+
+// ════════════════════════════════════════════════════════════════════════════
+// Animation loop
+// ════════════════════════════════════════════════════════════════════════════
+const _vh = new THREE.Vector3();
+
+function animate() {
+  requestAnimationFrame(animate);
+  TWEEN.update(); controls.update();
+
+  globalRotation += autoRotateSpeed;
+  const time = Date.now() * 0.002;
+
+  objects.forEach((obj, i) => {
+    if (!obj.userData.active) {
+      // CRITICAL: inactive items still update position so exit tweens work.
+      // (center tweens to FAR_Y, animate loop applies it each frame)
+      const offI = obj.userData.offset.clone();
+      const posI = new THREE.Vector3().copy(obj.userData.center).add(offI);
+      obj.position.copy(posI);
+      return;
+    }
+
+    const off = obj.userData.offset.clone();
+    off.applyAxisAngle(new THREE.Vector3(0,1,0), globalRotation);
+    const pos = new THREE.Vector3().copy(obj.userData.center).add(off);
+
+    if (state.view === 'chaos') {
+      const c = chaosOffsets[i];
+      pos.x += Math.sin(time+c.t)*45; pos.y += Math.cos(time*.9+c.t)*45; pos.z += Math.sin(time*.7+c.t)*45;
+      obj.position.copy(pos);
+      obj.rotation.x = obj.userData.rotation.x + Math.sin(time*.5)*.18;
+      obj.rotation.y = obj.userData.rotation.y + globalRotation;
+      obj.rotation.z = obj.userData.rotation.z + Math.cos(time*.3)*.18;
+    } else if (state.view === 'sphere') {
+      obj.position.copy(pos);
+      if (obj.userData.sphereCenter) {
+        _vh.subVectors(obj.position, obj.userData.sphereCenter).add(obj.position);
+        obj.lookAt(_vh);
+      }
+    } else {
+      obj.position.copy(pos);
+      obj.rotation.set(0, globalRotation, 0);
+    }
+  });
+
+  renderer.render(scene, camera);
+}
+
+// ════════════════════════════════════════════════════════════════════════════
+// Buttons & controls
+// ════════════════════════════════════════════════════════════════════════════
+function setupMenuButtons() {
+  document.querySelectorAll('.nav-btn').forEach(btn => {
+    btn.addEventListener('click', e => {
+      const type = e.currentTarget.dataset.type;
+      const val  = e.currentTarget.dataset.val;
+      if (!type) return;
+      document.querySelectorAll(`.nav-btn[data-type="${type}"]`).forEach(b => b.classList.remove('active'));
+      e.currentTarget.classList.add('active');
+      state[type] = val;
+
+      if (type === 'group') {
+        // Reset all non-stock category ticks on group change
+        state.ticks.age.clear();
+        state.ticks.shape.clear();
+        state.ticks.type.clear();
+        state.ticks.lens.clear();
+        // Rebuild tick bar: hides the new clustering group's section, resets buttons
+        buildTickBar();
+      }
+
+      updateLayout();
+    });
+  });
+}
+
+function setupSlider() {
+  document.getElementById('rotate-slider').addEventListener('input', e => {
+    autoRotateSpeed = parseFloat(e.target.value) * 0.02;
+  });
+}
+
+function setupFitButton() {
+  document.getElementById('fit-btn').addEventListener('click', () => {
+    let maxD = 0;
+    objects.forEach(o => {
+      if (o.userData.active) {
+        const d = o.userData.center.length() + o.userData.offset.length();
+        if (d > maxD) maxD = d;
+      }
+    });
+    maxD += 350;
+    let zoom = 3500 / (maxD * 1.55);
+    zoom = Math.max(0.04, Math.min(zoom, 6));
+    new TWEEN.Tween(camera).to({zoom}, 900)
+      .easing(TWEEN.Easing.Cubic.Out)
+      .onUpdate(() => camera.updateProjectionMatrix())
+      .start();
+  });
+}
+
+function onWindowResize() {
+  const FRUST = 3500, aspect = window.innerWidth / window.innerHeight;
+  camera.left   = -FRUST*aspect/2; camera.right  =  FRUST*aspect/2;
+  camera.top    =  FRUST/2;        camera.bottom = -FRUST/2;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+}
+
+// ════════════════════════════════════════════════════════════════════════════
+// Modal
+// ════════════════════════════════════════════════════════════════════════════
+let _imgs = [];
+
+function setupModal() {
+  document.getElementById('modal-close')   .addEventListener('click', closeModal);
+  document.getElementById('modal-backdrop').addEventListener('click', closeModal);
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+}
+
+function openModal(p)   { populateModal(p); document.getElementById('modal-overlay').classList.add('open'); document.body.style.overflow='hidden'; }
+function closeModal()   { document.getElementById('modal-overlay').classList.remove('open'); document.body.style.overflow=''; }
+
+function populateModal(p) {
+  const m = p._meta; _imgs = (p.images||[]).filter(Boolean);
+  const isOos = !m.available;
+
+  document.getElementById('modal-title').innerHTML =
+    esc(p.title) + (isOos ? ' <span class="oos-badge">(Out of Stock)</span>' : '');
+  document.getElementById('modal-price').textContent = '€' + Number(p.price).toFixed(2);
+  document.getElementById('modal-desc').textContent  = p.description || '';
+
+  document.getElementById('modal-meta').innerHTML = `
+    <div class="info-row"><span class="lbl">Type</span><span class="val">${esc(m.productType||'—')}</span></div>
+    <div class="info-row"><span class="lbl">Age</span><span class="val">${esc(m.age||'—')}</span></div>
+    <div class="info-row"><span class="lbl">Shape</span><span class="val">${esc(m.shapes.join(', ')||'—')}</span></div>
+    <div class="info-row"><span class="lbl">Lens</span><span class="val">${esc(m.lenses.join(', ')||'—')}</span></div>
+    <div class="info-row">
+      <span class="lbl">Stock</span>
+      <span class="val" style="color:${m.available?'#000':'#aaa'}">${m.available?'In Stock':'Out of Stock'}</span>
+    </div>`;
+
+  buildColorSelector(p);
+  document.getElementById('modal-visit').href = p.url || '#';
+  buildCarousel(_imgs);
+  if (_imgs.length) setMainImage(0);
+}
+
+function buildColorSelector(activeP) {
+  const cs = document.getElementById('color-selector'); cs.innerHTML = '';
+  const siblings = colorSiblings[activeP._base] || [activeP];
+  for (const sib of siblings) {
+    const ball = document.createElement('div');
+    ball.className = 'color-ball' + (sib.id===activeP.id?' active':'') + (!sib._meta.available?' oos':'');
+    ball.style.background = colorCSS(sib._meta.color);
+    ball.title = sib._meta.color + (!sib._meta.available?' (Out of Stock)':'');
+    if (sib.id !== activeP.id) ball.addEventListener('click', () => populateModal(sib));
+    cs.appendChild(ball);
+  }
+}
+
+function buildCarousel(images) {
+  const car = document.getElementById('modal-carousel'); car.innerHTML = '';
+  images.forEach((src, i) => {
+    const thumb = document.createElement('div');
+    thumb.className = 'c-thumb' + (i===0?' active':'');
+    const img = document.createElement('img');
+    img.src = shopifyImg(src, 120); img.alt = ''; img.loading = 'lazy';
+    thumb.appendChild(img);
+    thumb.addEventListener('click', () => setMainImage(i));
+    car.appendChild(thumb);
+  });
+}
+
+function setMainImage(idx) {
+  const main   = document.getElementById('modal-main-img');
+  const isLast = idx === _imgs.length - 1 && _imgs.length > 1;
+  main.className = isLast ? 'img-contain' : 'img-cover';
+  main.src       = shopifyImg(_imgs[idx], IMAGE_WIDTH);
+  document.querySelectorAll('.c-thumb').forEach((t,i) => t.classList.toggle('active', i===idx));
+}
+
+</script>
+</body>
+</html>
