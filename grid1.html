@@ -55,8 +55,7 @@
       backdrop-filter: blur(6px);
       overflow-x: auto;
       scrollbar-width: none;
-      width: fit-content;
-      max-width: calc(100vw - 100px); /* leave room for count on desktop */
+      align-self: flex-start;
     }
     .menu-bar::-webkit-scrollbar { display: none; }
 
@@ -86,7 +85,7 @@
     #tick-bar {
       display: flex;
       flex-wrap: nowrap;
-      gap: 5px;
+      gap: 0;
       align-items: center;
       pointer-events: auto;
       overflow-x: auto;
@@ -94,12 +93,28 @@
       padding-bottom: 8px;
     }
     #tick-bar::-webkit-scrollbar { display: none; }
-    #tick-bar:empty { display: none; }
 
-    .tick-sep {
-      width: 1px; height: 14px;
-      background: rgba(0,0,0,0.18);
-      flex-shrink: 0; margin: 0 2px;
+    /* Each category is a section */
+    .tick-section {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      flex-shrink: 0;
+      padding: 0 10px;
+      border-right: 1px solid rgba(0,0,0,0.15);
+    }
+    .tick-section:first-child { padding-left: 0; }
+    .tick-section:last-child  { border-right: none; }
+
+    .tick-section-label {
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: rgba(0,0,0,0.35);
+      white-space: nowrap;
+      padding-right: 1px;
+      flex-shrink: 0;
     }
 
     .tick-btn {
@@ -396,7 +411,7 @@
       /* Hide desktop count, show mobile count at bottom-right */
       #count-badge {
         top: auto; right: 14px;
-        bottom: 16px;                   /* same row as slider */
+        bottom: 16px;
       }
 
       /* Compact bottom controls */
@@ -431,7 +446,7 @@
 
 <!-- ── Top UI ────────────────────────────────────────────── -->
 <div id="ui-top">
-  <!-- Primary: view modes + grouping -->
+  <!-- Primary: view modes + grouping (clustering only) -->
   <div class="menu-bar" id="main-menu">
     <button class="nav-btn active" data-type="view"  data-val="grid">Grid</button>
     <button class="nav-btn"        data-type="view"  data-val="sphere">Sphere</button>
@@ -445,20 +460,10 @@
   </div>
 
   <!--
-    Tick-filter bar — rebuilt dynamically.
-    Structure: [group-specific ticks...] [separator?] [In Stock] [Out of Stock]
-    Group ticks reset on group change; stock ticks persist.
+    Tick-filter bar — always shows ALL categories except the current clustering group.
+    Built dynamically by buildTickBar(). Stock section never resets.
   -->
-  <div id="tick-bar">
-    <!-- group ticks injected here by JS -->
-    <div class="tick-sep" id="tick-stock-sep" style="display:none"></div>
-    <button class="tick-btn" data-tick="in-stock">
-      <span class="tick-box"></span>In Stock
-    </button>
-    <button class="tick-btn" data-tick="out-stock">
-      <span class="tick-box"></span>Out of Stock
-    </button>
-  </div>
+  <div id="tick-bar"></div>
 </div>
 
 <!-- ── Count badge ───────────────────────────────────────── -->
@@ -580,23 +585,24 @@ function extractProductType(title) {
 }
 
 function extractMeta(p) {
-  const tl = (p.title || '').toLowerCase();
-  let age = '';
-  for (const a of AGES) { if (tl.includes(a.toLowerCase())) { age = a; break; } }
+  const varTitles = (p.variants || []).map(v => v.title || '');
+  const allText   = (p.title + ' ' + varTitles.join(' ')).toLowerCase();
 
-  const shapes = new Set(), lenses = new Set();
-  let color = '';
-  for (const v of (p.variants || [])) {
-    const pts = (v.title || '').split('/').map(s => s.trim());
-    if (!color) color = v.color || pts[0] || '';
-    if (pts[1] && SHAPES.has(pts[1])) shapes.add(pts[1]);
-    if (pts[1] && LENS_T.has(pts[1])) lenses.add(pts[1]);
-    if (pts[2] && LENS_T.has(pts[2])) lenses.add(pts[2]);
+  const age    = AGES.find(a => allText.includes(a.toLowerCase())) || null;
+  const shapes = varTitles.flatMap(t => t.split(/[\s,/]+/).filter(w => SHAPES.has(w)));
+  const uniqueShapes = [...new Set(shapes.length ? shapes : [])];
+  const lenses = varTitles.flatMap(t => [...LENS_T].filter(l => t.includes(l)));
+  const uniqueLenses = [...new Set(lenses)];
+
+  let color = null;
+  for (const c of COLOR_NAMES) {
+    if (p.title.toLowerCase().includes(c.toLowerCase())) { color = c; break; }
   }
 
-  const available   = (p.variants || []).some(v => v.available);
-  const productType = extractProductType(p.title || '');
-  return { age, shapes:[...shapes], lenses:[...lenses], color, available, productType };
+  const available = (p.variants || []).some(v => v.available);
+  const productType = extractProductType(p.title);
+
+  return { age, shapes: uniqueShapes, lenses: uniqueLenses, color, available, productType };
 }
 
 function baseModelOf(title) {
@@ -608,23 +614,30 @@ function baseModelOf(title) {
   return title.trim();
 }
 
-// ── Predefined tick values per group (ordered + filtered to existing products) ─
-const GROUP_TICK_ORDER = {
-  age:   ['Baby','Toddler','Kids','Junior','Adult'],
-  shape: ['Oval','Round','Creative Shield','Full-Rim','Half-Rim'],
-  type:  ['Sunglasses','Sport Sunglasses','Ski Goggles','Screen Glasses','Accessories'],
-  lens:  ['Polarised','Non-Polarised'],
-};
+// ════════════════════════════════════════════════════════════════════════════
+// Tick bar definition — ordered list of filter sections
+// ════════════════════════════════════════════════════════════════════════════
+const TICK_DEFS = [
+  { key: 'age',   label: 'Age',   values: ['Baby','Toddler','Kids','Junior','Adult'] },
+  { key: 'shape', label: 'Shape', values: ['Oval','Round','Creative Shield','Full-Rim','Half-Rim'] },
+  { key: 'type',  label: 'Type',  values: ['Sunglasses','Sport Sunglasses','Ski Goggles','Screen Glasses','Accessories'] },
+  { key: 'lens',  label: 'Lens',  values: ['Polarised','Non-Polarised'] },
+  { key: 'stock', label: 'Stock', values: [{ label: 'In Stock', val: 'in' }, { label: 'Out of Stock', val: 'out' }] },
+];
 
 // ════════════════════════════════════════════════════════════════════════════
 // Application state
 // ════════════════════════════════════════════════════════════════════════════
 const state = {
-  view:       'grid',   // grid | sphere | chaos
-  group:      'all',    // all | age | shape | type | lens
-  tickValues: new Set(),// selected group-specific values (resets on group change)
-  tickIn:     false,    // stock filter — persistent
-  tickOut:    false,    // stock filter — persistent
+  view:  'grid',  // grid | sphere | chaos
+  group: 'all',   // all | age | shape | type | lens  — spatial clustering only
+  ticks: {
+    age:   new Set(),   // selected Age values — resets on group change
+    shape: new Set(),   // selected Shape values — resets on group change
+    type:  new Set(),   // selected Type values — resets on group change
+    lens:  new Set(),   // selected Lens values — resets on group change
+    stock: new Set(),   // 'in' | 'out' — PERSISTENT, never resets
+  },
 };
 
 let camera, scene, renderer, controls;
@@ -684,8 +697,7 @@ function init() {
   buildScene();
   window.addEventListener('resize', onWindowResize);
   setupMenuButtons();
-  rebuildTickBar();       // initial tick bar (stock ticks only, no group ticks)
-  setupStaticTickBtns();  // attach handlers to the persistent stock ticks
+  buildTickBar();   // build the full tick bar (all categories)
   setupSlider();
   setupFitButton();
   setupModal();
@@ -719,7 +731,7 @@ function buildScene() {
       center:      new THREE.Vector3(0,0,0),
       offset:      new THREE.Vector3(sx,sy,sz),
       rotation:    new THREE.Euler(0,0,0),
-      sphereCenter:null
+      sphereCenter: null,
     };
     scene.add(obj);
     objects.push(obj);
@@ -730,7 +742,7 @@ function buildScene() {
 }
 
 // ════════════════════════════════════════════════════════════════════════════
-// Group key for a product
+// Group key — used only for spatial clustering
 // ════════════════════════════════════════════════════════════════════════════
 function groupKey(i) {
   const m = products[i]._meta;
@@ -744,22 +756,39 @@ function groupKey(i) {
 }
 
 // ════════════════════════════════════════════════════════════════════════════
-// Visible indices — combined group-tick + stock-tick filter
+// Visible indices — checks ALL tick categories independently
+// Within each category: OR logic (any selected value matches)
+// Across categories: AND logic (must pass all active categories)
 // ════════════════════════════════════════════════════════════════════════════
 function visibleIndices() {
   return products.map((_,i) => i).filter(i => {
-    // Group-specific tick filter (only when group ≠ all AND ticks are active)
-    if (state.tickValues.size > 0 && state.group !== 'all') {
-      if (!state.tickValues.has(groupKey(i))) return false;
-    }
+    const m = products[i]._meta;
+
+    // Age filter
+    const ta = state.ticks.age;
+    if (ta.size > 0 && !ta.has(m.age || 'Other')) return false;
+
+    // Shape filter (product may have multiple shapes)
+    const ts = state.ticks.shape;
+    if (ts.size > 0 && !m.shapes.some(s => ts.has(s))) return false;
+
+    // Type filter
+    const tt = state.ticks.type;
+    if (tt.size > 0 && !tt.has(m.productType || 'Other')) return false;
+
+    // Lens filter (product may have multiple lens types)
+    const tl = state.ticks.lens;
+    if (tl.size > 0 && !m.lenses.some(l => tl.has(l))) return false;
 
     // Stock filter
-    const wantIn = state.tickIn, wantOut = state.tickOut;
-    if (wantIn || wantOut) {
-      const avail = products[i]._meta.available;
-      if (wantIn  &&  avail) return true;
-      if (wantOut && !avail) return true;
-      return false;
+    const tk = state.ticks.stock;
+    if (tk.size > 0) {
+      const avail    = m.available;
+      const wantIn   = tk.has('in');
+      const wantOut  = tk.has('out');
+      if (wantIn && wantOut) return true;   // both ticked = show all
+      if (wantIn  && !avail) return false;  // want in-stock only, this is OOS
+      if (wantOut &&  avail) return false;  // want OOS only, this is in-stock
     }
 
     return true;
@@ -767,73 +796,72 @@ function visibleIndices() {
 }
 
 // ════════════════════════════════════════════════════════════════════════════
-// Tick bar — rebuild group-specific part whenever group changes
+// Tick bar — builds ALL filter sections except the current clustering group
 // ════════════════════════════════════════════════════════════════════════════
-function rebuildTickBar() {
-  // Remove all existing group tick buttons
-  document.querySelectorAll('.tick-btn[data-tick-group]').forEach(b => b.remove());
-  state.tickValues.clear();
-
-  const sep = document.getElementById('tick-stock-sep');
-
-  if (state.group === 'all') {
-    sep.style.display = 'none';
-    return;
-  }
-
-  // Which values exist in current product data for this group?
-  const existingValues = new Set(products.map((_,i) => groupKey(i)));
-  const ordered = (GROUP_TICK_ORDER[state.group] || []).filter(v => existingValues.has(v));
-
-  if (ordered.length === 0) { sep.style.display = 'none'; return; }
-
-  // Show separator between group ticks and stock ticks
-  sep.style.display = '';
-
+function buildTickBar() {
   const bar = document.getElementById('tick-bar');
-  // Insert group tick buttons BEFORE the separator
-  for (const val of ordered) {
-    const btn = document.createElement('button');
-    btn.className       = 'tick-btn';
-    btn.dataset.tick    = 'group-' + val;
-    btn.dataset.tickGroup = 'true';
-    btn.innerHTML = `<span class="tick-box"></span>${esc(val)}`;
-    btn.addEventListener('click', () => toggleGroupTick(btn, val));
-    bar.insertBefore(btn, sep);
+  bar.innerHTML = '';
+
+  for (const def of TICK_DEFS) {
+    // Hide the section whose dimension is currently being used for spatial clustering
+    if (def.key !== 'stock' && def.key === state.group) continue;
+
+    // For non-stock categories, only include values that actually exist in the data
+    let values = def.values;
+    if (def.key !== 'stock') {
+      const existing = new Set();
+      products.forEach(p => {
+        const m = p._meta;
+        if      (def.key === 'age')   existing.add(m.age || 'Other');
+        else if (def.key === 'shape') m.shapes.forEach(s => existing.add(s));
+        else if (def.key === 'type')  existing.add(m.productType || 'Other');
+        else if (def.key === 'lens')  m.lenses.forEach(l => existing.add(l));
+      });
+      values = def.values.filter(v => existing.has(v));
+      if (values.length === 0) continue;
+    }
+
+    const section = document.createElement('div');
+    section.className = 'tick-section';
+    section.id = 'ts-' + def.key;
+
+    const lbl = document.createElement('span');
+    lbl.className = 'tick-section-label';
+    lbl.textContent = def.label;
+    section.appendChild(lbl);
+
+    for (const valDef of values) {
+      const btnLabel = def.key === 'stock' ? valDef.label : valDef;
+      const btnVal   = def.key === 'stock' ? valDef.val   : valDef;
+
+      const btn = document.createElement('button');
+      btn.className = 'tick-btn';
+      btn.dataset.category = def.key;
+      btn.dataset.val = btnVal;
+
+      const isActive = state.ticks[def.key].has(btnVal);
+      if (isActive) btn.classList.add('active');
+      btn.innerHTML = `<span class="tick-box">${isActive ? '✓' : ''}</span>${esc(btnLabel)}`;
+      btn.addEventListener('click', () => toggleTick(def.key, btnVal, btn));
+      section.appendChild(btn);
+    }
+
+    bar.appendChild(section);
   }
 }
 
-function toggleGroupTick(btn, val) {
-  btn.classList.toggle('active');
-  const box = btn.querySelector('.tick-box');
-  if (btn.classList.contains('active')) {
-    box.textContent = '✓';
-    state.tickValues.add(val);
+function toggleTick(category, val, btn) {
+  const set = state.ticks[category];
+  if (set.has(val)) {
+    set.delete(val);
+    btn.classList.remove('active');
+    btn.querySelector('.tick-box').textContent = '';
   } else {
-    box.textContent = '';
-    state.tickValues.delete(val);
+    set.add(val);
+    btn.classList.add('active');
+    btn.querySelector('.tick-box').textContent = '✓';
   }
   updateLayout();
-}
-
-// Set up the permanent stock tick buttons
-function setupStaticTickBtns() {
-  document.querySelector('[data-tick="in-stock"]').addEventListener('click', btn => {
-    const b = btn.currentTarget;
-    b.classList.toggle('active');
-    const box = b.querySelector('.tick-box');
-    state.tickIn = b.classList.contains('active');
-    box.textContent = state.tickIn ? '✓' : '';
-    updateLayout();
-  });
-  document.querySelector('[data-tick="out-stock"]').addEventListener('click', btn => {
-    const b = btn.currentTarget;
-    b.classList.toggle('active');
-    const box = b.querySelector('.tick-box');
-    state.tickOut = b.classList.contains('active');
-    box.textContent = state.tickOut ? '✓' : '';
-    updateLayout();
-  });
 }
 
 // ════════════════════════════════════════════════════════════════════════════
@@ -869,19 +897,33 @@ function updateLayout() {
   removeLabels();
   objects.forEach(o => { o.userData.rotation.set(0,0,0); o.userData.sphereCenter = null; });
 
-  const visible   = new Set(visibleIndices());
-  const FAR_Y     = 18000;
+  const visible = new Set(visibleIndices());
+  const FAR_Y   = 18000;
 
-  // Park invisible items far away (no null — center stays a valid Vector3)
+  // Tween invisible items OUT (fly up to FAR_Y)
   objects.forEach((obj, i) => {
     if (!visible.has(i)) {
+      const wasActive = obj.userData.active;
       obj.userData.active = false;
-      obj.userData.center.set(0, FAR_Y, 0);
-      obj.userData.offset.set(0, 0, 0);
+      if (wasActive) {
+        // Animate out — fly toward FAR_Y
+        new TWEEN.Tween(obj.userData.center)
+          .to({ x: 0, y: FAR_Y, z: 0 }, 900)
+          .easing(TWEEN.Easing.Exponential.In)
+          .start();
+        new TWEEN.Tween(obj.userData.offset)
+          .to({ x: 0, y: 0, z: 0 }, 900)
+          .easing(TWEEN.Easing.Exponential.In)
+          .start();
+      } else {
+        // Already hidden — ensure it's parked (no tween needed)
+        obj.userData.center.set(0, FAR_Y, 0);
+        obj.userData.offset.set(0, 0, 0);
+      }
     }
   });
 
-  // Build groups
+  // Build groups for visible items
   const groups = {};
   for (const i of visible) {
     const k = groupKey(i);
@@ -920,7 +962,11 @@ function updateLayout() {
       const cols = Math.ceil(Math.sqrt(idxs.length));
       idxs.forEach((objIdx, i) => {
         const obj = objects[objIdx];
-        if (!obj.userData.active) { obj.userData.center.set(cx,cy,cz); obj.userData.offset.set(0,0,0); }
+        // If item was hidden, start its entrance from above the cluster
+        if (!obj.userData.active) {
+          obj.userData.center.set(cx, FAR_Y, cz);
+          obj.userData.offset.set(0, 0, 0);
+        }
         obj.userData.active = true;
         const ox = (i%cols - (cols-1)/2)*ITEM_SPC, oy = 420 - Math.floor(i/cols)*ITEM_SPC;
         new TWEEN.Tween(obj.userData.center).to({x:cx,y:cy,z:cz},2300).easing(TWEEN.Easing.Exponential.InOut).start();
@@ -934,7 +980,10 @@ function updateLayout() {
       const sphereCY = 420 - sphereR;
       idxs.forEach((objIdx, i) => {
         const obj = objects[objIdx];
-        if (!obj.userData.active) { obj.userData.center.set(cx,cy,cz); obj.userData.offset.set(0,0,0); }
+        if (!obj.userData.active) {
+          obj.userData.center.set(cx, FAR_Y, cz);
+          obj.userData.offset.set(0, 0, 0);
+        }
         obj.userData.active = true;
         const phi = Math.acos(-1+(2*i)/idxs.length), theta = Math.sqrt(idxs.length*Math.PI)*phi;
         const ox = sphereR*Math.sin(phi)*Math.cos(theta);
@@ -952,7 +1001,10 @@ function updateLayout() {
       const spread = 800;
       idxs.forEach(objIdx => {
         const obj = objects[objIdx];
-        if (!obj.userData.active) { obj.userData.center.set(cx,cy,cz); obj.userData.offset.set(0,0,0); }
+        if (!obj.userData.active) {
+          obj.userData.center.set(cx, FAR_Y, cz);
+          obj.userData.offset.set(0, 0, 0);
+        }
         obj.userData.active = true;
         const ox=(Math.random()-.5)*spread, oy=(Math.random()-.5)*spread, oz=(Math.random()-.5)*spread;
         const rx=(Math.random()-.5)*.45, rz=(Math.random()-.5)*.45;
@@ -977,7 +1029,15 @@ function animate() {
   const time = Date.now() * 0.002;
 
   objects.forEach((obj, i) => {
-    if (!obj.userData.active) return;
+    if (!obj.userData.active) {
+      // CRITICAL: inactive items still update position so exit tweens work.
+      // (center tweens to FAR_Y, animate loop applies it each frame)
+      const offI = obj.userData.offset.clone();
+      const posI = new THREE.Vector3().copy(obj.userData.center).add(offI);
+      obj.position.copy(posI);
+      return;
+    }
+
     const off = obj.userData.offset.clone();
     off.applyAxisAngle(new THREE.Vector3(0,1,0), globalRotation);
     const pos = new THREE.Vector3().copy(obj.userData.center).add(off);
@@ -1016,7 +1076,17 @@ function setupMenuButtons() {
       document.querySelectorAll(`.nav-btn[data-type="${type}"]`).forEach(b => b.classList.remove('active'));
       e.currentTarget.classList.add('active');
       state[type] = val;
-      if (type === 'group') rebuildTickBar(); // reset group ticks, keep stock ticks
+
+      if (type === 'group') {
+        // Reset all non-stock category ticks on group change
+        state.ticks.age.clear();
+        state.ticks.shape.clear();
+        state.ticks.type.clear();
+        state.ticks.lens.clear();
+        // Rebuild tick bar: hides the new clustering group's section, resets buttons
+        buildTickBar();
+      }
+
       updateLayout();
     });
   });
