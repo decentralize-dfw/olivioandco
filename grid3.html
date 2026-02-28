@@ -5,12 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <title>Olivio&amp;Co — Product Catalog</title>
 
-  <!-- ═══════════════════════════════════════════
-       CONFIG — change only these two numbers
-  ═══════════════════════════════════════════ -->
   <script>
-    const THUMBNAIL_WIDTH = 400;   // px — 3D card images
-    const IMAGE_WIDTH     = 1200;  // px — popup full-size images
+    const THUMBNAIL_WIDTH = 400;
+    const IMAGE_WIDTH     = 1200;
   </script>
 
   <style>
@@ -18,8 +15,7 @@
 
     html, body {
       height: 100%; width: 100%;
-      background: #ffffff;
-      color: #000000;
+      background: #ffffff; color: #000;
       font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
       font-size: 13px;
       overflow: hidden;
@@ -27,52 +23,38 @@
       -webkit-tap-highlight-color: transparent;
     }
 
-    /* ────────────────────────────────────────────────────────
-       TOP UI
-    ──────────────────────────────────────────────────────── */
+    /* ─── TOP UI ───────────────────────────────────────────── */
     #ui-top {
-      position: fixed;
-      top: 0; left: 0; right: 0;
+      position: fixed; top: 0; left: 0; right: 0;
       z-index: 100;
       padding: 12px 16px 0;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
+      display: flex; flex-direction: column; gap: 6px;
       pointer-events: none;
     }
 
-    /* ── Primary menu bar ── */
     .menu-bar {
-      display: flex;
-      flex-wrap: nowrap;
-      gap: 3px;
-      align-items: center;
+      align-self: flex-start;
+      display: flex; flex-wrap: nowrap; gap: 3px; align-items: center;
       pointer-events: auto;
       background: rgba(255,255,255,0.94);
       padding: 5px 11px;
-      border-radius: 30px;
-      border: 1px solid #000;
+      border-radius: 30px; border: 1px solid #000;
       backdrop-filter: blur(6px);
-      overflow-x: auto;
-      scrollbar-width: none;
-      align-self: flex-start;
+      overflow-x: auto; scrollbar-width: none;
     }
     .menu-bar::-webkit-scrollbar { display: none; }
 
     .menu-sep {
       width: 1px; height: 14px;
-      background: rgba(0,0,0,0.2);
-      margin: 0 3px; flex-shrink: 0;
+      background: rgba(0,0,0,0.2); margin: 0 3px; flex-shrink: 0;
     }
 
     .nav-btn {
-      background: transparent;
-      border: 1px solid transparent;
+      background: transparent; border: 1px solid transparent;
       color: rgba(0,0,0,0.42);
       padding: 2px 10px;
-      font-family: inherit;
-      font-size: 11px; font-weight: 700;
-      letter-spacing: 0.06em; text-transform: uppercase;
+      font-family: inherit; font-size: 11px; font-weight: 700;
+      letter-spacing: .06em; text-transform: uppercase;
       cursor: pointer; border-radius: 4px;
       transition: color .12s, border-color .12s, background .12s;
       white-space: nowrap; flex-shrink: 0;
@@ -81,104 +63,100 @@
     .nav-btn:hover  { color: #000; border-color: rgba(0,0,0,0.28); }
     .nav-btn.active { background: #000; color: #fff; border-color: #000; }
 
-    /* ── Tick-filter bar ── */
-    #tick-bar {
-      display: flex;
-      flex-wrap: nowrap;
-      gap: 0;
-      align-items: center;
+    /* Mobile rows hidden on desktop */
+    #mobile-view-bar, #mobile-group-bar { display: none; }
+
+    /* ─── COUNT BADGE ──────────────────────────────────────── */
+    #count-badge {
+      position: fixed; top: 14px; right: 14px;
+      z-index: 101;
+      background: rgba(255,255,255,0.92);
+      border: 1px solid rgba(0,0,0,0.18); border-radius: 20px;
+      padding: 4px 10px; font-size: 11px; color: rgba(0,0,0,0.5);
+      backdrop-filter: blur(4px); pointer-events: none; white-space: nowrap;
+    }
+
+    /* ─── FILTER PANEL (bottom-left on desktop) ────────────── */
+    #filter-panel {
+      position: fixed; left: 16px; bottom: 68px;
+      z-index: 100;
+      background: rgba(255,255,255,0.97);
+      border: 1px solid rgba(0,0,0,0.15); border-radius: 12px;
+      padding: 12px 14px 10px;
+      backdrop-filter: blur(10px);
+      max-width: 290px;
+      max-height: calc(100vh - 170px);
+      overflow-y: auto; scrollbar-width: thin; scrollbar-color: #ccc transparent;
       pointer-events: auto;
-      overflow-x: auto;
-      scrollbar-width: none;
-      padding-bottom: 8px;
     }
-    #tick-bar::-webkit-scrollbar { display: none; }
 
-    /* Each category is a section */
+    /* Tick sections — vertical layout inside filter panel */
+    #tick-bar {
+      display: flex; flex-direction: column; gap: 9px;
+    }
+
     .tick-section {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      flex-shrink: 0;
-      padding: 0 10px;
-      border-right: 1px solid rgba(0,0,0,0.15);
+      display: flex; align-items: flex-start; gap: 6px;
     }
-    .tick-section:first-child { padding-left: 0; }
-    .tick-section:last-child  { border-right: none; }
-
     .tick-section-label {
-      font-size: 9px;
-      font-weight: 800;
-      letter-spacing: .1em;
-      text-transform: uppercase;
-      color: rgba(0,0,0,0.35);
-      white-space: nowrap;
-      padding-right: 1px;
-      flex-shrink: 0;
+      width: 42px; flex-shrink: 0;
+      font-size: 9px; font-weight: 800; letter-spacing: .1em;
+      text-transform: uppercase; color: rgba(0,0,0,0.35);
+      padding-top: 4px;
+    }
+    .tick-section-btns {
+      display: flex; flex-wrap: wrap; gap: 4px;
     }
 
     .tick-btn {
-      display: inline-flex; align-items: center; gap: 5px;
-      padding: 3px 10px 3px 8px;
-      border: 1px solid rgba(0,0,0,0.22);
-      border-radius: 30px;
-      background: rgba(255,255,255,0.9);
-      color: rgba(0,0,0,0.48);
-      font-family: inherit;
-      font-size: 11px; font-weight: 600;
+      display: inline-flex; align-items: center; gap: 4px;
+      padding: 3px 9px 3px 7px;
+      border: 1px solid rgba(0,0,0,0.22); border-radius: 30px;
+      background: rgba(255,255,255,0.9); color: rgba(0,0,0,0.48);
+      font-family: inherit; font-size: 11px; font-weight: 600;
       letter-spacing: .04em;
       cursor: pointer; white-space: nowrap; flex-shrink: 0;
       user-select: none; -webkit-user-select: none;
       transition: color .12s, border-color .12s, background .12s;
       backdrop-filter: blur(4px);
     }
-    .tick-btn:hover { border-color: #000; color: #000; }
-    .tick-btn.active {
-      border-color: #000; color: #000;
-      background: rgba(255,255,255,0.98);
-    }
+    .tick-btn:hover  { border-color: #000; color: #000; }
+    .tick-btn.active { border-color: #000; color: #000; background: rgba(0,0,0,0.06); }
     .tick-box {
-      width: 13px; height: 13px;
-      border: 1.5px solid currentColor;
-      border-radius: 3px;
+      width: 12px; height: 12px;
+      border: 1.5px solid currentColor; border-radius: 3px;
       display: flex; align-items: center; justify-content: center;
-      font-size: 9px; line-height: 1;
-      flex-shrink: 0;
+      font-size: 9px; line-height: 1; flex-shrink: 0;
     }
 
-    /* ────────────────────────────────────────────────────────
-       PRODUCT COUNT BADGE
-    ──────────────────────────────────────────────────────── */
-    #count-badge {
-      position: fixed;
-      top: 14px; right: 14px;
-      z-index: 101;
-      background: rgba(255,255,255,0.92);
-      border: 1px solid rgba(0,0,0,0.18);
-      border-radius: 20px;
-      padding: 4px 10px;
-      font-size: 11px;
-      color: rgba(0,0,0,0.5);
-      backdrop-filter: blur(4px);
-      pointer-events: none;
-      white-space: nowrap;
+    /* Filter footer: Reset + Apply */
+    #filter-footer {
+      margin-top: 10px; padding-top: 10px;
+      border-top: 1px solid rgba(0,0,0,0.08);
+      display: flex; gap: 6px;
     }
+    .filter-action-btn {
+      flex: 1; padding: 6px; border: 1px solid #000; border-radius: 4px;
+      background: transparent; cursor: pointer; font-family: inherit;
+      font-size: 10px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase;
+      transition: background .12s, color .12s;
+    }
+    .filter-action-btn:hover { background: #000; color: #fff; }
+    #filter-apply-btn { background: #000; color: #fff; }
+    #filter-apply-btn:hover { background: #333; }
+    #filter-apply-btn { display: none; } /* only shown on mobile */
 
-    /* ────────────────────────────────────────────────────────
-       BOTTOM CONTROLS (Rotate slider + Fit)
-    ──────────────────────────────────────────────────────── */
-    #slider-container {
-      position: fixed;
-      bottom: 16px; left: 16px;
+    /* ─── CONTROLS (Rotate + Fit) ──────────────────────────── */
+    #controls {
+      position: fixed; left: 16px; bottom: 16px;
       z-index: 100;
-      display: flex; flex-direction: row; align-items: center; gap: 9px;
+      display: flex; align-items: center; gap: 9px;
       pointer-events: auto;
-      background: rgba(255,255,255,0.92);
-      padding: 6px 12px; border-radius: 10px;
-      border: 1px solid rgba(0,0,0,0.18);
+      background: rgba(255,255,255,0.92); padding: 6px 12px;
+      border-radius: 10px; border: 1px solid rgba(0,0,0,0.18);
       backdrop-filter: blur(6px);
     }
-    #slider-label {
+    #ctrl-label {
       font-size: 10px; font-weight: 700;
       letter-spacing: .08em; text-transform: uppercase;
       color: rgba(0,0,0,0.5); white-space: nowrap;
@@ -186,13 +164,11 @@
     input[type=range] {
       -webkit-appearance: none;
       width: 80px; height: 2px;
-      background: rgba(0,0,0,0.18);
-      border-radius: 2px; outline: none;
+      background: rgba(0,0,0,0.18); border-radius: 2px; outline: none;
     }
     input[type=range]::-webkit-slider-thumb {
       -webkit-appearance: none;
-      width: 11px; height: 11px;
-      border-radius: 50%; background: #000; cursor: pointer;
+      width: 11px; height: 11px; border-radius: 50%; background: #000; cursor: pointer;
     }
     #fit-btn {
       font-size: 10px; font-weight: 700;
@@ -205,17 +181,13 @@
     }
     #fit-btn:hover { background: #000; color: #fff; border-color: #000; }
 
-    /* ────────────────────────────────────────────────────────
-       3D CANVAS
-    ──────────────────────────────────────────────────────── */
+    /* ─── 3D CANVAS ────────────────────────────────────────── */
     #container {
       position: absolute; inset: 0;
       z-index: 1; pointer-events: auto; touch-action: none;
     }
 
-    /* ────────────────────────────────────────────────────────
-       3D CARDS
-    ──────────────────────────────────────────────────────── */
+    /* ─── 3D CARDS ──────────────────────────────────────────── */
     .element-card {
       width: 155px; height: 155px;
       cursor: pointer;
@@ -232,14 +204,11 @@
     }
     .element-card:hover { transform: scale(1.1); z-index: 999; }
     .element-card img {
-      width: 100%; height: 100%;
-      object-fit: cover; display: block;
+      width: 100%; height: 100%; object-fit: cover; display: block;
       user-select: none; -webkit-user-drag: none; pointer-events: none;
     }
 
-    /* ────────────────────────────────────────────────────────
-       GROUP LABELS (3D floating text)
-    ──────────────────────────────────────────────────────── */
+    /* ─── GROUP LABELS ──────────────────────────────────────── */
     .group-label-wrap {
       display: flex; flex-direction: column;
       align-items: center; justify-content: center;
@@ -249,9 +218,8 @@
     }
     .group-label-wrap.visible { opacity: 1; transform: scale(1); }
     .group-label-main {
-      font-size: 62px; font-weight: 900;
-      line-height: 0.9; color: rgba(0,0,0,0.8);
-      text-transform: uppercase; letter-spacing: -0.02em;
+      font-size: 62px; font-weight: 900; line-height: .9;
+      color: rgba(0,0,0,0.8); text-transform: uppercase; letter-spacing: -.02em;
     }
     .group-label-sub {
       font-size: 11px; font-weight: 600; color: #fff;
@@ -259,9 +227,7 @@
       padding: 3px 12px; background: rgba(0,0,0,0.7);
     }
 
-    /* ────────────────────────────────────────────────────────
-       LOADER
-    ──────────────────────────────────────────────────────── */
+    /* ─── LOADER ────────────────────────────────────────────── */
     #loader {
       position: fixed; inset: 0; background: #fff; z-index: 99999;
       display: flex; flex-direction: column;
@@ -271,9 +237,7 @@
     #loader-title { font-size: 20px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
     #loader-sub   { font-size: 11px; color: rgba(0,0,0,0.4); margin-top: 6px; letter-spacing: .08em; }
 
-    /* ────────────────────────────────────────────────────────
-       MODAL / POPUP
-    ──────────────────────────────────────────────────────── */
+    /* ─── MODAL ─────────────────────────────────────────────── */
     #modal-overlay {
       opacity: 0; visibility: hidden;
       transition: opacity .25s, visibility .25s;
@@ -285,17 +249,14 @@
 
     #modal-backdrop {
       position: absolute; inset: 0;
-      background: rgba(0,0,0,0.52);
-      backdrop-filter: blur(5px);
-      cursor: pointer;
+      background: rgba(0,0,0,0.52); backdrop-filter: blur(5px); cursor: pointer;
     }
 
     #modal {
       position: relative; z-index: 10;
       background: #fff; color: #000;
       border: 1px solid #000; border-radius: 4px;
-      width: min(960px, 96vw);
-      height: min(620px, 92vh);
+      width: min(960px, 96vw); height: min(620px, 92vh);
       display: flex; flex-direction: column; overflow: hidden;
     }
 
@@ -310,7 +271,6 @@
 
     #modal-body { display: flex; flex: 1; overflow: hidden; }
 
-    /* Left: image viewer */
     #modal-left {
       flex: 1; min-width: 0;
       display: flex; flex-direction: column;
@@ -318,14 +278,12 @@
     }
     #modal-main-img-wrap {
       flex: 1; min-height: 0;
-      display: flex; align-items: center; justify-content: center;
-      overflow: hidden;
+      display: flex; align-items: center; justify-content: center; overflow: hidden;
     }
     #modal-main-img-wrap img { display: block; }
     #modal-main-img-wrap img.img-cover   { width: 100%; height: 100%; object-fit: cover; }
     #modal-main-img-wrap img.img-contain { max-width: 100%; max-height: 100%; object-fit: contain; }
 
-    /* Carousel */
     #modal-carousel {
       display: flex; gap: 5px;
       padding: 7px 9px; border-top: 1px solid #000;
@@ -334,47 +292,44 @@
     }
     .c-thumb {
       width: 50px; height: 50px; flex-shrink: 0;
-      border: 1px solid #ccc; border-radius: 3px;
-      overflow: hidden; cursor: pointer;
-      opacity: .5; transition: opacity .12s, border-color .12s;
+      border: 1px solid #ccc; border-radius: 3px; overflow: hidden;
+      cursor: pointer; opacity: .5; transition: opacity .12s, border-color .12s;
     }
     .c-thumb:hover { opacity: .8; }
     .c-thumb.active { opacity: 1; border: 2px solid #000; }
     .c-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
-    /* Right: info panel */
     #modal-right {
       width: 295px; flex-shrink: 0;
       display: flex; flex-direction: column;
-      padding: 18px 16px; gap: 11px;
       overflow-y: auto;
       scrollbar-width: thin; scrollbar-color: #ccc transparent;
     }
+    /* Each section in info panel */
+    .modal-sec {
+      padding: 12px 16px;
+      border-bottom: 1px solid #eee;
+    }
+    .modal-sec:last-child { border-bottom: none; }
 
     #modal-title { font-size: 14px; font-weight: 700; line-height: 1.4; padding-right: 28px; }
     .oos-badge   { color: #aaa; font-size: 12px; font-weight: 400; }
     #modal-price { font-size: 20px; font-weight: 800; }
     #modal-desc  { font-size: 11.5px; line-height: 1.65; color: #555; }
 
-    .divider { height: 1px; background: #eee; flex-shrink: 0; }
-
     .info-group { display: flex; flex-direction: column; gap: 7px; }
     .info-row {
-      display: flex; justify-content: space-between;
-      align-items: baseline; gap: 8px; font-size: 12px;
+      display: flex; justify-content: space-between; align-items: baseline; gap: 8px; font-size: 12px;
     }
     .info-row .lbl {
-      font-size: 10px; font-weight: 700;
-      letter-spacing: .08em; text-transform: uppercase;
-      color: #999; flex-shrink: 0;
+      font-size: 10px; font-weight: 700; letter-spacing: .08em;
+      text-transform: uppercase; color: #999; flex-shrink: 0;
     }
     .info-row .val { font-weight: 500; text-align: right; }
 
-    /* Color selector */
     .color-lbl {
-      font-size: 10px; font-weight: 700;
-      letter-spacing: .08em; text-transform: uppercase;
-      color: #999; margin-bottom: 6px;
+      font-size: 10px; font-weight: 700; letter-spacing: .08em;
+      text-transform: uppercase; color: #999; margin-bottom: 8px;
     }
     #color-selector { display: flex; flex-wrap: wrap; gap: 6px; }
     .color-ball {
@@ -392,62 +347,99 @@
       padding: 9px; border: 1px solid #000; border-radius: 3px;
       text-decoration: none; color: #000;
       font-size: 12px; font-weight: 600;
-      transition: background .12s, color .12s; flex-shrink: 0;
+      transition: background .12s, color .12s;
     }
     #modal-visit:hover { background: #000; color: #fff; }
 
-    /* ────────────────────────────────────────────────────────
-       MOBILE  ≤ 639 px
-    ──────────────────────────────────────────────────────── */
+    /* ─── MOBILE ≤ 639 px ───────────────────────────────────── */
     @media (max-width: 639px) {
-      /* Smaller 3D cards */
+      /* Two-row menu */
+      #desktop-nav { display: none; }
+      #mobile-view-bar, #mobile-group-bar {
+        display: flex;
+        width: calc(100vw - 32px);
+        justify-content: space-between;
+      }
+      #mobile-view-bar .nav-btn,
+      #mobile-group-bar .nav-btn { flex: 1; text-align: center; padding: 3px 4px; }
+      #filter-toggle { flex: 0 0 auto; padding: 3px 9px; }
+
+      /* Count badge — bottom-right */
+      #count-badge { top: auto; bottom: 16px; right: 14px; }
+
+      /* Filter panel — dropdown from top bar */
+      #filter-panel {
+        left: 0; right: 0; bottom: auto;
+        top: 108px;
+        border-radius: 0 0 14px 14px;
+        border-left: none; border-right: none; border-top: none;
+        max-width: 100%; max-height: 62vh;
+        transform: translateY(calc(-100% - 110px));
+        opacity: 0; visibility: hidden;
+        transition: transform .25s ease, opacity .25s, visibility .25s;
+        z-index: 150;
+      }
+      #filter-panel.open {
+        transform: translateY(0);
+        opacity: 1; visibility: visible;
+      }
+      /* Mobile: tick sections horizontal-scrollable rows */
+      #tick-bar { gap: 10px; }
+      .tick-section { align-items: center; }
+      .tick-section-label { padding-top: 0; }
+      .tick-section-btns { flex-wrap: wrap; }
+
+      #filter-apply-btn { display: block; }
+
+      /* Controls */
+      #controls { left: 14px; bottom: 16px; gap: 7px; padding: 5px 10px; }
+      input[type=range] { width: 65px; }
+
+      /* 3D cards */
       .element-card { width: 100px; height: 100px; }
       .group-label-main { font-size: 36px; }
       .group-label-sub  { font-size: 10px; }
 
-      /* Menu takes full width, count moves to bottom-right */
-      .menu-bar { max-width: calc(100vw - 28px); }
-
-      /* Hide desktop count, show mobile count at bottom-right */
-      #count-badge {
-        top: auto; right: 14px;
-        bottom: 16px;
-      }
-
-      /* Compact bottom controls */
-      #slider-container { bottom: 16px; left: 14px; gap: 7px; padding: 5px 10px; }
-      input[type=range] { width: 65px; }
-      #fit-btn { display: none; }
-
-      /* Full-screen bottom-sheet popup */
+      /* Modal: bottom sheet */
       #modal-overlay { padding: 0; align-items: flex-end; }
       #modal {
         width: 100%; height: 92dvh;
         border-radius: 14px 14px 0 0;
         border-left: none; border-right: none; border-bottom: none;
       }
-      /* Stack: image on top, info below */
+      /* Stack image then info */
       #modal-body { flex-direction: column; }
       #modal-left {
-        flex: none; height: 48%;
+        flex: none; height: 42%;
         border-right: none; border-bottom: 1px solid #000;
       }
-      #modal-right { width: 100%; flex: 1; padding: 14px 14px 24px; }
+      #modal-right { width: 100%; flex: 1; }
+      /* Mobile info order: title > price > color > meta > desc > visit */
+      /* HTML is already in this order */
     }
+
+    /* ─── FILTER BACKDROP (mobile) ──────────────────────────── */
+    #filter-backdrop {
+      display: none;
+      position: fixed; inset: 0; z-index: 149;
+      background: rgba(0,0,0,0.25);
+    }
+    #filter-backdrop.active { display: block; }
   </style>
 </head>
 <body>
 
-<!-- ── Loader ────────────────────────────────────────────── -->
+<!-- Loader -->
 <div id="loader">
   <div id="loader-title">Olivio &amp; Co</div>
   <div id="loader-sub">Loading products…</div>
 </div>
 
-<!-- ── Top UI ────────────────────────────────────────────── -->
+<!-- ── Top UI ─────────────────────────────────────────────── -->
 <div id="ui-top">
-  <!-- Primary: view modes + grouping (clustering only) -->
-  <div class="menu-bar" id="main-menu">
+
+  <!-- Desktop: single combined nav bar -->
+  <div class="menu-bar" id="desktop-nav">
     <button class="nav-btn active" data-type="view"  data-val="grid">Grid</button>
     <button class="nav-btn"        data-type="view"  data-val="sphere">Sphere</button>
     <button class="nav-btn"        data-type="view"  data-val="chaos">Chaos</button>
@@ -459,19 +451,44 @@
     <button class="nav-btn"        data-type="group" data-val="lens">Lens</button>
   </div>
 
-  <!--
-    Tick-filter bar — always shows ALL categories except the current clustering group.
-    Built dynamically by buildTickBar(). Stock section never resets.
-  -->
-  <div id="tick-bar"></div>
+  <!-- Mobile row 1: view modes + filter toggle -->
+  <div class="menu-bar" id="mobile-view-bar">
+    <button class="nav-btn active" data-type="view" data-val="grid">Grid</button>
+    <button class="nav-btn"        data-type="view" data-val="sphere">Sphere</button>
+    <button class="nav-btn"        data-type="view" data-val="chaos">Chaos</button>
+    <div class="menu-sep"></div>
+    <button id="filter-toggle" class="nav-btn">Filter ▾</button>
+  </div>
+
+  <!-- Mobile row 2: spatial clustering group -->
+  <div class="menu-bar" id="mobile-group-bar">
+    <button class="nav-btn active" data-type="group" data-val="all">All</button>
+    <button class="nav-btn"        data-type="group" data-val="age">Age</button>
+    <button class="nav-btn"        data-type="group" data-val="shape">Shape</button>
+    <button class="nav-btn"        data-type="group" data-val="type">Type</button>
+    <button class="nav-btn"        data-type="group" data-val="lens">Lens</button>
+  </div>
+
 </div>
 
-<!-- ── Count badge ───────────────────────────────────────── -->
+<!-- Count badge -->
 <div id="count-badge">— products</div>
 
-<!-- ── Bottom controls ──────────────────────────────────── -->
-<div id="slider-container">
-  <span id="slider-label">Rotate</span>
+<!-- ── Filter Panel ──────────────────────────────────────── -->
+<div id="filter-panel">
+  <div id="tick-bar"><!-- sections built by JS --></div>
+  <div id="filter-footer">
+    <button class="filter-action-btn" id="filter-reset-btn">Reset</button>
+    <button class="filter-action-btn" id="filter-apply-btn">Apply</button>
+  </div>
+</div>
+
+<!-- Filter backdrop (mobile) -->
+<div id="filter-backdrop"></div>
+
+<!-- ── Controls (Rotate + Fit) ──────────────────────────── -->
+<div id="controls">
+  <span id="ctrl-label">Rotate</span>
   <input type="range" id="rotate-slider" min="-2" max="2" step="0.1" value="0">
   <button id="fit-btn">Fit</button>
 </div>
@@ -486,7 +503,7 @@
     <button id="modal-close" aria-label="Close">✕</button>
     <div id="modal-body">
 
-      <!-- Image side -->
+      <!-- Image side (top on mobile) -->
       <div id="modal-left">
         <div id="modal-main-img-wrap">
           <img id="modal-main-img" src="" alt="" class="img-cover">
@@ -494,28 +511,32 @@
         <div id="modal-carousel"></div>
       </div>
 
-      <!-- Info side -->
+      <!-- Info side — mobile order: title > price > color > meta > desc > visit -->
       <div id="modal-right">
-        <div id="modal-title"></div>
-        <div id="modal-price"></div>
-        <div class="divider"></div>
-        <div id="modal-desc"></div>
-        <div class="divider"></div>
-        <div class="info-group" id="modal-meta"></div>
-        <div class="divider"></div>
-        <div>
+        <div class="modal-sec">
+          <div id="modal-title"></div>
+          <div id="modal-price" style="margin-top:6px"></div>
+        </div>
+        <div class="modal-sec" id="color-section">
           <div class="color-lbl">Colors</div>
           <div id="color-selector"></div>
         </div>
-        <div class="divider"></div>
-        <a id="modal-visit" href="#" target="_blank" rel="noopener">View on store →</a>
+        <div class="modal-sec" id="meta-section">
+          <div class="info-group" id="modal-meta"></div>
+        </div>
+        <div class="modal-sec" id="desc-section">
+          <div id="modal-desc"></div>
+        </div>
+        <div class="modal-sec">
+          <a id="modal-visit" href="#" target="_blank" rel="noopener">View on store →</a>
+        </div>
       </div>
 
     </div>
   </div>
 </div>
 
-<!-- ── Three.js import map ────────────────────────────────── -->
+<!-- Three.js -->
 <script type="importmap">
 {
   "imports": {
@@ -566,10 +587,9 @@ function shopifyImg(url, w) {
   catch { return url + (url.includes('?') ? '&' : '?') + 'width=' + w; }
 }
 const esc = s => String(s)
-  .replace(/&/g,'&amp;').replace(/</g,'&lt;')
-  .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 
-// ── Metadata extraction ───────────────────────────────────────────────────────
+// ── Metadata ──────────────────────────────────────────────────────────────────
 const AGES   = ['Baby','Toddler','Kids','Junior','Adult'];
 const SHAPES = new Set(['Oval','Round','Creative Shield','Full-Rim','Half-Rim']);
 const LENS_T = new Set(['Polarised','Non-Polarised']);
@@ -588,10 +608,10 @@ function extractMeta(p) {
   const varTitles = (p.variants || []).map(v => v.title || '');
   const allText   = (p.title + ' ' + varTitles.join(' ')).toLowerCase();
 
-  const age    = AGES.find(a => allText.includes(a.toLowerCase())) || null;
-  const shapes = varTitles.flatMap(t => t.split(/[\s,/]+/).filter(w => SHAPES.has(w)));
+  const age        = AGES.find(a => allText.includes(a.toLowerCase())) || null;
+  const shapes     = varTitles.flatMap(t => t.split(/[\s,/]+/).filter(w => SHAPES.has(w)));
   const uniqueShapes = [...new Set(shapes.length ? shapes : [])];
-  const lenses = varTitles.flatMap(t => [...LENS_T].filter(l => t.includes(l)));
+  const lenses     = varTitles.flatMap(t => [...LENS_T].filter(l => t.includes(l)));
   const uniqueLenses = [...new Set(lenses)];
 
   let color = null;
@@ -599,9 +619,8 @@ function extractMeta(p) {
     if (p.title.toLowerCase().includes(c.toLowerCase())) { color = c; break; }
   }
 
-  const available = (p.variants || []).some(v => v.available);
+  const available   = (p.variants || []).some(v => v.available);
   const productType = extractProductType(p.title);
-
   return { age, shapes: uniqueShapes, lenses: uniqueLenses, color, available, productType };
 }
 
@@ -614,9 +633,7 @@ function baseModelOf(title) {
   return title.trim();
 }
 
-// ════════════════════════════════════════════════════════════════════════════
-// Tick bar definition — ordered list of filter sections
-// ════════════════════════════════════════════════════════════════════════════
+// ── Tick definitions ──────────────────────────────────────────────────────────
 const TICK_DEFS = [
   { key: 'age',   label: 'Age',   values: ['Baby','Toddler','Kids','Junior','Adult'] },
   { key: 'shape', label: 'Shape', values: ['Oval','Round','Creative Shield','Full-Rim','Half-Rim'] },
@@ -625,18 +642,16 @@ const TICK_DEFS = [
   { key: 'stock', label: 'Stock', values: [{ label: 'In Stock', val: 'in' }, { label: 'Out of Stock', val: 'out' }] },
 ];
 
-// ════════════════════════════════════════════════════════════════════════════
-// Application state
-// ════════════════════════════════════════════════════════════════════════════
+// ── State ─────────────────────────────────────────────────────────────────────
 const state = {
-  view:  'grid',  // grid | sphere | chaos
-  group: 'all',   // all | age | shape | type | lens  — spatial clustering only
+  view:  'grid',
+  group: 'all',
   ticks: {
-    age:   new Set(),   // selected Age values — resets on group change
-    shape: new Set(),   // selected Shape values — resets on group change
-    type:  new Set(),   // selected Type values — resets on group change
-    lens:  new Set(),   // selected Lens values — resets on group change
-    stock: new Set(),   // 'in' | 'out' — PERSISTENT, never resets
+    age:   new Set(),
+    shape: new Set(),
+    type:  new Set(),
+    lens:  new Set(),
+    stock: new Set(),  // persistent
   },
 };
 
@@ -645,9 +660,7 @@ let objects = [], labels = [], chaosOffsets = [];
 let isDragging = false, autoRotateSpeed = 0, globalRotation = 0;
 let products = {}, colorSiblings = {};
 
-// ════════════════════════════════════════════════════════════════════════════
-// Data load
-// ════════════════════════════════════════════════════════════════════════════
+// ── Data load ─────────────────────────────────────────────────────────────────
 fetch('https://decentralize-dfw.github.io/olivioandco/mega_products.json')
   .then(r => r.json())
   .then(data => {
@@ -664,9 +677,7 @@ fetch('https://decentralize-dfw.github.io/olivioandco/mega_products.json')
   })
   .catch(() => { document.getElementById('loader-sub').textContent = 'Failed to load — check network.'; });
 
-// ════════════════════════════════════════════════════════════════════════════
-// Three.js init
-// ════════════════════════════════════════════════════════════════════════════
+// ── Three.js init ─────────────────────────────────────────────────────────────
 function init() {
   const container = document.getElementById('container');
   const FRUST = 3500, aspect = window.innerWidth / window.innerHeight;
@@ -675,13 +686,13 @@ function init() {
     FRUST*aspect/-2, FRUST*aspect/2, FRUST/2, FRUST/-2, 1, 10000
   );
   camera.position.set(2000, 1000, 2000);
-  camera.lookAt(0,0,0);
+  camera.lookAt(0, 0, 0);
 
   scene    = new THREE.Scene();
   renderer = new CSS3DRenderer();
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.domElement.style.position = 'absolute';
-  renderer.domElement.style.top      = '0';
+  renderer.domElement.style.top = '0';
   container.appendChild(renderer.domElement);
 
   controls = new OrbitControls(camera, renderer.domElement);
@@ -689,48 +700,47 @@ function init() {
   controls.minZoom = 0.04; controls.maxZoom = 6;
   controls.minPolarAngle = 0.05; controls.maxPolarAngle = Math.PI - 0.05;
 
-  window.addEventListener('mousedown',  () => { isDragging = true;  });
+  window.addEventListener('mousedown',  () => { isDragging = true; });
   window.addEventListener('mouseup',    () => { isDragging = false; });
-  window.addEventListener('touchstart', () => { isDragging = true;  }, {passive:true});
-  window.addEventListener('touchend',   () => { isDragging = false; }, {passive:true});
+  window.addEventListener('touchstart', () => { isDragging = true; }, { passive: true });
+  window.addEventListener('touchend',   () => { isDragging = false; }, { passive: true });
 
   buildScene();
   window.addEventListener('resize', onWindowResize);
   setupMenuButtons();
-  buildTickBar();   // build the full tick bar (all categories)
+  setupFilterControls();
+  buildTickBar();
   setupSlider();
   setupFitButton();
   setupModal();
 }
 
-// ════════════════════════════════════════════════════════════════════════════
-// Build 3D cards
-// ════════════════════════════════════════════════════════════════════════════
+// ── Build 3D cards ────────────────────────────────────────────────────────────
 function buildScene() {
   objects.forEach(o => scene.remove(o));
   objects = []; chaosOffsets = [];
 
   for (const p of products) {
-    const el  = document.createElement('div');
+    const el = document.createElement('div');
     el.className = 'element-card';
 
-    const img    = document.createElement('img');
-    img.src      = p.images?.[0] ? shopifyImg(p.images[0], THUMBNAIL_WIDTH) : '';
+    const img = document.createElement('img');
+    img.src = p.images?.[0] ? shopifyImg(p.images[0], THUMBNAIL_WIDTH) : '';
     img.draggable = false; img.loading = 'eager';
     el.appendChild(img);
 
     el.addEventListener('mouseenter', () => { if (!isDragging) controls.enabled = false; });
     el.addEventListener('mouseleave', () => { controls.enabled = true; });
-    el.addEventListener('click',      e  => { e.stopPropagation(); openModal(p); });
+    el.addEventListener('click', e => { e.stopPropagation(); openModal(p); });
 
     const sx = (Math.random()-.5)*1400, sy = (Math.random()-.5)*1400, sz = (Math.random()-.5)*1400;
     const obj = new CSS3DObject(el);
     obj.position.set(sx, sy, sz);
     obj.userData = {
-      active:      true,
-      center:      new THREE.Vector3(0,0,0),
-      offset:      new THREE.Vector3(sx,sy,sz),
-      rotation:    new THREE.Euler(0,0,0),
+      active: true,
+      center: new THREE.Vector3(0, 0, 0),
+      offset: new THREE.Vector3(sx, sy, sz),
+      rotation: new THREE.Euler(0, 0, 0),
       sphereCenter: null,
     };
     scene.add(obj);
@@ -741,72 +751,57 @@ function buildScene() {
   updateLayout();
 }
 
-// ════════════════════════════════════════════════════════════════════════════
-// Group key — used only for spatial clustering
-// ════════════════════════════════════════════════════════════════════════════
+// ── Group key ─────────────────────────────────────────────────────────────────
 function groupKey(i) {
   const m = products[i]._meta;
   switch (state.group) {
-    case 'age':   return m.age          || 'Other';
-    case 'shape': return m.shapes[0]    || 'Other';
-    case 'type':  return m.productType  || 'Other';
-    case 'lens':  return m.lenses[0]    || 'Other';
+    case 'age':   return m.age         || 'Other';
+    case 'shape': return m.shapes[0]   || 'Other';
+    case 'type':  return m.productType || 'Other';
+    case 'lens':  return m.lenses[0]   || 'Other';
     default:      return '__ALL__';
   }
 }
 
-// ════════════════════════════════════════════════════════════════════════════
-// Visible indices — checks ALL tick categories independently
-// Within each category: OR logic (any selected value matches)
-// Across categories: AND logic (must pass all active categories)
-// ════════════════════════════════════════════════════════════════════════════
+// ── Visible indices ───────────────────────────────────────────────────────────
+// OR within each category, AND across categories
 function visibleIndices() {
-  return products.map((_,i) => i).filter(i => {
+  return products.map((_, i) => i).filter(i => {
     const m = products[i]._meta;
 
-    // Age filter
     const ta = state.ticks.age;
     if (ta.size > 0 && !ta.has(m.age || 'Other')) return false;
 
-    // Shape filter (product may have multiple shapes)
     const ts = state.ticks.shape;
     if (ts.size > 0 && !m.shapes.some(s => ts.has(s))) return false;
 
-    // Type filter
     const tt = state.ticks.type;
     if (tt.size > 0 && !tt.has(m.productType || 'Other')) return false;
 
-    // Lens filter (product may have multiple lens types)
     const tl = state.ticks.lens;
     if (tl.size > 0 && !m.lenses.some(l => tl.has(l))) return false;
 
-    // Stock filter
     const tk = state.ticks.stock;
     if (tk.size > 0) {
-      const avail    = m.available;
-      const wantIn   = tk.has('in');
-      const wantOut  = tk.has('out');
-      if (wantIn && wantOut) return true;   // both ticked = show all
-      if (wantIn  && !avail) return false;  // want in-stock only, this is OOS
-      if (wantOut &&  avail) return false;  // want OOS only, this is in-stock
+      const avail = m.available;
+      const wantIn = tk.has('in'), wantOut = tk.has('out');
+      if (wantIn && wantOut) return true;
+      if (wantIn  && !avail) return false;
+      if (wantOut &&  avail) return false;
     }
 
     return true;
   });
 }
 
-// ════════════════════════════════════════════════════════════════════════════
-// Tick bar — builds ALL filter sections except the current clustering group
-// ════════════════════════════════════════════════════════════════════════════
+// ── Build tick bar ────────────────────────────────────────────────────────────
 function buildTickBar() {
   const bar = document.getElementById('tick-bar');
   bar.innerHTML = '';
 
   for (const def of TICK_DEFS) {
-    // Hide the section whose dimension is currently being used for spatial clustering
     if (def.key !== 'stock' && def.key === state.group) continue;
 
-    // For non-stock categories, only include values that actually exist in the data
     let values = def.values;
     if (def.key !== 'stock') {
       const existing = new Set();
@@ -830,6 +825,9 @@ function buildTickBar() {
     lbl.textContent = def.label;
     section.appendChild(lbl);
 
+    const btns = document.createElement('div');
+    btns.className = 'tick-section-btns';
+
     for (const valDef of values) {
       const btnLabel = def.key === 'stock' ? valDef.label : valDef;
       const btnVal   = def.key === 'stock' ? valDef.val   : valDef;
@@ -839,13 +837,14 @@ function buildTickBar() {
       btn.dataset.category = def.key;
       btn.dataset.val = btnVal;
 
-      const isActive = state.ticks[def.key].has(btnVal);
-      if (isActive) btn.classList.add('active');
-      btn.innerHTML = `<span class="tick-box">${isActive ? '✓' : ''}</span>${esc(btnLabel)}`;
+      const active = state.ticks[def.key].has(btnVal);
+      if (active) btn.classList.add('active');
+      btn.innerHTML = `<span class="tick-box">${active ? '✓' : ''}</span>${esc(btnLabel)}`;
       btn.addEventListener('click', () => toggleTick(def.key, btnVal, btn));
-      section.appendChild(btn);
+      btns.appendChild(btn);
     }
 
+    section.appendChild(btns);
     bar.appendChild(section);
   }
 }
@@ -864,9 +863,42 @@ function toggleTick(category, val, btn) {
   updateLayout();
 }
 
-// ════════════════════════════════════════════════════════════════════════════
-// Labels (3D floating group headings)
-// ════════════════════════════════════════════════════════════════════════════
+// ── Filter panel controls ─────────────────────────────────────────────────────
+function openFilterPanel() {
+  document.getElementById('filter-panel').classList.add('open');
+  document.getElementById('filter-backdrop').classList.add('active');
+  const btn = document.getElementById('filter-toggle');
+  if (btn) btn.textContent = 'Filter ▴';
+}
+
+function closeFilterPanel() {
+  document.getElementById('filter-panel').classList.remove('open');
+  document.getElementById('filter-backdrop').classList.remove('active');
+  const btn = document.getElementById('filter-toggle');
+  if (btn) btn.textContent = 'Filter ▾';
+}
+
+function setupFilterControls() {
+  document.getElementById('filter-toggle')?.addEventListener('click', e => {
+    e.stopPropagation();
+    const isOpen = document.getElementById('filter-panel').classList.contains('open');
+    isOpen ? closeFilterPanel() : openFilterPanel();
+  });
+
+  document.getElementById('filter-apply-btn').addEventListener('click', closeFilterPanel);
+
+  document.getElementById('filter-reset-btn').addEventListener('click', () => {
+    state.ticks.age.clear(); state.ticks.shape.clear();
+    state.ticks.type.clear(); state.ticks.lens.clear();
+    state.ticks.stock.clear();
+    buildTickBar();
+    updateLayout();
+  });
+
+  document.getElementById('filter-backdrop').addEventListener('click', closeFilterPanel);
+}
+
+// ── Labels ────────────────────────────────────────────────────────────────────
 function removeLabels() {
   const old = [...labels]; labels = [];
   old.forEach(l => {
@@ -889,9 +921,7 @@ function createLabel(text, sub, x, y, z) {
   setTimeout(() => wrap.classList.add('visible'), 50);
 }
 
-// ════════════════════════════════════════════════════════════════════════════
-// Layout update — positions every card in 3D space
-// ════════════════════════════════════════════════════════════════════════════
+// ── Layout update ─────────────────────────────────────────────────────────────
 function updateLayout() {
   TWEEN.removeAll();
   removeLabels();
@@ -900,23 +930,19 @@ function updateLayout() {
   const visible = new Set(visibleIndices());
   const FAR_Y   = 18000;
 
-  // Tween invisible items OUT (fly up to FAR_Y)
+  // Exit tweens for items being hidden
   objects.forEach((obj, i) => {
     if (!visible.has(i)) {
       const wasActive = obj.userData.active;
       obj.userData.active = false;
       if (wasActive) {
-        // Animate out — fly toward FAR_Y
         new TWEEN.Tween(obj.userData.center)
           .to({ x: 0, y: FAR_Y, z: 0 }, 900)
-          .easing(TWEEN.Easing.Exponential.In)
-          .start();
+          .easing(TWEEN.Easing.Exponential.In).start();
         new TWEEN.Tween(obj.userData.offset)
           .to({ x: 0, y: 0, z: 0 }, 900)
-          .easing(TWEEN.Easing.Exponential.In)
-          .start();
+          .easing(TWEEN.Easing.Exponential.In).start();
       } else {
-        // Already hidden — ensure it's parked (no tween needed)
         obj.userData.center.set(0, FAR_Y, 0);
         obj.userData.offset.set(0, 0, 0);
       }
@@ -935,7 +961,6 @@ function updateLayout() {
   const groupKeys  = Object.keys(groups).sort();
   const ITEM_SPC   = 185, LABEL_Y = 900;
 
-  // Update count badge
   document.getElementById('count-badge').textContent =
     visible.size + ' product' + (visible.size !== 1 ? 's' : '');
 
@@ -957,68 +982,51 @@ function updateLayout() {
       createLabel(key, state.group.toUpperCase(), cx, LABEL_Y, cz);
     }
 
-    // ── GRID ─────────────────────────────────────────────────────────────────
     if (state.view === 'grid') {
       const cols = Math.ceil(Math.sqrt(idxs.length));
       idxs.forEach((objIdx, i) => {
         const obj = objects[objIdx];
-        // If item was hidden, start its entrance from above the cluster
-        if (!obj.userData.active) {
-          obj.userData.center.set(cx, FAR_Y, cz);
-          obj.userData.offset.set(0, 0, 0);
-        }
+        if (!obj.userData.active) { obj.userData.center.set(cx, FAR_Y, cz); obj.userData.offset.set(0,0,0); }
         obj.userData.active = true;
         const ox = (i%cols - (cols-1)/2)*ITEM_SPC, oy = 420 - Math.floor(i/cols)*ITEM_SPC;
         new TWEEN.Tween(obj.userData.center).to({x:cx,y:cy,z:cz},2300).easing(TWEEN.Easing.Exponential.InOut).start();
-        new TWEEN.Tween(obj.userData.offset).to({x:ox,y:oy,z:0}, 2300).easing(TWEEN.Easing.Exponential.InOut).start();
-        new TWEEN.Tween(obj.userData.rotation).to({x:0,y:0,z:0}, 2300).easing(TWEEN.Easing.Exponential.InOut).start();
+        new TWEEN.Tween(obj.userData.offset).to({x:ox,y:oy,z:0},2300).easing(TWEEN.Easing.Exponential.InOut).start();
+        new TWEEN.Tween(obj.userData.rotation).to({x:0,y:0,z:0},2300).easing(TWEEN.Easing.Exponential.InOut).start();
       });
-    }
 
-    // ── SPHERE ───────────────────────────────────────────────────────────────
-    else if (state.view === 'sphere') {
+    } else if (state.view === 'sphere') {
       const sphereCY = 420 - sphereR;
       idxs.forEach((objIdx, i) => {
         const obj = objects[objIdx];
-        if (!obj.userData.active) {
-          obj.userData.center.set(cx, FAR_Y, cz);
-          obj.userData.offset.set(0, 0, 0);
-        }
+        if (!obj.userData.active) { obj.userData.center.set(cx, FAR_Y, cz); obj.userData.offset.set(0,0,0); }
         obj.userData.active = true;
         const phi = Math.acos(-1+(2*i)/idxs.length), theta = Math.sqrt(idxs.length*Math.PI)*phi;
         const ox = sphereR*Math.sin(phi)*Math.cos(theta);
         const oy = sphereR*Math.sin(phi)*Math.sin(theta);
         const oz = sphereR*Math.cos(phi);
-        obj.userData.sphereCenter = new THREE.Vector3(cx,sphereCY,cz);
-        new TWEEN.Tween(obj.userData.center).to({x:cx,y:cy,z:cz}, 2300).easing(TWEEN.Easing.Exponential.InOut).start();
-        new TWEEN.Tween(obj.userData.offset).to({x:ox,y:oy+sphereCY,z:oz}, 2300).easing(TWEEN.Easing.Exponential.InOut).start();
-        new TWEEN.Tween(obj.userData.rotation).to({x:0,y:0,z:0}, 2300).easing(TWEEN.Easing.Exponential.InOut).start();
+        obj.userData.sphereCenter = new THREE.Vector3(cx, sphereCY, cz);
+        new TWEEN.Tween(obj.userData.center).to({x:cx,y:cy,z:cz},2300).easing(TWEEN.Easing.Exponential.InOut).start();
+        new TWEEN.Tween(obj.userData.offset).to({x:ox,y:oy+sphereCY,z:oz},2300).easing(TWEEN.Easing.Exponential.InOut).start();
+        new TWEEN.Tween(obj.userData.rotation).to({x:0,y:0,z:0},2300).easing(TWEEN.Easing.Exponential.InOut).start();
       });
-    }
 
-    // ── CHAOS ────────────────────────────────────────────────────────────────
-    else {
+    } else {
       const spread = 800;
       idxs.forEach(objIdx => {
         const obj = objects[objIdx];
-        if (!obj.userData.active) {
-          obj.userData.center.set(cx, FAR_Y, cz);
-          obj.userData.offset.set(0, 0, 0);
-        }
+        if (!obj.userData.active) { obj.userData.center.set(cx, FAR_Y, cz); obj.userData.offset.set(0,0,0); }
         obj.userData.active = true;
         const ox=(Math.random()-.5)*spread, oy=(Math.random()-.5)*spread, oz=(Math.random()-.5)*spread;
         const rx=(Math.random()-.5)*.45, rz=(Math.random()-.5)*.45;
-        new TWEEN.Tween(obj.userData.center).to({x:cx,y:cy,z:cz}, 2300).easing(TWEEN.Easing.Exponential.InOut).start();
-        new TWEEN.Tween(obj.userData.offset).to({x:ox,y:oy,z:oz}, 2300).easing(TWEEN.Easing.Exponential.InOut).start();
-        new TWEEN.Tween(obj.userData.rotation).to({x:rx,y:0,z:rz}, 2300).easing(TWEEN.Easing.Exponential.InOut).start();
+        new TWEEN.Tween(obj.userData.center).to({x:cx,y:cy,z:cz},2300).easing(TWEEN.Easing.Exponential.InOut).start();
+        new TWEEN.Tween(obj.userData.offset).to({x:ox,y:oy,z:oz},2300).easing(TWEEN.Easing.Exponential.InOut).start();
+        new TWEEN.Tween(obj.userData.rotation).to({x:rx,y:0,z:rz},2300).easing(TWEEN.Easing.Exponential.InOut).start();
       });
     }
   });
 }
 
-// ════════════════════════════════════════════════════════════════════════════
-// Animation loop
-// ════════════════════════════════════════════════════════════════════════════
+// ── Animation loop ────────────────────────────────────────────────────────────
 const _vh = new THREE.Vector3();
 
 function animate() {
@@ -1030,11 +1038,10 @@ function animate() {
 
   objects.forEach((obj, i) => {
     if (!obj.userData.active) {
-      // CRITICAL: inactive items still update position so exit tweens work.
-      // (center tweens to FAR_Y, animate loop applies it each frame)
-      const offI = obj.userData.offset.clone();
-      const posI = new THREE.Vector3().copy(obj.userData.center).add(offI);
-      obj.position.copy(posI);
+      // Must still update position so exit-tweens actually move the object
+      const off = obj.userData.offset.clone();
+      const pos = new THREE.Vector3().copy(obj.userData.center).add(off);
+      obj.position.copy(pos);
       return;
     }
 
@@ -1064,32 +1071,75 @@ function animate() {
   renderer.render(scene, camera);
 }
 
-// ════════════════════════════════════════════════════════════════════════════
-// Buttons & controls
-// ════════════════════════════════════════════════════════════════════════════
+// ── Menu buttons ──────────────────────────────────────────────────────────────
 function setupMenuButtons() {
-  document.querySelectorAll('.nav-btn').forEach(btn => {
+  document.querySelectorAll('.nav-btn[data-type]').forEach(btn => {
     btn.addEventListener('click', e => {
       const type = e.currentTarget.dataset.type;
       const val  = e.currentTarget.dataset.val;
-      if (!type) return;
-      document.querySelectorAll(`.nav-btn[data-type="${type}"]`).forEach(b => b.classList.remove('active'));
-      e.currentTarget.classList.add('active');
+      // Sync active state across ALL bars (desktop + mobile have same buttons)
+      document.querySelectorAll(`.nav-btn[data-type="${type}"]`)
+        .forEach(b => b.classList.toggle('active', b.dataset.val === val));
       state[type] = val;
-
       if (type === 'group') {
-        // Reset all non-stock category ticks on group change
-        state.ticks.age.clear();
-        state.ticks.shape.clear();
-        state.ticks.type.clear();
-        state.ticks.lens.clear();
-        // Rebuild tick bar: hides the new clustering group's section, resets buttons
+        state.ticks.age.clear(); state.ticks.shape.clear();
+        state.ticks.type.clear(); state.ticks.lens.clear();
         buildTickBar();
       }
-
       updateLayout();
     });
   });
+}
+
+// ── Fit view ──────────────────────────────────────────────────────────────────
+function fitView() {
+  if (!camera) return;
+
+  // Collect world positions of all currently active + visible objects
+  const activePos = [];
+  objects.forEach(obj => {
+    if (obj.userData.active) activePos.push(obj.position.clone());
+  });
+  if (activePos.length === 0) return;
+
+  // Project to camera-local space to find screen-space bounding box
+  camera.updateMatrixWorld();
+  const invCam = new THREE.Matrix4().copy(camera.matrixWorldInverse);
+  const camLocal = activePos.map(p => p.clone().applyMatrix4(invCam));
+
+  let minX = Infinity, maxX = -Infinity;
+  let minY = Infinity, maxY = -Infinity;
+  camLocal.forEach(p => {
+    if (p.x < minX) minX = p.x; if (p.x > maxX) maxX = p.x;
+    if (p.y < minY) minY = p.y; if (p.y > maxY) maxY = p.y;
+  });
+
+  const W = window.innerWidth, H = window.innerHeight;
+  const aspect = W / H;
+  const FRUST  = 3500;
+  // Half card size as margin (world-space units approx = CSS px for CSS3DRenderer)
+  const cardHalf = (W <= 639 ? 100 : 155) / 2;
+  const pad      = cardHalf * 3;
+
+  const extX = (maxX - minX) / 2 + pad;
+  const extY = (maxY - minY) / 2 + pad;
+
+  // OrthographicCamera: visible half-width = (FRUST * aspect) / (2 * zoom)
+  //   → zoom = (FRUST * aspect) / (2 * extX)  to fit X
+  //   → zoom = FRUST / (2 * extY)              to fit Y
+  const zoomX = (FRUST * aspect) / (2 * extX);
+  const zoomY = FRUST / (2 * extY);
+  const zoom  = Math.max(0.04, Math.min(Math.min(zoomX, zoomY) * 0.9, 6));
+
+  new TWEEN.Tween(camera)
+    .to({ zoom }, 900)
+    .easing(TWEEN.Easing.Cubic.Out)
+    .onUpdate(() => camera.updateProjectionMatrix())
+    .start();
+}
+
+function setupFitButton() {
+  document.getElementById('fit-btn').addEventListener('click', fitView);
 }
 
 function setupSlider() {
@@ -1098,36 +1148,15 @@ function setupSlider() {
   });
 }
 
-function setupFitButton() {
-  document.getElementById('fit-btn').addEventListener('click', () => {
-    let maxD = 0;
-    objects.forEach(o => {
-      if (o.userData.active) {
-        const d = o.userData.center.length() + o.userData.offset.length();
-        if (d > maxD) maxD = d;
-      }
-    });
-    maxD += 350;
-    let zoom = 3500 / (maxD * 1.55);
-    zoom = Math.max(0.04, Math.min(zoom, 6));
-    new TWEEN.Tween(camera).to({zoom}, 900)
-      .easing(TWEEN.Easing.Cubic.Out)
-      .onUpdate(() => camera.updateProjectionMatrix())
-      .start();
-  });
-}
-
 function onWindowResize() {
   const FRUST = 3500, aspect = window.innerWidth / window.innerHeight;
-  camera.left   = -FRUST*aspect/2; camera.right  =  FRUST*aspect/2;
-  camera.top    =  FRUST/2;        camera.bottom = -FRUST/2;
+  camera.left = -FRUST*aspect/2; camera.right  =  FRUST*aspect/2;
+  camera.top  =  FRUST/2;        camera.bottom = -FRUST/2;
   camera.updateProjectionMatrix();
   renderer.setSize(window.innerWidth, window.innerHeight);
 }
 
-// ════════════════════════════════════════════════════════════════════════════
-// Modal
-// ════════════════════════════════════════════════════════════════════════════
+// ── Modal ─────────────────────────────────────────────────────────────────────
 let _imgs = [];
 
 function setupModal() {
@@ -1136,11 +1165,11 @@ function setupModal() {
   document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 }
 
-function openModal(p)   { populateModal(p); document.getElementById('modal-overlay').classList.add('open'); document.body.style.overflow='hidden'; }
-function closeModal()   { document.getElementById('modal-overlay').classList.remove('open'); document.body.style.overflow=''; }
+function openModal(p)  { populateModal(p); document.getElementById('modal-overlay').classList.add('open'); }
+function closeModal()  { document.getElementById('modal-overlay').classList.remove('open'); }
 
 function populateModal(p) {
-  const m = p._meta; _imgs = (p.images||[]).filter(Boolean);
+  const m = p._meta; _imgs = (p.images || []).filter(Boolean);
   const isOos = !m.available;
 
   document.getElementById('modal-title').innerHTML =
@@ -1191,10 +1220,10 @@ function buildCarousel(images) {
 }
 
 function setMainImage(idx) {
-  const main   = document.getElementById('modal-main-img');
+  const main = document.getElementById('modal-main-img');
   const isLast = idx === _imgs.length - 1 && _imgs.length > 1;
   main.className = isLast ? 'img-contain' : 'img-cover';
-  main.src       = shopifyImg(_imgs[idx], IMAGE_WIDTH);
+  main.src = shopifyImg(_imgs[idx], IMAGE_WIDTH);
   document.querySelectorAll('.c-thumb').forEach((t,i) => t.classList.toggle('active', i===idx));
 }
 
