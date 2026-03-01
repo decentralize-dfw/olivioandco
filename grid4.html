@@ -1,0 +1,1893 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Olivio&amp;Co — Product Catalog</title>
+  <script>
+    const THUMBNAIL_WIDTH = 200;
+    const IMAGE_WIDTH     = 1200;
+  </script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      height: 100%; width: 100%;
+      background: #fff; color: #000;
+      font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+      font-size: 13px;
+      overflow: hidden;
+      touch-action: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    /* ─── TOP UI ─────────────────────────────────────── */
+    #ui-top {
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 12px 16px 0;
+      display: flex; flex-direction: column; gap: 5px;
+      pointer-events: none;
+    }
+
+    .menu-bar {
+      align-self: flex-start;
+      display: flex; flex-wrap: nowrap; gap: 3px; align-items: center;
+      pointer-events: auto;
+      background: rgba(255,255,255,0.94);
+      padding: 5px 11px;
+      border-radius: 30px; border: 1px solid #000;
+      backdrop-filter: blur(6px);
+      overflow-x: auto; scrollbar-width: none;
+    }
+    .menu-bar::-webkit-scrollbar { display: none; }
+
+    .menu-sep { width: 1px; height: 14px; background: rgba(0,0,0,0.2); margin: 0 3px; flex-shrink: 0; }
+
+    .nav-btn {
+      background: transparent; border: 1px solid transparent;
+      color: rgba(0,0,0,0.42);
+      padding: 2px 10px;
+      font-family: inherit; font-size: 11px; font-weight: 700;
+      letter-spacing: .06em; text-transform: uppercase;
+      cursor: pointer; border-radius: 4px;
+      transition: color .12s, border-color .12s, background .12s;
+      white-space: nowrap; flex-shrink: 0;
+      user-select: none; -webkit-user-select: none;
+    }
+    .nav-btn:hover  { color: #000; border-color: rgba(0,0,0,0.28); }
+    .nav-btn.active { background: #000; color: #fff; border-color: #000; }
+
+    /* Hover tooltip */
+    #hover-tooltip {
+      pointer-events: none;
+      align-self: flex-start;
+      font-size: 11px; font-weight: 600; color: rgba(0,0,0,0.55);
+      background: rgba(255,255,255,0.88);
+      padding: 3px 14px; border-radius: 20px;
+      border: 1px solid rgba(0,0,0,0.1);
+      backdrop-filter: blur(4px);
+      max-width: 380px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      opacity: 0; transition: opacity 0.15s;
+      min-height: 22px;
+      display: flex; align-items: center;
+    }
+    #hover-tooltip.visible { opacity: 1; }
+
+    #mobile-view-bar, #mobile-group-bar { display: none; }
+
+    /* ─── SEARCH BAR (replaces count badge top-right) ── */
+    #search-wrap {
+      position: fixed; top: 14px; right: 14px;
+      z-index: 101;
+      display: flex; align-items: center; gap: 6px;
+    }
+    #search-input {
+      background: rgba(255,255,255,0.94);
+      border: 1px solid rgba(0,0,0,0.18); border-radius: 20px;
+      padding: 4px 14px; font-size: 11px; color: #000;
+      font-family: inherit; outline: none;
+      backdrop-filter: blur(4px); width: 180px;
+      transition: border-color .15s, width .2s;
+    }
+    #search-input:focus { border-color: #000; width: 240px; }
+    #search-input::placeholder { color: rgba(0,0,0,0.35); }
+    #count-badge {
+      font-size: 10px; color: rgba(0,0,0,0.45);
+      white-space: nowrap; pointer-events: none;
+      background: rgba(255,255,255,0.9);
+      border: 1px solid rgba(0,0,0,0.12); border-radius: 20px;
+      padding: 3px 9px; backdrop-filter: blur(4px);
+    }
+
+    /* ─── BOTTOM-LEFT CONTAINER ──────────────────────── */
+    #bl-container {
+      position: fixed; left: 16px; bottom: 16px;
+      z-index: 100;
+      display: flex; flex-direction: column; gap: 7px;
+      align-items: stretch;
+      width: 240px;
+    }
+
+    /* Filter wrap (for popup positioning) */
+    #filter-wrap { position: relative; }
+
+    /* Filters toggle button */
+    #filter-toggle-btn {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 6px 13px;
+      background: rgba(255,255,255,0.92);
+      border: 1px solid rgba(0,0,0,0.18); border-radius: 10px;
+      backdrop-filter: blur(6px);
+      font-size: 10px; font-weight: 700; letter-spacing: .09em; text-transform: uppercase;
+      color: rgba(0,0,0,0.55); cursor: pointer;
+      transition: background .15s, color .15s, border-color .15s;
+      width: 100%;
+    }
+    #filter-toggle-btn:hover { background: #000; color: #fff; border-color: #000; }
+    #filter-toggle-btn.open  { background: #000; color: #fff; border-color: #000; }
+
+    /* Filter popup */
+    #filter-popup {
+      position: absolute; bottom: calc(100% + 7px); left: 0; right: 0;
+      background: rgba(255,255,255,0.98);
+      border: 1px solid rgba(0,0,0,0.14); border-radius: 12px;
+      padding: 10px 11px 8px;
+      backdrop-filter: blur(14px);
+      transform-origin: bottom left;
+      transform: scale(0);
+      opacity: 0;
+      pointer-events: none;
+      transition: transform .18s cubic-bezier(.4,0,.2,1), opacity .18s;
+      display: flex; flex-direction: column; gap: 6px;
+      z-index: 110;
+    }
+    #filter-popup.open { transform: scale(1); opacity: 1; pointer-events: auto; }
+
+    .fp-row { display: flex; align-items: center; gap: 6px; min-height: 22px; }
+    .fp-label {
+      width: 38px; flex-shrink: 0;
+      font-size: 9px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase;
+      color: rgba(0,0,0,0.3);
+    }
+    .fp-btns { display: flex; flex-wrap: wrap; gap: 3px; }
+
+    .fp-btn {
+      display: inline-flex; align-items: center; gap: 3px;
+      padding: 2px 8px;
+      border: 1px solid rgba(0,0,0,0.18); border-radius: 20px;
+      background: transparent; color: rgba(0,0,0,0.48);
+      font-size: 10px; font-weight: 600; cursor: pointer; white-space: nowrap;
+      transition: all .12s; font-family: inherit;
+      line-height: 1.4;
+    }
+    .fp-btn:hover  { border-color: #000; color: #000; }
+    .fp-btn.active { border-color: #000; background: #000; color: #fff; }
+    .fp-btn svg    { flex-shrink: 0; display: block; }
+
+    .fp-btn.shape-btn { padding: 3px 7px; }
+
+    .fp-divider { height: 1px; background: rgba(0,0,0,0.08); margin: 1px 0; }
+
+    .fp-reset {
+      display: block; width: 100%; padding: 3px;
+      text-align: center; font-size: 9px; font-weight: 700;
+      letter-spacing: .08em; text-transform: uppercase;
+      color: rgba(0,0,0,0.32); background: none; border: none; cursor: pointer;
+      transition: color .12s; font-family: inherit;
+    }
+    .fp-reset:hover { color: #000; }
+
+    /* ─── CONTROLS ───────────────────────────────────── */
+    #controls {
+      display: flex; align-items: center; gap: 8px;
+      padding: 6px 12px;
+      background: rgba(255,255,255,0.92);
+      border: 1px solid rgba(0,0,0,0.18); border-radius: 10px;
+      backdrop-filter: blur(6px);
+      transition: opacity .3s, pointer-events .3s;
+      width: 100%;
+    }
+    #controls.disabled { opacity: 0.2; pointer-events: none; }
+
+    #ctrl-label {
+      font-size: 10px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+      color: rgba(0,0,0,0.5); white-space: nowrap; flex-shrink: 0;
+      width: 42px; /* same width as reset btn so swap doesn't shift layout */
+      text-align: center;
+    }
+    #rotate-reset-btn {
+      display: none;
+      font-size: 10px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase;
+      padding: 0;
+      border: none;
+      background: transparent; color: rgba(0,0,0,0.55);
+      cursor: pointer; white-space: nowrap; flex-shrink: 0;
+      transition: color .12s;
+      width: 42px; text-align: center;
+    }
+    #rotate-reset-btn:hover { color: #000; }
+
+    input[type=range] {
+      -webkit-appearance: none;
+      flex: 1; height: 2px;
+      background: rgba(0,0,0,0.18); border-radius: 2px; outline: none;
+    }
+    input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 11px; height: 11px; border-radius: 50%; background: #000; cursor: pointer;
+    }
+
+    #fit-btn {
+      font-size: 10px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase;
+      padding: 2px 9px;
+      border: 1px solid rgba(0,0,0,0.28);
+      background: transparent; color: rgba(0,0,0,0.6);
+      cursor: pointer; border-radius: 4px;
+      transition: background .12s; white-space: nowrap; flex-shrink: 0;
+    }
+    #fit-btn:hover { background: #000; color: #fff; border-color: #000; }
+
+    /* ─── 3D CANVAS ──────────────────────────────────── */
+    #container {
+      position: absolute; inset: 0;
+      z-index: 1; pointer-events: auto; touch-action: none;
+    }
+
+    /* ─── 3D CARDS ───────────────────────────────────── */
+    .card-wrap {
+      width: 155px; height: 155px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .element-card {
+      width: 155px; height: 155px;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      pointer-events: auto;
+      user-select: none; -webkit-user-select: none;
+      border-radius: 4px; overflow: hidden;
+      background: #fff;
+      border: 1px solid rgba(0,0,0,0.12);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+      transition: transform .18s;
+      /* scale driven by JS via style.transform, default 1 */
+    }
+    .element-card:hover { transform: scale(1.1); z-index: 999; }
+    .element-card.hiding { transform: scale(0) !important; transition: transform .35s cubic-bezier(0.4,0,1,1); }
+    .element-card.showing { transition: transform .45s cubic-bezier(0.34,1.56,0.64,1); }
+    .element-card img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+      user-select: none; -webkit-user-drag: none; pointer-events: none;
+    }
+
+    /* ─── GROUP LABELS ───────────────────────────────── */
+    .group-label-wrap {
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      pointer-events: none; user-select: none; text-align: center;
+      opacity: 0; transform: scale(0.8);
+      transition: opacity .8s ease, transform .8s ease;
+    }
+    .group-label-wrap.visible { opacity: 1; transform: scale(1); }
+    .group-label-main {
+      font-size: 62px; font-weight: 900; line-height: .9;
+      color: rgba(0,0,0,0.8); text-transform: uppercase; letter-spacing: -.02em;
+    }
+    .group-label-sub {
+      font-size: 11px; font-weight: 600; color: #fff;
+      margin-top: 9px; text-transform: uppercase; letter-spacing: .18em;
+      padding: 3px 12px; background: rgba(0,0,0,0.7);
+    }
+
+    /* ─── LOADER ─────────────────────────────────────── */
+    #loader {
+      position: fixed; inset: 0; background: #fff; z-index: 99999;
+      display: flex; flex-direction: column;
+      justify-content: center; align-items: center;
+      transition: opacity .4s ease-out;
+    }
+    #loader-title { font-size: 20px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+    #loader-sub   { font-size: 11px; color: rgba(0,0,0,0.4); margin-top: 6px; letter-spacing: .08em; }
+
+    /* ─── FLAT OVERLAY ───────────────────────────────── */
+    #flat-overlay {
+      position: fixed; inset: 0;
+      z-index: 10;
+      background: #fff;
+      overflow-y: auto;
+      overflow-x: hidden;
+      display: none;
+      padding: 74px 20px 120px;
+    }
+    #flat-content { max-width: 1600px; margin: 0 auto; }
+
+    .flat-group-header {
+      font-size: 13px; font-weight: 800; letter-spacing: .14em;
+      text-transform: uppercase; color: #000;
+      padding: 24px 0 10px;
+      border-bottom: 1.5px solid rgba(0,0,0,0.08);
+      margin-bottom: 8px;
+    }
+    .flat-group-header:first-child { padding-top: 4px; }
+
+    .flat-grid {
+      display: grid;
+      grid-template-columns: repeat(9, 1fr);
+      gap: 5px;
+      margin-bottom: 4px;
+    }
+
+    .flat-card {
+      aspect-ratio: 1;
+      border-radius: 4px; overflow: hidden;
+      border: 1px solid rgba(0,0,0,0.09);
+      cursor: pointer;
+      background: #f7f7f7;
+      transform-origin: center center;
+      animation: flatIn .2s cubic-bezier(0.34,1.56,0.64,1) both;
+    }
+    .flat-card:hover { box-shadow: 0 0 0 2px #000; z-index: 1; position: relative; }
+    .flat-card img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+      user-select: none; pointer-events: none;
+    }
+    @keyframes flatIn {
+      from { transform: scale(0); opacity: 0; }
+      to   { transform: scale(1); opacity: 1; }
+    }
+
+    /* ─── MODAL ──────────────────────────────────────── */
+    #modal-overlay {
+      opacity: 0; visibility: hidden;
+      transition: opacity .25s, visibility .25s;
+      position: fixed; inset: 0; z-index: 200;
+      display: flex; align-items: center; justify-content: center;
+      padding: 16px; pointer-events: none;
+    }
+    #modal-overlay.open { opacity: 1; visibility: visible; pointer-events: auto; }
+    #modal-backdrop {
+      position: absolute; inset: 0;
+      background: rgba(0,0,0,0.52); backdrop-filter: blur(5px); cursor: pointer;
+    }
+    #modal {
+      position: relative; z-index: 10;
+      background: #fff; color: #000;
+      border: 1px solid #000; border-radius: 4px;
+      width: min(960px, 96vw); height: min(620px, 92vh);
+      display: flex; flex-direction: column; overflow: hidden;
+    }
+    #modal-close {
+      position: absolute; top: 10px; right: 12px; z-index: 20;
+      background: none; border: 1px solid #000; border-radius: 50%;
+      width: 27px; height: 27px; cursor: pointer; font-size: 13px;
+      display: flex; align-items: center; justify-content: center;
+      color: #000; transition: background .12s, color .12s;
+    }
+    #modal-close:hover { background: #000; color: #fff; }
+    #modal-body { display: flex; flex: 1; overflow: hidden; }
+    #modal-left {
+      flex: 1; min-width: 0;
+      display: flex; flex-direction: column;
+      background: #f5f5f5; border-right: 1px solid #000;
+    }
+    #modal-main-img-wrap {
+      flex: 1; min-height: 0;
+      display: flex; align-items: center; justify-content: center; overflow: hidden;
+    }
+    #modal-main-img-wrap img { display: block; }
+    #modal-main-img-wrap img.img-cover   { width: 100%; height: 100%; object-fit: cover; }
+    #modal-main-img-wrap img.img-contain { max-width: 100%; max-height: 100%; object-fit: contain; }
+    #modal-carousel {
+      display: flex; gap: 5px;
+      padding: 7px 9px; border-top: 1px solid #000;
+      overflow-x: auto; background: #fff; flex-shrink: 0;
+      scrollbar-width: thin; scrollbar-color: #bbb transparent;
+    }
+    .c-thumb {
+      width: 50px; height: 50px; flex-shrink: 0;
+      border: 1px solid #ccc; border-radius: 3px; overflow: hidden;
+      cursor: pointer; opacity: .5; transition: opacity .12s, border-color .12s;
+    }
+    .c-thumb:hover { opacity: .8; }
+    .c-thumb.active { opacity: 1; border: 2px solid #000; }
+    .c-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    #modal-right {
+      width: 295px; flex-shrink: 0;
+      display: flex; flex-direction: column;
+      overflow-y: auto; scrollbar-width: thin; scrollbar-color: #ccc transparent;
+    }
+    .modal-sec { padding: 12px 16px; border-bottom: 1px solid #eee; }
+    .modal-sec:last-child { border-bottom: none; }
+    #modal-title { font-size: 14px; font-weight: 700; line-height: 1.4; padding-right: 28px; }
+    .oos-badge   { color: #aaa; font-size: 12px; font-weight: 400; }
+    #modal-price { font-size: 20px; font-weight: 800; }
+    #modal-desc  { font-size: 11.5px; line-height: 1.65; color: #555; }
+    .info-group  { display: flex; flex-direction: column; gap: 7px; }
+    .info-row    { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; font-size: 12px; }
+    .info-row .lbl { font-size: 10px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #999; flex-shrink: 0; }
+    .info-row .val { font-weight: 500; text-align: right; }
+    .color-lbl { font-size: 10px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #999; margin-bottom: 8px; }
+    #color-selector { display: flex; flex-wrap: wrap; gap: 6px; }
+
+    /* Color swatch balls (CSS colors, no swatch images in data) */
+    .swatch-wrap {
+      width: 24px; height: 24px; border-radius: 50%; flex-shrink: 0;
+      border: 2.5px solid transparent; cursor: pointer;
+      box-shadow: 0 0 0 1px rgba(0,0,0,0.18);
+      transition: transform .12s, box-shadow .12s;
+    }
+    .swatch-wrap:hover  { transform: scale(1.15); }
+    .swatch-wrap.active { box-shadow: 0 0 0 2.5px #000; }
+    .swatch-wrap.oos    { opacity: .32; }
+
+    /* Badges */
+    .product-badges { display: flex; gap: 5px; flex-wrap: wrap; margin-top: 5px; }
+    .badge {
+      font-size: 9px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase;
+      padding: 2px 7px; border-radius: 3px;
+    }
+    .badge-featured    { background: #000; color: #fff; }
+    .badge-bestseller  { background: #f0c040; color: #000; }
+
+    /* Lens selector in modal */
+    .lens-lbl { font-size: 10px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #999; margin-bottom: 8px; }
+    #lens-selector { display: flex; flex-wrap: wrap; gap: 5px; }
+    .lens-pill {
+      display: inline-flex; align-items: center; gap: 4px;
+      padding: 4px 10px;
+      border: 1px solid rgba(0,0,0,0.18); border-radius: 20px;
+      background: transparent; color: rgba(0,0,0,0.5);
+      font-size: 11px; font-weight: 600; cursor: pointer;
+      transition: all .15s; font-family: inherit;
+    }
+    .lens-pill:hover  { border-color: #000; color: #000; }
+    .lens-pill.active { border-color: #000; background: #000; color: #fff; }
+    .lens-pill.unavail { opacity: 0.35; cursor: default; }
+
+    /* Tabs */
+    #tab-bar {
+      display: flex; gap: 0; border-bottom: 1px solid #eee; flex-shrink: 0;
+      overflow-x: auto; scrollbar-width: none;
+    }
+    #tab-bar::-webkit-scrollbar { display: none; }
+    .tab-btn {
+      flex-shrink: 0; padding: 7px 12px;
+      font-size: 10px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase;
+      background: none; border: none; border-bottom: 2px solid transparent;
+      color: rgba(0,0,0,0.38); cursor: pointer; font-family: inherit;
+      transition: color .12s, border-color .12s;
+      margin-bottom: -1px;
+    }
+    .tab-btn:hover  { color: #000; }
+    .tab-btn.active { color: #000; border-bottom-color: #000; }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+    #tab-content {
+      padding: 12px 16px; font-size: 11.5px; line-height: 1.65; color: #555;
+      flex: 1; overflow-y: auto; scrollbar-width: thin; scrollbar-color: #ddd transparent;
+    }
+
+    /* Recommendations */
+    #reco-section { flex-shrink: 0; }
+    .reco-lbl { font-size: 10px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #999; margin-bottom: 8px; }
+    #reco-scroll {
+      display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px;
+      scrollbar-width: thin; scrollbar-color: #ddd transparent;
+    }
+    #reco-scroll::-webkit-scrollbar { height: 3px; }
+    .reco-card {
+      flex-shrink: 0; width: 80px; cursor: pointer;
+      text-decoration: none; color: #000;
+    }
+    .reco-card:hover .reco-img { box-shadow: 0 0 0 2px #000; }
+    .reco-img {
+      width: 80px; height: 80px; border-radius: 4px; overflow: hidden;
+      border: 1px solid rgba(0,0,0,0.1); background: #f5f5f5;
+      transition: box-shadow .15s;
+    }
+    .reco-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .reco-name { font-size: 9px; font-weight: 600; margin-top: 4px; line-height: 1.3; color: #333;
+      display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .reco-price { font-size: 9px; font-weight: 700; color: #000; margin-top: 1px; }
+
+    #modal-visit {
+      display: block; text-align: center;
+      padding: 9px; border: 1px solid #000; border-radius: 3px;
+      text-decoration: none; color: #000;
+      font-size: 12px; font-weight: 600;
+      transition: background .12s, color .12s;
+    }
+    #modal-visit:hover { background: #000; color: #fff; }
+
+    /* ─── MOBILE ≤ 639px ─────────────────────────────── */
+    @media (max-width: 639px) {
+      #desktop-nav { display: none; }
+      #hover-tooltip { display: none !important; }
+      #mobile-view-bar, #mobile-group-bar {
+        display: flex; width: calc(100vw - 32px); justify-content: space-between;
+      }
+      #mobile-view-bar .nav-btn,
+      #mobile-group-bar .nav-btn { flex: 1; text-align: center; padding: 3px 4px; }
+      #count-badge { display: none; }
+      #search-wrap { top: auto; bottom: 72px; right: 14px; }
+      #search-input { width: 140px; }
+      #search-input:focus { width: 180px; }
+      #flat-overlay { padding-top: 120px; }
+      .flat-grid { grid-template-columns: repeat(3, 1fr); }
+      .element-card { width: 100px; height: 100px; }
+      .group-label-main { font-size: 36px; }
+      .group-label-sub  { font-size: 10px; }
+      #bl-container { width: 200px; bottom: 14px; }
+      #filter-popup { max-height: 55vh; overflow-y: auto; }
+      #modal-overlay { padding: 0; align-items: flex-end; }
+      #modal { width: 100%; height: 92dvh; border-radius: 14px 14px 0 0; border-left: none; border-right: none; border-bottom: none; }
+      #modal-body { flex-direction: column; }
+      #modal-left { flex: none; height: 42%; border-right: none; border-bottom: 1px solid #000; }
+      #modal-right { width: 100%; flex: 1; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Loader -->
+<div id="loader">
+  <div id="loader-title">Olivio &amp; Co</div>
+  <div id="loader-sub">Loading products…</div>
+</div>
+
+<!-- ── Top UI ──────────────────────────────────────── -->
+<div id="ui-top">
+
+  <!-- Desktop single nav bar -->
+  <div class="menu-bar" id="desktop-nav">
+    <button class="nav-btn active" data-type="view"  data-val="grid">Grid</button>
+    <button class="nav-btn"        data-type="view"  data-val="sphere">Sphere</button>
+    <button class="nav-btn"        data-type="view"  data-val="flat">Flat</button>
+    <button class="nav-btn"        data-type="view"  data-val="flow">Flow</button>
+    <div class="menu-sep"></div>
+    <button class="nav-btn active" data-type="group" data-val="all">All</button>
+    <button class="nav-btn"        data-type="group" data-val="age">Age</button>
+    <button class="nav-btn"        data-type="group" data-val="shape">Shape</button>
+    <button class="nav-btn"        data-type="group" data-val="type">Type</button>
+    <button class="nav-btn"        data-type="group" data-val="lens">Lens</button>
+  </div>
+
+  <!-- Mobile row 1: view modes -->
+  <div class="menu-bar" id="mobile-view-bar">
+    <button class="nav-btn active" data-type="view" data-val="grid">Grid</button>
+    <button class="nav-btn"        data-type="view" data-val="sphere">Sphere</button>
+    <button class="nav-btn"        data-type="view" data-val="flat">Flat</button>
+    <button class="nav-btn"        data-type="view" data-val="flow">Flow</button>
+  </div>
+
+  <!-- Mobile row 2: group -->
+  <div class="menu-bar" id="mobile-group-bar">
+    <button class="nav-btn active" data-type="group" data-val="all">All</button>
+    <button class="nav-btn"        data-type="group" data-val="age">Age</button>
+    <button class="nav-btn"        data-type="group" data-val="shape">Shape</button>
+    <button class="nav-btn"        data-type="group" data-val="type">Type</button>
+    <button class="nav-btn"        data-type="group" data-val="lens">Lens</button>
+  </div>
+
+  <!-- Hover tooltip (desktop only) -->
+  <div id="hover-tooltip"></div>
+</div>
+
+<!-- Search + count -->
+<div id="search-wrap">
+  <input id="search-input" type="search" placeholder="Search products…" autocomplete="off" spellcheck="false">
+  <div id="count-badge">— products</div>
+</div>
+
+<!-- ── Flat overlay ────────────────────────────────── -->
+<div id="flat-overlay">
+  <div id="flat-content"></div>
+</div>
+
+<!-- ── Bottom-left: Filters + Controls ────────────── -->
+<div id="bl-container">
+
+  <!-- Filter wrap -->
+  <div id="filter-wrap">
+    <button id="filter-toggle-btn">
+      <span>Filters</span>
+      <span id="filter-arrow">▾</span>
+    </button>
+
+    <!-- Filter popup (opens upward) -->
+    <div id="filter-popup">
+
+      <!-- Age -->
+      <div class="fp-row">
+        <span class="fp-label">Age</span>
+        <div class="fp-btns">
+          <button class="fp-btn" data-cat="age" data-val="Baby">Baby</button>
+          <button class="fp-btn" data-cat="age" data-val="Toddler">Toddler</button>
+          <button class="fp-btn" data-cat="age" data-val="Kids">Kids</button>
+          <button class="fp-btn" data-cat="age" data-val="Junior">Junior</button>
+          <button class="fp-btn" data-cat="age" data-val="Junior+">Junior+</button>
+          <button class="fp-btn" data-cat="age" data-val="Teen &amp; Adult">Teen &amp; Adult</button>
+        </div>
+      </div>
+
+      <!-- Type -->
+      <div class="fp-row">
+        <span class="fp-label">Type</span>
+        <div class="fp-btns">
+          <button class="fp-btn" data-cat="type" data-val="Sunglasses">☀ Sun</button>
+          <button class="fp-btn" data-cat="type" data-val="Sports Sunglasses">⚡ Sport</button>
+          <button class="fp-btn" data-cat="type" data-val="Ski Goggles">⛷ Ski</button>
+          <button class="fp-btn" data-cat="type" data-val="Screen Glasses">🖥 Screen</button>
+          <button class="fp-btn" data-cat="type" data-val="Accessories">✦ Acc</button>
+        </div>
+      </div>
+
+      <!-- Shape -->
+      <div class="fp-row">
+        <span class="fp-label">Shape</span>
+        <div class="fp-btns">
+          <button class="fp-btn shape-btn" data-cat="shape" data-val="Oval" title="Oval">
+            <svg width="22" height="14" viewBox="0 0 22 14" fill="none">
+              <ellipse cx="11" cy="7" rx="10" ry="6" stroke="currentColor" stroke-width="1.8"/>
+            </svg>
+          </button>
+          <button class="fp-btn shape-btn" data-cat="shape" data-val="Round" title="Round">
+            <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
+              <circle cx="7.5" cy="7.5" r="6.5" stroke="currentColor" stroke-width="1.8"/>
+            </svg>
+          </button>
+          <button class="fp-btn shape-btn" data-cat="shape" data-val="D-Frame" title="D-Frame (#D)">
+            <svg width="16" height="15" viewBox="0 0 16 15" fill="none">
+              <polygon points="8,1 15,4 15,11 8,14 1,11 1,4" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" fill="none"/>
+            </svg>
+          </button>
+          <button class="fp-btn shape-btn" data-cat="shape" data-val="Shield" title="Creative Shield">
+            <svg width="14" height="17" viewBox="0 0 14 17" fill="none">
+              <path d="M7 1.5L13 4.5v5.5Q13 14.5 7 15.5Q1 14.5 1 10V4.5Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          <button class="fp-btn shape-btn" data-cat="shape" data-val="Full-Rim" title="Full-Rim">
+            <svg width="20" height="14" viewBox="0 0 20 14" fill="none">
+              <rect x="1" y="1" width="18" height="12" rx="3" stroke="currentColor" stroke-width="1.8"/>
+            </svg>
+          </button>
+          <button class="fp-btn shape-btn" data-cat="shape" data-val="Half-Rim" title="Half-Rim">
+            <svg width="20" height="11" viewBox="0 0 20 11" fill="none">
+              <path d="M1 10 Q1 1 10 1 Q19 1 19 10" stroke="currentColor" stroke-width="1.8"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Lens -->
+      <div class="fp-row">
+        <span class="fp-label">Lens</span>
+        <div class="fp-btns">
+          <button class="fp-btn" data-cat="lens" data-val="Polarised">
+            <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+              <circle cx="6.5" cy="6.5" r="5.5" stroke="currentColor" stroke-width="1.4"/>
+              <line x1="1" y1="6.5" x2="12" y2="6.5" stroke="currentColor" stroke-width="1.3"/>
+              <line x1="2" y1="4.5" x2="11" y2="4.5" stroke="currentColor" stroke-width="0.8" opacity="0.5"/>
+              <line x1="2" y1="8.5" x2="11" y2="8.5" stroke="currentColor" stroke-width="0.8" opacity="0.5"/>
+            </svg>
+            Polar
+          </button>
+          <button class="fp-btn" data-cat="lens" data-val="Non-Polarised">
+            <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+              <circle cx="6.5" cy="6.5" r="5.5" stroke="currentColor" stroke-width="1.4"/>
+            </svg>
+            Non-P
+          </button>
+          <button class="fp-btn" data-cat="lens" data-val="__other__">Other</button>
+        </div>
+      </div>
+
+      <!-- Stock -->
+      <div class="fp-row">
+        <span class="fp-label">Stock</span>
+        <div class="fp-btns">
+          <button class="fp-btn" data-cat="stock" data-val="in">✓ In Stock</button>
+        </div>
+      </div>
+
+      <!-- Collection -->
+      <div class="fp-row">
+        <span class="fp-label">Pick</span>
+        <div class="fp-btns">
+          <button class="fp-btn" data-cat="collection" data-val="featured">★ Featured</button>
+          <button class="fp-btn" data-cat="collection" data-val="bestseller">🔥 Best Seller</button>
+        </div>
+      </div>
+
+      <div class="fp-divider"></div>
+      <button class="fp-reset" id="filter-reset-btn">↺ Reset all filters</button>
+    </div>
+  </div><!-- /filter-wrap -->
+
+  <!-- Controls -->
+  <div id="controls">
+    <button id="rotate-reset-btn">↺ Reset</button>
+    <span id="ctrl-label">Rotate</span>
+    <input type="range" id="rotate-slider" min="-2" max="2" step="0.1" value="0">
+    <button id="fit-btn">Fit</button>
+  </div>
+
+</div><!-- /bl-container -->
+
+<!-- ── 3D canvas ───────────────────────────────────── -->
+<div id="container"></div>
+
+<!-- ── Modal ──────────────────────────────────────── -->
+<div id="modal-overlay" role="dialog" aria-modal="true">
+  <div id="modal-backdrop"></div>
+  <div id="modal">
+    <button id="modal-close" aria-label="Close">✕</button>
+    <div id="modal-body">
+      <div id="modal-left">
+        <div id="modal-main-img-wrap">
+          <img id="modal-main-img" src="" alt="" class="img-cover">
+        </div>
+        <div id="modal-carousel"></div>
+      </div>
+      <div id="modal-right">
+        <!-- Title + price + badges -->
+        <div class="modal-sec">
+          <div id="modal-title"></div>
+          <div class="product-badges" id="modal-badges"></div>
+          <div id="modal-price" style="margin-top:6px"></div>
+        </div>
+        <!-- Color swatches (image-based) -->
+        <div class="modal-sec" id="color-section">
+          <div class="color-lbl">Colors</div>
+          <div id="color-selector"></div>
+        </div>
+        <!-- Lens selector -->
+        <div class="modal-sec" id="lens-section" style="display:none">
+          <div class="lens-lbl">Lens</div>
+          <div id="lens-selector"></div>
+        </div>
+        <!-- Meta info -->
+        <div class="modal-sec" id="meta-section">
+          <div class="info-group" id="modal-meta"></div>
+        </div>
+        <!-- Tabs: Description / Materials / Dimensions / Shipping -->
+        <div class="modal-sec" id="tabs-section" style="padding:0; border-bottom:1px solid #eee;">
+          <div id="tab-bar"></div>
+          <div id="tab-content"></div>
+        </div>
+        <!-- Recommendations -->
+        <div class="modal-sec" id="reco-section" style="display:none">
+          <div class="reco-lbl">You may also like</div>
+          <div id="reco-scroll"></div>
+        </div>
+        <!-- Visit -->
+        <div class="modal-sec">
+          <a id="modal-visit" href="#" target="_blank" rel="noopener">View on store →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Three.js -->
+<script type="importmap">
+{
+  "imports": {
+    "three":         "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
+
+<script type="module">
+import * as THREE                     from 'three';
+import { OrbitControls }              from 'three/addons/controls/OrbitControls.js';
+import { CSS3DRenderer, CSS3DObject } from 'three/addons/renderers/CSS3DRenderer.js';
+import TWEEN                          from 'three/addons/libs/tween.module.js';
+
+// ── All color names from product swatches (sorted longest-first for title stripping) ─
+const ALL_COLOR_NAMES = [
+  'Colorblock Coral','Colorblock Sand','Colorblock Sea','Crane Flower Yellow',
+  'Sea Anemone Green','Tranquil Lavender','Medallion Platinum','Midnight Berry',
+  'Sunshine Coral','Sardine Coral','Floral Reverie','Gelato Summer','Flamingo Soda',
+  'Flamingo Pink','Starfish Orange','Grapefruit Pink','Vacation Yellow','Vanilla Brownie',
+  'Sunrise Mist','Sunrise Orange','Waffle Special','Desert Sand','Coral Blush',
+  'Coral Fantasy','Polar Blue','Polar Gray','Tranquil Blue','Tranquil Gray',
+  'Shell Purple','Shell Pink','Space Silver','Citrus Grove','Citrus Yellow',
+  'Wild Flower','Art Brush','Daisy Soda','Jellyfish White','Lava Black','Lava Grey',
+  'Medallion Gold','Cloud White','Squid Black','Ocean Fantasy','Olive Green',
+  'Rock Rose','Sand Beige','Sand beige','Reef blue','Reef Blue','Azure Blue',
+  'Sailing Blue','Starry Blue','Sky Blue','Ice Blue','Navy Blue',
+  'Cactus Green','Lime Green','Leopard Brown','Leopard Pink','Purple Coral',
+  'Begonia Red','Berry Mist','Deep Sea','Sun Coral','Tortoiseshell','Retro Brown',
+  'Lavender','Blueberry','Raspberry','Apricot','Chocolate','Fig Pink','Jam On',
+  'Blue','Pink','Oval','Round',
+].sort((a,b) => b.length - a.length);
+
+// ── CSS Color map ─────────────────────────────────────────────────────
+const COLOR_MAP = {
+  'Apricot':'#FBCEB1','Art Brush':'#8B4513','Azure Blue':'#007FFF','Begonia Red':'#FA6E79',
+  'Berry Mist':'#8E4585','Blue':'#2563EB','Blueberry':'#4F2877','Cactus Green':'#58A55C',
+  'Chocolate':'#7B3F00','Citrus Grove':'#B5A233','Citrus Yellow':'#F7D358','Cloud White':'#E8E8E8',
+  'Colorblock Coral':'#FF6F61','Colorblock Sand':'#C2B280','Colorblock Sea':'#2E8B97',
+  'Coral Blush':'#F4A494','Coral Fantasy':'#FF6B6B','Crane Flower Yellow':'#FFD700',
+  'Daisy Soda':'#FDE68A','Deep Sea':'#003153','Desert Sand':'#C2A06E','Fig Pink':'#C16B8A',
+  'Flamingo Pink':'#FC8EAC','Flamingo Soda':'#F9A8D4','Floral Reverie':'#E8A0BF',
+  'Gelato Summer':'#FEC8D8','Grapefruit Pink':'#F7786B','Ice Blue':'#B0E0E6',
+  'Jam On':'#960018','Jellyfish White':'#F5F5F5','Lava Black':'#1C1C1C','Lava Grey':'#808080',
+  'Lavender':'#B57EDC','Leopard Brown':'#8B6914','Leopard Pink':'#E75480','Lime Green':'#32CD32',
+  'Medallion Gold':'#CFB53B','Medallion Platinum':'#C0C0C0','Midnight Berry':'#3D0C52',
+  'Navy Blue':'#000080','Ocean Fantasy':'#006994','Olive Green':'#6B7C41','Pink':'#FFC0CB',
+  'Polar Blue':'#A2C4E8','Polar Gray':'#C8D2D6','Purple Coral':'#AD5E74','Raspberry':'#872657',
+  'Reef Blue':'#005A8E','Reef blue':'#005A8E','Retro Brown':'#6B4226','Rock Rose':'#CC6E8F',
+  'Sailing Blue':'#1E3A8A','Sand Beige':'#D4B896','Sand beige':'#D4B896',
+  'Sardine Coral':'#E8735A','Sea Anemone Green':'#3CB371','Shark White':'#F5F5F5',
+  'Shell Pink':'#FBB8C3','Shell Purple':'#C3A0D0','Sky Blue':'#87CEEB','Space Silver':'#B0B3BC',
+  'Squid Black':'#1C1C2E','Starfish Orange':'#FF7043','Starry Blue':'#1D3557',
+  'Sun Coral':'#FF6347','Sunrise Mist':'#FFD9A0','Sunrise Orange':'#FF7518',
+  'Sunshine Coral':'#FF8C69','Tortoiseshell':'#8B5E3C','Tranquil Blue':'#5B8DB8',
+  'Tranquil Gray':'#9B9B9B','Tranquil Lavender':'#A89DC6','Vacation Yellow':'#FFDD57',
+  'Vanilla Brownie':'#C8A97E','Waffle Special':'#D4A574','Wild Flower':'#C06080'
+};
+const colorCSS = name => {
+  if (!name) return '#ccc';
+  if (COLOR_MAP[name]) return COLOR_MAP[name];
+  const lower = name.toLowerCase();
+  for (const [k,v] of Object.entries(COLOR_MAP)) {
+    if (k.toLowerCase() === lower) return v;
+  }
+  return '#ccc';
+};
+
+// ── Helpers ───────────────────────────────────────────────────────────
+function shopifyImg(url, w) {
+  if (!url) return '';
+  try { const u = new URL(url); u.searchParams.set('width', String(w)); return u.toString(); }
+  catch { return url + (url.includes('?') ? '&' : '?') + 'width=' + w; }
+}
+
+const esc = s => String(s)
+  .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+
+// Normalise a product from the new flat JSON to a consistent internal shape
+function normaliseProduct(raw) {
+  const attr    = raw.attributes  || {};
+  const pol     = raw.polarisation_summary || {};
+  const imgs    = Array.isArray(raw.images?.all) ? raw.images.all
+                : (raw.images ? Object.values(raw.images)[0] || [] : []);
+  const col     = raw.collection_positions || {};
+  const allCols = col.all_collections || {};
+
+  // Description fallback: tabs.description is always "ABOUT US" junk, use raw.description
+  const topDesc = typeof raw.description === 'string'
+    ? raw.description
+    : (raw.description?.clean_text || raw.description?.raw_html || '');
+  const descFallback = topDesc.replace(/<[^>]*>/g, ' ').replace(/\s+/g,' ').trim();
+
+  // Product type: merge Shield Sunglasses → Sunglasses (shield IS a shape, not a type)
+  let productType = attr.product_type || 'Other';
+  if (productType === 'Shield Sunglasses') productType = 'Sunglasses';
+
+  // Detect color name by stripping from end of title (extracted_color is unreliable for Junior+)
+  let color = null;
+  const title = raw.title || '';
+  for (const c of ALL_COLOR_NAMES) {
+    if (title.endsWith(c) || title.toLowerCase().endsWith(c.toLowerCase())) {
+      color = c; break;
+    }
+  }
+  // Fallback to extracted_color if clean
+  if (!color) {
+    const ec = attr.extracted_color || '';
+    if (ec && !ec.startsWith('+') && !ec.startsWith('-')) color = ec;
+  }
+
+  // _base: title with color stripped from end
+  const _base = color
+    ? title.slice(0, title.toLowerCase().lastIndexOf(color.toLowerCase())).trim()
+    : title.trim();
+
+  // Best seller: in 'best-seller' collection
+  const isBestSeller = 'best-seller' in allCols;
+  const bestSellerPos = isBestSeller ? (allCols['best-seller']?.position ?? 9999) : 9999;
+
+  // Featured: use 'news-2025' collection as "featured / new arrivals"
+  const isFeatured = 'news-2025' in allCols || col.is_featured === true;
+
+  return {
+    id:          raw.id,
+    title,
+    url:         raw.url   || '#',
+    price:       parseFloat(raw.price?.amount ?? raw.price ?? 0) || 0,
+    priceMin:    parseFloat(raw.price?.price_min ?? raw.price?.amount ?? raw.price ?? 0) || 0,
+    priceMax:    parseFloat(raw.price?.price_max ?? raw.price?.amount ?? raw.price ?? 0) || 0,
+    images:      imgs,
+    age:         attr.age_group || null,
+    shape:       attr.frame_shape || null,   // e.g. 'D-Frame', 'Oval', 'Round', 'Shield'
+    productType,
+    color,
+    available:   raw.available !== false,
+    polStatus:   pol.polarisation_status || 'unknown',
+    isSwitchable:pol.is_switchable || false,
+    variants:    raw.variants || [],
+    tabs:        raw.tabs || {},
+    descFallback,
+    swatches:    raw.color_swatches || [],
+    recos:       raw.recommendations?.you_may_also_like || [],
+    isBestSeller,
+    bestSellerPos,
+    isFeatured,
+    _base,
+  };
+}
+
+// ── State ─────────────────────────────────────────────────────────────
+const state = {
+  view:  'grid',
+  group: 'all',
+  search: '',
+  ticks: {
+    age: new Set(), shape: new Set(), type: new Set(),
+    lens: new Set(), stock: new Set(), collection: new Set()
+  }
+};
+
+let camera, scene, renderer, controls;
+let objects = [], labels = [];
+let isDragging = false, autoRotateSpeed = 0, globalRotation = 0;
+let products = [], colorSiblings = {};
+let flowPaused = false;
+
+// ── Data load ─────────────────────────────────────────────────────────
+fetch('https://decentralize-dfw.github.io/olivioandco/olivio_mega_data_flat.json')
+  .then(r => r.json())
+  .then(data => {
+    const raw = Array.isArray(data) ? data : (data.products || Object.values(data));
+    products = raw.map(normaliseProduct);
+    // Build color siblings by base key (title minus color name)
+    colorSiblings = {};
+    for (const p of products) {
+      if (!colorSiblings[p._base]) colorSiblings[p._base] = [];
+      colorSiblings[p._base].push(p);
+    }
+    // Build product lookup by id for recommendations
+    window._productById = {};
+    for (const p of products) window._productById[p.id] = p;
+
+    init();
+    animate();
+    const l = document.getElementById('loader');
+    l.style.opacity = '0';
+    setTimeout(() => l.remove(), 400);
+  })
+  .catch(err => {
+    console.error(err);
+    document.getElementById('loader-sub').textContent = 'Failed to load — check network.';
+  });
+
+// ── Three.js init ─────────────────────────────────────────────────────
+function init() {
+  const container = document.getElementById('container');
+  const FRUST = 3500, aspect = window.innerWidth / window.innerHeight;
+
+  camera = new THREE.OrthographicCamera(
+    FRUST*aspect/-2, FRUST*aspect/2, FRUST/2, FRUST/-2, 1, 15000
+  );
+  camera.position.set(2000, 1000, 2000);
+  camera.lookAt(0, 0, 0);
+
+  scene    = new THREE.Scene();
+  renderer = new CSS3DRenderer();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.domElement.style.position = 'absolute';
+  renderer.domElement.style.top = '0';
+  container.appendChild(renderer.domElement);
+
+  controls = new OrbitControls(camera, renderer.domElement);
+  controls.enableDamping = true; controls.dampingFactor = 0.05;
+  controls.minZoom = 0.04; controls.maxZoom = 6;
+  controls.minPolarAngle = 0.05; controls.maxPolarAngle = Math.PI - 0.05;
+
+  window.addEventListener('mousedown',  () => { isDragging = true; });
+  window.addEventListener('mouseup',    () => { isDragging = false; });
+  window.addEventListener('touchstart', () => { isDragging = true; }, { passive: true });
+  window.addEventListener('touchend',   () => { isDragging = false; }, { passive: true });
+
+  buildScene();
+  window.addEventListener('resize', onWindowResize);
+  setupMenuButtons();
+  setupFilterPopup();
+  setupSlider();
+  setupFitButton();
+  setupModal();
+  setupSearch();
+}
+
+// ── Build 3D scene ────────────────────────────────────────────────────
+function buildScene() {
+  objects.forEach(o => scene.remove(o));
+  objects = [];
+
+  for (let idx = 0; idx < products.length; idx++) {
+    const p = products[idx];
+
+    // Outer wrapper: CSS3DRenderer owns this element's transform
+    const wrap = document.createElement('div');
+    wrap.className = 'card-wrap';
+
+    // Inner card: we control its scale for show/hide
+    const el = document.createElement('div');
+    el.className = 'element-card';
+
+    const img = document.createElement('img');
+    img.src = p.images?.[0] ? shopifyImg(p.images[0], THUMBNAIL_WIDTH) : '';
+    img.draggable = false; img.loading = 'eager';
+    el.appendChild(img);
+    wrap.appendChild(el);
+
+    el.addEventListener('mouseenter', () => {
+      if (state.view === 'flow') flowPaused = true;
+      else if (!isDragging) controls.enabled = false;
+      showTooltip(p.title);
+    });
+    el.addEventListener('mouseleave', () => {
+      if (state.view === 'flow') flowPaused = false;
+      else controls.enabled = true;
+      hideTooltip();
+    });
+    el.addEventListener('click', e => { e.stopPropagation(); openModal(p); });
+
+    const sx = (Math.random()-.5)*1400, sy = (Math.random()-.5)*1400, sz = (Math.random()-.5)*1400;
+    const obj = new CSS3DObject(wrap);
+    obj.position.set(sx, sy, sz);
+    obj.userData = {
+      active:       true,
+      cardEl:       el,       // inner element we scale
+      center:       new THREE.Vector3(0, 0, 0),
+      offset:       new THREE.Vector3(sx, sy, sz),
+      rotation:     new THREE.Euler(0, 0, 0),
+      sphereCenter: null,
+      flowX: (Math.random()-.5)*1800,
+      flowY: (Math.random()-.5)*1100,
+      flowZ: -2000 - Math.random()*6000,
+      flowSpeed: 5 + Math.random()*12,
+    };
+    scene.add(obj);
+    objects.push(obj);
+  }
+
+  updateLayout();
+}
+
+// ── Tooltip ───────────────────────────────────────────────────────────
+function showTooltip(text) {
+  const t = document.getElementById('hover-tooltip');
+  if (t) { t.textContent = text; t.classList.add('visible'); }
+}
+function hideTooltip() {
+  const t = document.getElementById('hover-tooltip');
+  if (t) { t.textContent = ''; t.classList.remove('visible'); }
+}
+
+// ── Group key ─────────────────────────────────────────────────────────
+function groupKey(i) {
+  const p = products[i];
+  switch (state.group) {
+    case 'age':   return p.age         || 'Other';
+    case 'shape': {
+      // Display-friendly shape label
+      const s = p.shape;
+      if (!s) return 'Other';
+      if (s === 'D-Frame') return '#D';
+      return s;
+    }
+    case 'type':  return p.productType || 'Other';
+    case 'lens':  return p.polStatus === 'polarised_only'     ? 'Polarised'
+                       : p.polStatus === 'non_polarised_only' ? 'Non-Polarised'
+                       : p.polStatus === 'switchable'         ? 'Switchable'
+                       : 'Other';
+    default: return '__ALL__';
+  }
+}
+
+// ── Visible indices (filters, search; no filtering in flow) ───────────
+function visibleIndices() {
+  if (state.view === 'flow') return products.map((_, i) => i);
+
+  const q = state.search.toLowerCase().trim();
+
+  let indices = products.map((_, i) => i).filter(i => {
+    const p = products[i];
+
+    // Search
+    if (q && !p.title.toLowerCase().includes(q) && !(p.color||'').toLowerCase().includes(q)) return false;
+
+    const ta = state.ticks.age;
+    if (ta.size > 0 && !ta.has(p.age || 'Other')) return false;
+
+    const ts = state.ticks.shape;
+    if (ts.size > 0 && !ts.has(p.shape || 'Other')) return false;
+
+    const tt = state.ticks.type;
+    if (tt.size > 0 && !tt.has(p.productType || 'Other')) return false;
+
+    const tl = state.ticks.lens;
+    if (tl.size > 0) {
+      const s = p.polStatus;
+      const matchesPolar    = tl.has('Polarised')     && (s === 'polarised_only'     || s === 'switchable');
+      const matchesNonPolar = tl.has('Non-Polarised') && (s === 'non_polarised_only' || s === 'switchable');
+      const matchesOther    = tl.has('__other__')     && (s === 'unknown');
+      if (!matchesPolar && !matchesNonPolar && !matchesOther) return false;
+    }
+
+    const tk = state.ticks.stock;
+    if (tk.has('in') && !p.available) return false;
+
+    const tc = state.ticks.collection;
+    if (tc.size > 0) {
+      const wantFeat = tc.has('featured');
+      const wantBest = tc.has('bestseller');
+      if (!(wantFeat && p.isFeatured) && !(wantBest && p.isBestSeller)) return false;
+    }
+
+    return true;
+  });
+
+  // Sort by best-seller position when that filter is active (and no other collection filter)
+  if (state.ticks.collection.has('bestseller') && !state.ticks.collection.has('featured')) {
+    indices.sort((a, b) => products[a].bestSellerPos - products[b].bestSellerPos);
+  }
+
+  return indices;
+}
+
+// ── Labels ────────────────────────────────────────────────────────────
+function removeLabels() {
+  const old = [...labels]; labels = [];
+  old.forEach(l => {
+    if (l.element) l.element.classList.remove('visible');
+    setTimeout(() => scene.remove(l), 800);
+  });
+}
+function createLabel(text, sub, x, y, z) {
+  const wrap = document.createElement('div'); wrap.className = 'group-label-wrap';
+  const main = document.createElement('div'); main.className = 'group-label-main'; main.textContent = text;
+  wrap.appendChild(main);
+  if (sub) {
+    const s = document.createElement('div'); s.className = 'group-label-sub'; s.textContent = sub;
+    wrap.appendChild(s);
+  }
+  const obj = new CSS3DObject(wrap);
+  obj.position.set(x, y, z);
+  scene.add(obj); labels.push(obj);
+  setTimeout(() => wrap.classList.add('visible'), 50);
+}
+
+// ── Layout update ─────────────────────────────────────────────────────
+function updateLayout() {
+  TWEEN.removeAll();
+  removeLabels();
+  objects.forEach(o => { o.userData.rotation.set(0,0,0); o.userData.sphereCenter = null; });
+
+  const visible = new Set(visibleIndices());
+
+  // Hide items that should not be visible — scale to 0 in place
+  objects.forEach((obj, i) => {
+    if (!visible.has(i)) {
+      if (obj.userData.active) {
+        obj.userData.active = false;
+        const el = obj.userData.cardEl;
+        el.classList.remove('showing');
+        el.classList.add('hiding');
+        setTimeout(() => { if (!obj.userData.active) el.style.pointerEvents = 'none'; }, 380);
+      } else {
+        obj.userData.cardEl.style.transform = 'scale(0)';
+        obj.userData.cardEl.style.pointerEvents = 'none';
+      }
+    }
+  });
+
+  // Build groups for visible items
+  const groups = {};
+  for (const i of visible) {
+    const k = groupKey(i);
+    if (!groups[k]) groups[k] = [];
+    groups[k].push(i);
+  }
+
+  const isGrouped = ['age','shape','type','lens'].includes(state.group);
+  const groupKeys = Object.keys(groups).sort();
+  const ITEM_SPC  = 185, LABEL_Y = 900;
+
+  document.getElementById('count-badge').textContent =
+    visible.size + ' product' + (visible.size !== 1 ? 's' : '');
+
+  groupKeys.forEach((key, gIdx) => {
+    const idxs = groups[key];
+    let cx = 0, cy = 0, cz = 0;
+    const sphereR    = Math.max(Math.sqrt(idxs.length)*65, 200);
+    const clusterSpc = Math.max(2400, (groupKeys.length*1300)/(Math.PI*2));
+
+    if (isGrouped) {
+      if (state.view === 'grid') {
+        const zSpc = 2600, totalZ = (groupKeys.length-1)*zSpc;
+        cz = (totalZ/2) - (gIdx*zSpc);
+      } else {
+        const angle = (gIdx/groupKeys.length)*Math.PI*2;
+        cx = Math.cos(angle)*clusterSpc; cz = Math.sin(angle)*clusterSpc;
+      }
+      createLabel(key, state.group.toUpperCase(), cx, LABEL_Y, cz);
+    }
+
+    if (state.view === 'grid') {
+      const cols = Math.ceil(Math.sqrt(idxs.length));
+      idxs.forEach((objIdx, i) => {
+        const obj = objects[objIdx];
+        const wasActive = obj.userData.active;
+        obj.userData.active = true;
+        const ox = (i%cols - (cols-1)/2)*ITEM_SPC, oy = 420 - Math.floor(i/cols)*ITEM_SPC;
+
+        // Tween position
+        new TWEEN.Tween(obj.userData.center).to({x:cx,y:cy,z:cz},2300).easing(TWEEN.Easing.Exponential.InOut).start();
+        new TWEEN.Tween(obj.userData.offset).to({x:ox,y:oy,z:0},2300).easing(TWEEN.Easing.Exponential.InOut).start();
+        new TWEEN.Tween(obj.userData.rotation).to({x:0,y:0,z:0},2300).easing(TWEEN.Easing.Exponential.InOut).start();
+
+        // Scale in if newly shown
+        if (!wasActive) {
+          const el = obj.userData.cardEl;
+          el.style.pointerEvents = '';
+          el.style.transform = 'scale(0)';
+          el.classList.remove('hiding');
+          // Small delay so position tween starts first
+          setTimeout(() => {
+            el.classList.add('showing');
+            el.style.transform = 'scale(1)';
+            setTimeout(() => el.classList.remove('showing'), 500);
+          }, 150);
+        } else {
+          // Already visible — just remove hiding class if present
+          const el = obj.userData.cardEl;
+          el.classList.remove('hiding');
+          el.style.pointerEvents = '';
+          if (!el.style.transform || el.style.transform === 'scale(0)') {
+            el.style.transform = 'scale(1)';
+          }
+        }
+      });
+    } else { // sphere
+      const sphereCY = 420 - sphereR;
+      idxs.forEach((objIdx, i) => {
+        const obj = objects[objIdx];
+        const wasActive = obj.userData.active;
+        obj.userData.active = true;
+        const phi   = Math.acos(-1+(2*i)/idxs.length), theta = Math.sqrt(idxs.length*Math.PI)*phi;
+        const ox    = sphereR*Math.sin(phi)*Math.cos(theta);
+        const oy    = sphereR*Math.sin(phi)*Math.sin(theta);
+        const oz    = sphereR*Math.cos(phi);
+        obj.userData.sphereCenter = new THREE.Vector3(cx, sphereCY, cz);
+
+        new TWEEN.Tween(obj.userData.center).to({x:cx,y:cy,z:cz},2300).easing(TWEEN.Easing.Exponential.InOut).start();
+        new TWEEN.Tween(obj.userData.offset).to({x:ox,y:oy+sphereCY,z:oz},2300).easing(TWEEN.Easing.Exponential.InOut).start();
+        new TWEEN.Tween(obj.userData.rotation).to({x:0,y:0,z:0},2300).easing(TWEEN.Easing.Exponential.InOut).start();
+
+        if (!wasActive) {
+          const el = obj.userData.cardEl;
+          el.style.pointerEvents = '';
+          el.style.transform = 'scale(0)';
+          el.classList.remove('hiding');
+          setTimeout(() => {
+            el.classList.add('showing');
+            el.style.transform = 'scale(1)';
+            setTimeout(() => el.classList.remove('showing'), 500);
+          }, 150);
+        } else {
+          const el = obj.userData.cardEl;
+          el.classList.remove('hiding');
+          el.style.pointerEvents = '';
+          if (!el.style.transform || el.style.transform === 'scale(0)') {
+            el.style.transform = 'scale(1)';
+          }
+        }
+      });
+    }
+  });
+}
+
+// ── Flow mode ─────────────────────────────────────────────────────────
+function enterFlowMode() {
+  controls.enabled = false;
+  // Move camera to face forward
+  TWEEN.removeAll();
+  new TWEEN.Tween(camera.position)
+    .to({x:0, y:100, z:3200}, 1100)
+    .easing(TWEEN.Easing.Cubic.Out).start();
+  new TWEEN.Tween(controls.target)
+    .to({x:0, y:0, z:0}, 1100)
+    .easing(TWEEN.Easing.Cubic.Out).start();
+
+  // Assign all objects flow positions
+  objects.forEach(obj => {
+    obj.userData.active = true;
+    obj.userData.flowZ     = -2000 - Math.random()*7000;
+    obj.userData.flowX     = (Math.random()-.5)*2000;
+    obj.userData.flowY     = (Math.random()-.5)*1200;
+    obj.userData.flowSpeed = 5 + Math.random()*13;
+    obj.userData.center.set(0,0,0);
+    obj.userData.offset.set(0,0,0);
+  });
+
+  document.getElementById('count-badge').textContent = products.length + ' products';
+}
+
+function exitFlowMode() {
+  controls.enabled = true;
+  TWEEN.removeAll();
+  new TWEEN.Tween(camera.position)
+    .to({x:2000, y:1000, z:2000}, 1100)
+    .easing(TWEEN.Easing.Cubic.Out).start();
+  new TWEEN.Tween(controls.target)
+    .to({x:0, y:0, z:0}, 1100)
+    .easing(TWEEN.Easing.Cubic.Out).start();
+}
+
+// ── Flat mode ─────────────────────────────────────────────────────────
+function buildFlatGrid() {
+  const content = document.getElementById('flat-content');
+  content.innerHTML = '';
+
+  const visible = visibleIndices();
+  const groups  = {};
+  for (const i of visible) {
+    const k = groupKey(i);
+    if (!groups[k]) groups[k] = [];
+    groups[k].push(i);
+  }
+
+  const isGrouped = state.group !== 'all';
+  const groupKeys = Object.keys(groups).sort();
+
+  for (const key of groupKeys) {
+    if (isGrouped) {
+      const hdr = document.createElement('div');
+      hdr.className = 'flat-group-header';
+      hdr.textContent = key;
+      content.appendChild(hdr);
+    }
+    const grid = document.createElement('div');
+    grid.className = 'flat-grid';
+
+    for (const i of groups[key]) {
+      const p    = products[i];
+      const card = document.createElement('div');
+      card.className = 'flat-card';
+      // Random delay so every card scales from its own center simultaneously-ish
+      card.style.animationDelay = Math.round(Math.random() * 120) + 'ms';
+      const img = document.createElement('img');
+      img.src     = p.images?.[0] ? shopifyImg(p.images[0], THUMBNAIL_WIDTH) : '';
+      img.loading = 'lazy'; img.alt = '';
+      card.appendChild(img);
+      card.addEventListener('click', () => openModal(p));
+      grid.appendChild(card);
+    }
+    content.appendChild(grid);
+  }
+
+  document.getElementById('count-badge').textContent =
+    visible.length + ' product' + (visible.length !== 1 ? 's' : '');
+}
+
+// ── Animation loop ────────────────────────────────────────────────────
+const _vh = new THREE.Vector3();
+
+function animate() {
+  requestAnimationFrame(animate);
+  TWEEN.update();
+
+  // FLOW mode
+  if (state.view === 'flow') {
+    controls.update();
+    if (!flowPaused) {
+      objects.forEach(obj => {
+        obj.userData.flowZ += obj.userData.flowSpeed;
+        if (obj.userData.flowZ > 2800) {
+          obj.userData.flowZ     = -5500 - Math.random()*3000;
+          obj.userData.flowX     = (Math.random()-.5)*2000;
+          obj.userData.flowY     = (Math.random()-.5)*1200;
+          obj.userData.flowSpeed = 5 + Math.random()*13;
+        }
+        obj.position.set(obj.userData.flowX, obj.userData.flowY, obj.userData.flowZ);
+        obj.rotation.set(0, 0, 0);
+      });
+    }
+    renderer.render(scene, camera);
+    return;
+  }
+
+  // FLAT mode — 3D is behind overlay, skip heavy update
+  if (state.view === 'flat') {
+    return;
+  }
+
+  // Normal 3D modes
+  controls.update();
+  globalRotation += autoRotateSpeed;
+
+  objects.forEach((obj, i) => {
+    if (!obj.userData.active) return; // hidden in place, no update needed
+
+    const off = obj.userData.offset.clone();
+    off.applyAxisAngle(new THREE.Vector3(0,1,0), globalRotation);
+    const pos = new THREE.Vector3().copy(obj.userData.center).add(off);
+
+    if (state.view === 'sphere') {
+      obj.position.copy(pos);
+      if (obj.userData.sphereCenter) {
+        _vh.subVectors(obj.position, obj.userData.sphereCenter).add(obj.position);
+        obj.lookAt(_vh);
+      }
+    } else { // grid
+      obj.position.copy(pos);
+      obj.rotation.set(0, globalRotation, 0);
+    }
+  });
+
+  renderer.render(scene, camera);
+}
+
+// ── Menu buttons ──────────────────────────────────────────────────────
+function setupMenuButtons() {
+  document.querySelectorAll('.nav-btn[data-type]').forEach(btn => {
+    btn.addEventListener('click', e => {
+      const type = e.currentTarget.dataset.type;
+      const val  = e.currentTarget.dataset.val;
+      if (state[type] === val) return;
+
+      const prevView = state.view;
+
+      // Sync active state across all nav bars
+      document.querySelectorAll(`.nav-btn[data-type="${type}"]`)
+        .forEach(b => b.classList.toggle('active', b.dataset.val === val));
+
+      state[type] = val;
+
+      if (type === 'group') {
+        // Clear ticks that match old group
+        state.ticks.age.clear(); state.ticks.shape.clear();
+        state.ticks.type.clear(); state.ticks.lens.clear();
+        document.querySelectorAll('.fp-btn[data-cat="age"],.fp-btn[data-cat="shape"],.fp-btn[data-cat="type"],.fp-btn[data-cat="lens"]')
+          .forEach(b => b.classList.remove('active'));
+
+        if (state.view === 'flat') buildFlatGrid();
+        else if (state.view !== 'flow') updateLayout();
+        return;
+      }
+
+      // ── View transition ──
+      // Leave previous
+      if (prevView === 'flat') {
+        document.getElementById('flat-overlay').style.display = 'none';
+        document.getElementById('controls').classList.remove('disabled');
+      }
+      if (prevView === 'flow') {
+        exitFlowMode();
+      }
+
+      // Enter new
+      if (val === 'flat') {
+        document.getElementById('controls').classList.add('disabled');
+        buildFlatGrid();
+        document.getElementById('flat-overlay').style.display = 'block';
+        // Still run updateLayout in background for when user leaves flat
+        if (prevView !== 'flow') updateLayout();
+      } else if (val === 'flow') {
+        enterFlowMode();
+      } else {
+        // grid or sphere
+        updateLayout();
+      }
+    });
+  });
+}
+
+// ── Filter popup ──────────────────────────────────────────────────────
+function setupFilterPopup() {
+  const toggleBtn = document.getElementById('filter-toggle-btn');
+  const popup     = document.getElementById('filter-popup');
+  const arrow     = document.getElementById('filter-arrow');
+
+  toggleBtn.addEventListener('click', e => {
+    e.stopPropagation();
+    const isOpen = popup.classList.contains('open');
+    popup.classList.toggle('open', !isOpen);
+    toggleBtn.classList.toggle('open', !isOpen);
+    arrow.textContent = isOpen ? '▾' : '▴';
+  });
+
+  // Close on outside click
+  document.addEventListener('click', e => {
+    if (!document.getElementById('bl-container').contains(e.target)) {
+      popup.classList.remove('open');
+      toggleBtn.classList.remove('open');
+      arrow.textContent = '▾';
+    }
+  });
+
+  // Filter buttons
+  document.querySelectorAll('.fp-btn').forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.stopPropagation();
+      const cat = btn.dataset.cat;
+      const val = btn.dataset.val;
+      const set = state.ticks[cat];
+      if (set.has(val)) { set.delete(val); btn.classList.remove('active'); }
+      else              { set.add(val);    btn.classList.add('active');    }
+      if      (state.view === 'flat') buildFlatGrid();
+      else if (state.view !== 'flow') updateLayout();
+    });
+  });
+
+  // Reset
+  document.getElementById('filter-reset-btn').addEventListener('click', e => {
+    e.stopPropagation();
+    Object.values(state.ticks).forEach(s => s.clear());
+    document.querySelectorAll('.fp-btn').forEach(b => b.classList.remove('active'));
+    if      (state.view === 'flat') buildFlatGrid();
+    else if (state.view !== 'flow') updateLayout();
+  });
+}
+
+// ── Slider ────────────────────────────────────────────────────────────
+function setupSlider() {
+  const slider   = document.getElementById('rotate-slider');
+  const label    = document.getElementById('ctrl-label');
+  const resetBtn = document.getElementById('rotate-reset-btn');
+
+  slider.addEventListener('input', e => {
+    autoRotateSpeed = parseFloat(e.target.value) * 0.02;
+    const active = parseFloat(e.target.value) !== 0;
+    label.style.display    = active ? 'none'  : '';
+    resetBtn.style.display = active ? 'block' : 'none';
+  });
+
+  resetBtn.addEventListener('click', () => {
+    autoRotateSpeed = 0;
+    globalRotation  = 0;
+    slider.value = 0;
+    label.style.display    = '';
+    resetBtn.style.display = 'none';
+  });
+}
+
+// ── Fit view ──────────────────────────────────────────────────────────
+function fitView() {
+  if (!camera) return;
+  const activePos = [];
+  objects.forEach(obj => { if (obj.userData.active) activePos.push(obj.position.clone()); });
+  if (activePos.length === 0) return;
+
+  // World-space centroid
+  const centroid = new THREE.Vector3();
+  activePos.forEach(p => centroid.add(p));
+  centroid.divideScalar(activePos.length);
+
+  // Project all positions to camera-local space
+  camera.updateMatrixWorld();
+  const invCam = new THREE.Matrix4().copy(camera.matrixWorldInverse);
+
+  // Find extents relative to centroid in camera space (so zoom centers on group)
+  const centroidCam = centroid.clone().applyMatrix4(invCam);
+  let maxExtX = 0, maxExtY = 0;
+  activePos.forEach(p => {
+    const c = p.clone().applyMatrix4(invCam);
+    maxExtX = Math.max(maxExtX, Math.abs(c.x - centroidCam.x));
+    maxExtY = Math.max(maxExtY, Math.abs(c.y - centroidCam.y));
+  });
+
+  const W = window.innerWidth, H = window.innerHeight;
+  const aspect = W / H, FRUST = 3500;
+  const pad = (W <= 639 ? 100 : 155) * 1.8;
+  const extX = maxExtX + pad;
+  const extY = maxExtY + pad;
+  const zoomX = (FRUST * aspect) / (2 * extX);
+  const zoomY = FRUST / (2 * extY);
+  const zoom  = Math.max(0.04, Math.min(Math.min(zoomX, zoomY), 6));
+
+  // Pan camera to centroid (move both camera.position and controls.target by same delta)
+  const delta = centroid.clone().sub(controls.target);
+  const newCamPos = camera.position.clone().add(delta);
+
+  new TWEEN.Tween(controls.target)
+    .to({ x: centroid.x, y: centroid.y, z: centroid.z }, 900)
+    .easing(TWEEN.Easing.Cubic.Out).start();
+  new TWEEN.Tween(camera.position)
+    .to({ x: newCamPos.x, y: newCamPos.y, z: newCamPos.z }, 900)
+    .easing(TWEEN.Easing.Cubic.Out).start();
+  new TWEEN.Tween(camera)
+    .to({ zoom }, 900)
+    .easing(TWEEN.Easing.Cubic.Out)
+    .onUpdate(() => camera.updateProjectionMatrix())
+    .start();
+}
+
+function setupFitButton() {
+  document.getElementById('fit-btn').addEventListener('click', fitView);
+}
+
+// ── Search ─────────────────────────────────────────────────────────────
+function setupSearch() {
+  const input = document.getElementById('search-input');
+  if (!input) return;
+  let debounce;
+  input.addEventListener('input', () => {
+    clearTimeout(debounce);
+    debounce = setTimeout(() => {
+      state.search = input.value;
+      if      (state.view === 'flat') buildFlatGrid();
+      else if (state.view !== 'flow') updateLayout();
+    }, 120);
+  });
+  // Prevent drag while typing
+  input.addEventListener('mousedown', e => e.stopPropagation());
+  input.addEventListener('touchstart', e => e.stopPropagation(), { passive: true });
+}
+
+function onWindowResize() {
+  const FRUST = 3500, aspect = window.innerWidth / window.innerHeight;
+  camera.left = -FRUST*aspect/2; camera.right  =  FRUST*aspect/2;
+  camera.top  =  FRUST/2;        camera.bottom = -FRUST/2;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+}
+
+// ── Modal ─────────────────────────────────────────────────────────────
+let _imgs = [];
+
+function setupModal() {
+  document.getElementById('modal-close')   .addEventListener('click', closeModal);
+  document.getElementById('modal-backdrop').addEventListener('click', closeModal);
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+}
+
+function openModal(p)  { populateModal(p); document.getElementById('modal-overlay').classList.add('open'); }
+function closeModal()  { document.getElementById('modal-overlay').classList.remove('open'); }
+
+function populateModal(p) {
+  _imgs = (p.images || []).filter(Boolean);
+
+  // Title + badges
+  document.getElementById('modal-title').innerHTML =
+    esc(p.title) + (!p.available ? ' <span class="oos-badge">(Out of Stock)</span>' : '');
+  const badgesEl = document.getElementById('modal-badges');
+  badgesEl.innerHTML = '';
+  if (p.isFeatured)   { const b = document.createElement('span'); b.className='badge badge-featured'; b.textContent='New'; badgesEl.appendChild(b); }
+  if (p.isBestSeller) { const b = document.createElement('span'); b.className='badge badge-bestseller'; b.textContent='Best Seller'; badgesEl.appendChild(b); }
+
+  // Price: show range if switchable
+  const priceEl = document.getElementById('modal-price');
+  if (p.isSwitchable && p.priceMin !== p.priceMax && p.priceMin > 0) {
+    priceEl.textContent = `€${p.priceMin.toFixed(2)} – €${p.priceMax.toFixed(2)}`;
+  } else {
+    priceEl.textContent = '€' + Number(p.price).toFixed(2);
+  }
+
+  // Meta
+  document.getElementById('modal-meta').innerHTML = `
+    <div class="info-row"><span class="lbl">Type</span><span class="val">${esc(p.productType||'—')}</span></div>
+    <div class="info-row"><span class="lbl">Age</span><span class="val">${esc(p.age||'—')}</span></div>
+    <div class="info-row"><span class="lbl">Shape</span><span class="val">${esc(p.shape === 'D-Frame' ? '#D' : p.shape||'—')}</span></div>
+    <div class="info-row">
+      <span class="lbl">Stock</span>
+      <span class="val" style="color:${p.available?'#000':'#aaa'}">${p.available?'In Stock':'Out of Stock'}</span>
+    </div>`;
+
+  buildColorSelector(p);
+  buildLensSelector(p);
+  buildTabs(p);
+  buildRecommendations(p);
+  document.getElementById('modal-visit').href = p.url || '#';
+  buildCarousel(_imgs);
+  if (_imgs.length) setMainImage(0);
+}
+
+// CSS color swatch balls — JSON has no swatch images, use COLOR_MAP
+function buildColorSelector(activeP) {
+  const cs = document.getElementById('color-selector');
+  cs.innerHTML = '';
+  const siblings = colorSiblings[activeP._base] || [activeP];
+
+  for (const sib of siblings) {
+    const wrap = document.createElement('div');
+    wrap.className = 'swatch-wrap' +
+      (sib.id === activeP.id ? ' active' : '') +
+      (!sib.available ? ' oos' : '');
+    wrap.style.background = colorCSS(sib.color);
+    wrap.title = (sib.color || '') + (!sib.available ? ' (Out of Stock)' : '');
+    if (sib.id !== activeP.id) wrap.addEventListener('click', () => populateModal(sib));
+    cs.appendChild(wrap);
+  }
+}
+
+// Polarisation lens selector — for switchable products, toggling updates the price display
+function buildLensSelector(activeP) {
+  const sec = document.getElementById('lens-section');
+  const ls  = document.getElementById('lens-selector');
+  ls.innerHTML = '';
+
+  const status = activeP.polStatus;
+
+  if (status === 'unknown' || !status) { sec.style.display = 'none'; return; }
+
+  sec.style.display = 'block';
+
+  if (status === 'polarised_only') {
+    const pill = document.createElement('button');
+    pill.className = 'lens-pill active'; pill.textContent = 'Polarised'; pill.disabled = true;
+    ls.appendChild(pill);
+    return;
+  }
+
+  if (status === 'non_polarised_only') {
+    const pill = document.createElement('button');
+    pill.className = 'lens-pill active'; pill.textContent = 'Non-Polarised'; pill.disabled = true;
+    ls.appendChild(pill);
+    return;
+  }
+
+  if (status === 'switchable') {
+    // Build price lookup from variants
+    const variantPrices = {};
+    for (const v of (activeP.variants || [])) {
+      const opt3 = (v.option3 || '').toLowerCase();
+      if (opt3.includes('non')) variantPrices['Non-Polarised'] = parseFloat(v.price) || 0;
+      else if (opt3.includes('polar')) variantPrices['Polarised'] = parseFloat(v.price) || 0;
+    }
+
+    const options = ['Polarised', 'Non-Polarised'];
+    const pills = [];
+
+    const updatePrice = (selectedLens) => {
+      const pr = variantPrices[selectedLens];
+      if (pr > 0) {
+        document.getElementById('modal-price').textContent = '€' + pr.toFixed(2);
+      }
+    };
+
+    options.forEach((lbl, idx) => {
+      const pill = document.createElement('button');
+      pill.className = 'lens-pill' + (idx === 0 ? ' active' : '');
+      pill.textContent = lbl;
+      if (variantPrices[lbl] > 0) {
+        pill.title = '€' + variantPrices[lbl].toFixed(2);
+      }
+      pill.addEventListener('click', () => {
+        pills.forEach(p => p.classList.remove('active'));
+        pill.classList.add('active');
+        updatePrice(lbl);
+      });
+      ls.appendChild(pill);
+      pills.push(pill);
+    });
+
+    // Set initial price to Polarised
+    updatePrice('Polarised');
+    return;
+  }
+}
+
+// 4-tab structure — Description always from raw.description, others from tabs if available
+function buildTabs(p) {
+  const tabBar     = document.getElementById('tab-bar');
+  const tabContent = document.getElementById('tab-content');
+  tabBar.innerHTML = ''; tabContent.innerHTML = '';
+
+  const stripHtml = html => (html || '').replace(/<[^>]*>/g,' ').replace(/\s+/g,' ').trim();
+
+  // Description: always use the real product description (tabs.description is "ABOUT US" junk)
+  const descText = p.descFallback || '';
+
+  // Other tabs: only show if tabs object has real content
+  const matText  = stripHtml(p.tabs?.materials?.content_text  || p.tabs?.materials?.content_html  || '');
+  const dimText  = stripHtml(p.tabs?.dimensions?.content_text || p.tabs?.dimensions?.content_html || '');
+  const shipText = stripHtml(p.tabs?.shipping_and_customs?.content_text || p.tabs?.shipping_and_customs?.content_html || '');
+  const dimHtml  = p.tabs?.dimensions?.content_html || '';
+
+  const TAB_DATA = [
+    { label: 'Description', text: descText, html: null },
+    ...(matText  && matText.length > 5  ? [{ label: 'Materials',         text: matText,  html: null  }] : []),
+    ...(dimText  && dimText.length > 5  ? [{ label: 'Dimensions',        text: dimText,  html: dimHtml  }] : []),
+    ...(shipText && shipText.length > 5 ? [{ label: 'Shipping & Customs',text: shipText, html: null  }] : []),
+  ];
+
+  if (TAB_DATA.length === 0 || !descText) {
+    document.getElementById('tabs-section').style.display = 'none';
+    return;
+  }
+  document.getElementById('tabs-section').style.display = '';
+
+  TAB_DATA.forEach(({ label, text, html }, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'tab-btn' + (i === 0 ? ' active' : '');
+    btn.textContent = label;
+    tabBar.appendChild(btn);
+
+    const panel = document.createElement('div');
+    panel.className = 'tab-panel' + (i === 0 ? ' active' : '');
+
+    if (html && html.includes('<img')) {
+      // Dimensions: render images
+      panel.innerHTML = html;
+      // Make images responsive
+      panel.querySelectorAll('img').forEach(img => {
+        img.style.maxWidth = '100%'; img.style.height = 'auto'; img.loading = 'lazy';
+      });
+    } else {
+      panel.textContent = text;
+    }
+    tabContent.appendChild(panel);
+
+    btn.addEventListener('click', () => {
+      tabBar.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      tabContent.querySelectorAll('.tab-panel').forEach(pn => pn.classList.remove('active'));
+      btn.classList.add('active');
+      panel.classList.add('active');
+    });
+  });
+}
+
+// "You may also like" recommendations
+function buildRecommendations(p) {
+  const sec    = document.getElementById('reco-section');
+  const scroll = document.getElementById('reco-scroll');
+  scroll.innerHTML = '';
+
+  const recos = p.recos || [];
+  if (recos.length === 0) { sec.style.display = 'none'; return; }
+  sec.style.display = '';
+
+  for (const r of recos) {
+    const card = document.createElement('div');
+    card.className = 'reco-card';
+
+    const imgWrap = document.createElement('div'); imgWrap.className = 'reco-img';
+    const img = document.createElement('img'); img.src = r.image || ''; img.alt = '';
+    imgWrap.appendChild(img);
+
+    const name  = document.createElement('div'); name.className = 'reco-name'; name.textContent = r.title || '';
+    const price = document.createElement('div'); price.className = 'reco-price';
+    price.textContent = r.price != null ? '€' + Number(r.price).toFixed(2) : '';
+
+    card.appendChild(imgWrap); card.appendChild(name); card.appendChild(price);
+
+    // Click: open in modal if found in dataset, else visit URL
+    card.addEventListener('click', () => {
+      const found = r.id && window._productById?.[r.id];
+      if (found) populateModal(found);
+      else if (r.url) window.open(r.url, '_blank');
+    });
+    scroll.appendChild(card);
+  }
+}
+
+function buildCarousel(images) {
+  const car = document.getElementById('modal-carousel'); car.innerHTML = '';
+  images.forEach((src, i) => {
+    const thumb = document.createElement('div');
+    thumb.className = 'c-thumb' + (i===0?' active':'');
+    const img = document.createElement('img');
+    img.src = shopifyImg(src, 120); img.alt = ''; img.loading = 'lazy';
+    thumb.appendChild(img);
+    thumb.addEventListener('click', () => setMainImage(i));
+    car.appendChild(thumb);
+  });
+}
+
+function setMainImage(idx) {
+  const main = document.getElementById('modal-main-img');
+  const isLast = idx === _imgs.length - 1 && _imgs.length > 1;
+  main.className = isLast ? 'img-contain' : 'img-cover';
+  main.src = shopifyImg(_imgs[idx], IMAGE_WIDTH);
+  document.querySelectorAll('.c-thumb').forEach((t,i) => t.classList.toggle('active', i===idx));
+}
+</script>
+</body>
+</html>
