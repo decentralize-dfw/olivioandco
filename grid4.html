@@ -785,59 +785,9 @@ import { OrbitControls }              from 'three/addons/controls/OrbitControls.
 import { CSS3DRenderer, CSS3DObject } from 'three/addons/renderers/CSS3DRenderer.js';
 import TWEEN                          from 'three/addons/libs/tween.module.js';
 
-// ── All color names from product swatches (sorted longest-first for title stripping) ─
-const ALL_COLOR_NAMES = [
-  'Colorblock Coral','Colorblock Sand','Colorblock Sea','Crane Flower Yellow',
-  'Sea Anemone Green','Tranquil Lavender','Medallion Platinum','Midnight Berry',
-  'Sunshine Coral','Sardine Coral','Floral Reverie','Gelato Summer','Flamingo Soda',
-  'Flamingo Pink','Starfish Orange','Grapefruit Pink','Vacation Yellow','Vanilla Brownie',
-  'Sunrise Mist','Sunrise Orange','Waffle Special','Desert Sand','Coral Blush',
-  'Coral Fantasy','Polar Blue','Polar Gray','Tranquil Blue','Tranquil Gray',
-  'Shell Purple','Shell Pink','Space Silver','Citrus Grove','Citrus Yellow',
-  'Wild Flower','Art Brush','Daisy Soda','Jellyfish White','Lava Black','Lava Grey',
-  'Medallion Gold','Cloud White','Squid Black','Ocean Fantasy','Olive Green',
-  'Rock Rose','Sand Beige','Sand beige','Reef blue','Reef Blue','Azure Blue',
-  'Sailing Blue','Starry Blue','Sky Blue','Ice Blue','Navy Blue',
-  'Cactus Green','Lime Green','Leopard Brown','Leopard Pink','Purple Coral',
-  'Begonia Red','Berry Mist','Deep Sea','Sun Coral','Tortoiseshell','Retro Brown',
-  'Lavender','Blueberry','Raspberry','Apricot','Chocolate','Fig Pink','Jam On',
-  'Blue','Pink','Oval','Round',
-].sort((a,b) => b.length - a.length);
-
-// ── CSS Color map ─────────────────────────────────────────────────────
-const COLOR_MAP = {
-  'Apricot':'#FBCEB1','Art Brush':'#8B4513','Azure Blue':'#007FFF','Begonia Red':'#FA6E79',
-  'Berry Mist':'#8E4585','Blue':'#2563EB','Blueberry':'#4F2877','Cactus Green':'#58A55C',
-  'Chocolate':'#7B3F00','Citrus Grove':'#B5A233','Citrus Yellow':'#F7D358','Cloud White':'#E8E8E8',
-  'Colorblock Coral':'#FF6F61','Colorblock Sand':'#C2B280','Colorblock Sea':'#2E8B97',
-  'Coral Blush':'#F4A494','Coral Fantasy':'#FF6B6B','Crane Flower Yellow':'#FFD700',
-  'Daisy Soda':'#FDE68A','Deep Sea':'#003153','Desert Sand':'#C2A06E','Fig Pink':'#C16B8A',
-  'Flamingo Pink':'#FC8EAC','Flamingo Soda':'#F9A8D4','Floral Reverie':'#E8A0BF',
-  'Gelato Summer':'#FEC8D8','Grapefruit Pink':'#F7786B','Ice Blue':'#B0E0E6',
-  'Jam On':'#960018','Jellyfish White':'#F5F5F5','Lava Black':'#1C1C1C','Lava Grey':'#808080',
-  'Lavender':'#B57EDC','Leopard Brown':'#8B6914','Leopard Pink':'#E75480','Lime Green':'#32CD32',
-  'Medallion Gold':'#CFB53B','Medallion Platinum':'#C0C0C0','Midnight Berry':'#3D0C52',
-  'Navy Blue':'#000080','Ocean Fantasy':'#006994','Olive Green':'#6B7C41','Pink':'#FFC0CB',
-  'Polar Blue':'#A2C4E8','Polar Gray':'#C8D2D6','Purple Coral':'#AD5E74','Raspberry':'#872657',
-  'Reef Blue':'#005A8E','Reef blue':'#005A8E','Retro Brown':'#6B4226','Rock Rose':'#CC6E8F',
-  'Sailing Blue':'#1E3A8A','Sand Beige':'#D4B896','Sand beige':'#D4B896',
-  'Sardine Coral':'#E8735A','Sea Anemone Green':'#3CB371','Shark White':'#F5F5F5',
-  'Shell Pink':'#FBB8C3','Shell Purple':'#C3A0D0','Sky Blue':'#87CEEB','Space Silver':'#B0B3BC',
-  'Squid Black':'#1C1C2E','Starfish Orange':'#FF7043','Starry Blue':'#1D3557',
-  'Sun Coral':'#FF6347','Sunrise Mist':'#FFD9A0','Sunrise Orange':'#FF7518',
-  'Sunshine Coral':'#FF8C69','Tortoiseshell':'#8B5E3C','Tranquil Blue':'#5B8DB8',
-  'Tranquil Gray':'#9B9B9B','Tranquil Lavender':'#A89DC6','Vacation Yellow':'#FFDD57',
-  'Vanilla Brownie':'#C8A97E','Waffle Special':'#D4A574','Wild Flower':'#C06080'
-};
-const colorCSS = name => {
-  if (!name) return '#ccc';
-  if (COLOR_MAP[name]) return COLOR_MAP[name];
-  const lower = name.toLowerCase();
-  for (const [k,v] of Object.entries(COLOR_MAP)) {
-    if (k.toLowerCase() === lower) return v;
-  }
-  return '#ccc';
-};
+// ── Global swatch image map (color_name.toLowerCase() → swatch_image url) ──
+// Built from product data after load; replaces hard-coded COLOR_MAP + colorCSS
+let swatchImageMap = {};
 
 // ── Helpers ───────────────────────────────────────────────────────────
 function shopifyImg(url, w) {
@@ -849,67 +799,70 @@ function shopifyImg(url, w) {
 const esc = s => String(s)
   .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 
-// Normalise a product from the new flat JSON to a consistent internal shape
+// Normalise a product from v4.2 flat JSON to a consistent internal shape
 function normaliseProduct(raw) {
-  const attr    = raw.attributes  || {};
+  const attr    = raw.attributes           || {};
   const pol     = raw.polarisation_summary || {};
   const imgs    = Array.isArray(raw.images?.all) ? raw.images.all
                 : (raw.images ? Object.values(raw.images)[0] || [] : []);
   const col     = raw.collection_positions || {};
-  const allCols = col.all_collections || {};
+  const allCols = col.all_collections      || {};
 
-  // Description fallback: tabs.description is always "ABOUT US" junk, use raw.description
-  const topDesc = typeof raw.description === 'string'
-    ? raw.description
-    : (raw.description?.clean_text || raw.description?.raw_html || '');
-  const descFallback = topDesc.replace(/<[^>]*>/g, ' ').replace(/\s+/g,' ').trim();
+  // Description: tabs.description.content_text is the real product description in v4.2
+  const descFallback = raw.tabs?.description?.content_text
+    || (typeof raw.description === 'string'
+        ? raw.description.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim()
+        : '');
 
   // Product type: merge Shield Sunglasses → Sunglasses (shield IS a shape, not a type)
   let productType = attr.product_type || 'Other';
   if (productType === 'Shield Sunglasses') productType = 'Sunglasses';
 
-  // Detect color name by stripping from end of title (extracted_color is unreliable for Junior+)
-  let color = null;
+  // Color: attributes.extracted_color is reliable in v4.2 — no title-stripping needed
+  const color = attr.extracted_color || null;
   const title = raw.title || '';
-  for (const c of ALL_COLOR_NAMES) {
-    if (title.endsWith(c) || title.toLowerCase().endsWith(c.toLowerCase())) {
-      color = c; break;
-    }
-  }
-  // Fallback to extracted_color if clean
-  if (!color) {
-    const ec = attr.extracted_color || '';
-    if (ec && !ec.startsWith('+') && !ec.startsWith('-')) color = ec;
-  }
 
-  // _base: title with color stripped from end
+  // _base: title with color stripped from end (used for sibling grouping)
   const _base = color
     ? title.slice(0, title.toLowerCase().lastIndexOf(color.toLowerCase())).trim()
     : title.trim();
 
-  // Best seller: in 'best-seller' collection
-  const isBestSeller = 'best-seller' in allCols;
-  const bestSellerPos = isBestSeller ? (allCols['best-seller']?.position ?? 9999) : 9999;
+  // Stock: derived from variants (v4.2 has no top-level available field)
+  const variants = raw.variants || [];
+  const available = variants.length > 0
+    ? variants.some(v => v.available !== false)
+    : true;
 
-  // Featured: use 'news-2025' collection as "featured / new arrivals"
-  const isFeatured = 'news-2025' in allCols || col.is_featured === true;
+  // Price: v4.2 price object uses .min / .max / .amount
+  const priceMin = parseFloat(raw.price?.min    ?? raw.price?.amount ?? 0) || 0;
+  const priceMax = parseFloat(raw.price?.max    ?? raw.price?.amount ?? 0) || 0;
+  const price    = priceMin || parseFloat(raw.price?.amount ?? 0) || 0;
+
+  // Polarisation: pol.status (not pol.polarisation_status — that field doesn't exist)
+  const polStatus    = pol.status       || 'unknown';
+  const isSwitchable = pol.is_switchable || false;
+
+  // Collections
+  const isBestSeller  = 'best-seller' in allCols;
+  const bestSellerPos = isBestSeller ? (allCols['best-seller']?.position ?? 9999) : 9999;
+  const isFeatured    = 'news-2025' in allCols || col.is_featured === true;
 
   return {
     id:          raw.id,
     title,
-    url:         raw.url   || '#',
-    price:       parseFloat(raw.price?.amount ?? raw.price ?? 0) || 0,
-    priceMin:    parseFloat(raw.price?.price_min ?? raw.price?.amount ?? raw.price ?? 0) || 0,
-    priceMax:    parseFloat(raw.price?.price_max ?? raw.price?.amount ?? raw.price ?? 0) || 0,
+    url:         raw.url || '#',
+    price,
+    priceMin,
+    priceMax,
     images:      imgs,
-    age:         attr.age_group || null,
-    shape:       attr.frame_shape || null,   // e.g. 'D-Frame', 'Oval', 'Round', 'Shield'
+    age:         attr.age_group   || null,
+    shape:       attr.frame_shape || null,
     productType,
     color,
-    available:   raw.available !== false,
-    polStatus:   pol.polarisation_status || 'unknown',
-    isSwitchable:pol.is_switchable || false,
-    variants:    raw.variants || [],
+    available,
+    polStatus,
+    isSwitchable,
+    variants,
     tabs:        raw.tabs || {},
     descFallback,
     swatches:    raw.color_swatches || [],
@@ -935,24 +888,36 @@ const state = {
 let camera, scene, renderer, controls;
 let objects = [], labels = [];
 let isDragging = false, autoRotateSpeed = 0, globalRotation = 0;
-let products = [], colorSiblings = {};
+let products = [], colorSiblings = {}, productById = {};
 let flowPaused = false;
 
 // ── Data load ─────────────────────────────────────────────────────────
-fetch('https://decentralize-dfw.github.io/olivioandco/olivio_mega_data_flat.json')
+fetch('https://decentralize-dfw.github.io/olivioandco/olivio_mega_v4_2_flat.json')
   .then(r => r.json())
   .then(data => {
     const raw = Array.isArray(data) ? data : (data.products || Object.values(data));
     products = raw.map(normaliseProduct);
+
+    // Build global swatch image map (color_name.toLowerCase() → swatch_image url)
+    swatchImageMap = {};
+    for (const p of products) {
+      for (const sw of p.swatches) {
+        if (sw.color_name && sw.swatch_image) {
+          swatchImageMap[sw.color_name.toLowerCase()] = sw.swatch_image;
+        }
+      }
+    }
+
     // Build color siblings by base key (title minus color name)
     colorSiblings = {};
     for (const p of products) {
       if (!colorSiblings[p._base]) colorSiblings[p._base] = [];
       colorSiblings[p._base].push(p);
     }
-    // Build product lookup by id for recommendations
-    window._productById = {};
-    for (const p of products) window._productById[p.id] = p;
+
+    // Build product lookup by id for recommendations (module-scoped)
+    productById = {};
+    for (const p of products) productById[p.id] = p;
 
     init();
     animate();
@@ -1670,26 +1635,32 @@ function populateModal(p) {
     priceEl.textContent = '€' + Number(p.price).toFixed(2);
   }
 
-  // Meta
+  // Meta — data-stock attr lets buildLensSelector update the badge per variant
   document.getElementById('modal-meta').innerHTML = `
     <div class="info-row"><span class="lbl">Type</span><span class="val">${esc(p.productType||'—')}</span></div>
     <div class="info-row"><span class="lbl">Age</span><span class="val">${esc(p.age||'—')}</span></div>
     <div class="info-row"><span class="lbl">Shape</span><span class="val">${esc(p.shape === 'D-Frame' ? '#D' : p.shape||'—')}</span></div>
     <div class="info-row">
       <span class="lbl">Stock</span>
-      <span class="val" style="color:${p.available?'#000':'#aaa'}">${p.available?'In Stock':'Out of Stock'}</span>
+      <span class="val" data-stock style="color:${p.available?'#000':'#aaa'}">${p.available?'In Stock':'Out of Stock'}</span>
     </div>`;
 
   buildColorSelector(p);
-  buildLensSelector(p);
+  buildLensSelector(p);  // may override modal-visit href for switchable products
   buildTabs(p);
   buildRecommendations(p);
-  document.getElementById('modal-visit').href = p.url || '#';
+
+  // Default store URL: first available variant's direct URL  ← BUG 2 FIX
+  // (buildLensSelector will override this for switchable products)
+  if (!p.isSwitchable) {
+    const firstVariant = p.variants?.find(v => v.available !== false) || p.variants?.[0];
+    document.getElementById('modal-visit').href = firstVariant?.variant_url || p.url || '#';
+  }
   buildCarousel(_imgs);
   if (_imgs.length) setMainImage(0);
 }
 
-// CSS color swatch balls — JSON has no swatch images, use COLOR_MAP
+// Real swatch images from color_swatches data — no more COLOR_MAP hex
 function buildColorSelector(activeP) {
   const cs = document.getElementById('color-selector');
   cs.innerHTML = '';
@@ -1700,14 +1671,23 @@ function buildColorSelector(activeP) {
     wrap.className = 'swatch-wrap' +
       (sib.id === activeP.id ? ' active' : '') +
       (!sib.available ? ' oos' : '');
-    wrap.style.background = colorCSS(sib.color);
+
+    const swatchUrl = sib.color ? swatchImageMap[sib.color.toLowerCase()] : null;
+    if (swatchUrl) {
+      wrap.style.backgroundImage    = `url(${swatchUrl})`;
+      wrap.style.backgroundSize     = 'cover';
+      wrap.style.backgroundPosition = 'center';
+    } else {
+      wrap.style.background = '#ccc';
+    }
+
     wrap.title = (sib.color || '') + (!sib.available ? ' (Out of Stock)' : '');
     if (sib.id !== activeP.id) wrap.addEventListener('click', () => populateModal(sib));
     cs.appendChild(wrap);
   }
 }
 
-// Polarisation lens selector — for switchable products, toggling updates the price display
+// Polarisation lens selector — uses v4.2 variant fields directly (no string hacks)
 function buildLensSelector(activeP) {
   const sec = document.getElementById('lens-section');
   const ls  = document.getElementById('lens-selector');
@@ -1734,77 +1714,90 @@ function buildLensSelector(activeP) {
   }
 
   if (status === 'switchable') {
-    // Build price lookup from variants
-    const variantPrices = {};
-    for (const v of (activeP.variants || [])) {
-      const opt3 = (v.option3 || '').toLowerCase();
-      if (opt3.includes('non')) variantPrices['Non-Polarised'] = parseFloat(v.price) || 0;
-      else if (opt3.includes('polar')) variantPrices['Polarised'] = parseFloat(v.price) || 0;
+    // Index variants by is_polarised boolean (v4.2) — no option3 string parsing needed
+    const lensMap = {}; // { 'Polarised': variant, 'Non-Polarised': variant }
+    for (const v of activeP.variants) {
+      const key = v.is_polarised ? 'Polarised' : 'Non-Polarised';
+      if (!lensMap[key]) lensMap[key] = v;
     }
 
-    const options = ['Polarised', 'Non-Polarised'];
     const pills = [];
 
-    const updatePrice = (selectedLens) => {
-      const pr = variantPrices[selectedLens];
-      if (pr > 0) {
-        document.getElementById('modal-price').textContent = '€' + pr.toFixed(2);
+    // Updates price, store URL and stock badge for the selected lens variant
+    const updateSelection = (key) => {
+      const v = lensMap[key];
+      if (!v) return;
+      // Price
+      document.getElementById('modal-price').textContent = '€' + Number(v.price).toFixed(2);
+      // "View on store" with correct ?variant= param  ← BUG 1 FIX
+      document.getElementById('modal-visit').href = v.variant_url || activeP.url;
+      // Per-variant stock badge  ← BUG 3 FIX
+      const stockEl = document.querySelector('#modal-meta .val[data-stock]');
+      if (stockEl) {
+        stockEl.textContent = v.available ? 'In Stock' : 'Out of Stock';
+        stockEl.style.color = v.available ? '#000' : '#aaa';
       }
     };
 
-    options.forEach((lbl, idx) => {
-      const pill = document.createElement('button');
-      pill.className = 'lens-pill' + (idx === 0 ? ' active' : '');
-      pill.textContent = lbl;
-      if (variantPrices[lbl] > 0) {
-        pill.title = '€' + variantPrices[lbl].toFixed(2);
+    ['Polarised', 'Non-Polarised'].forEach((lbl, idx) => {
+      const v     = lensMap[lbl];
+      const avail = v?.available !== false;
+      const pill  = document.createElement('button');
+      pill.className = 'lens-pill' + (idx === 0 ? ' active' : '') + (!avail ? ' unavail' : '');
+      pill.textContent = lbl + (!avail ? ' (OOS)' : '');
+      if (v?.price) pill.title = '€' + Number(v.price).toFixed(2);
+
+      if (!avail) {
+        pill.disabled = true;
+      } else {
+        pill.addEventListener('click', () => {
+          pills.forEach(p => p.classList.remove('active'));
+          pill.classList.add('active');
+          updateSelection(lbl);
+        });
       }
-      pill.addEventListener('click', () => {
-        pills.forEach(p => p.classList.remove('active'));
-        pill.classList.add('active');
-        updatePrice(lbl);
-      });
       ls.appendChild(pill);
       pills.push(pill);
     });
 
-    // Set initial price to Polarised
-    updatePrice('Polarised');
+    // Init: prefer Polarised if available, otherwise Non-Polarised  ← BUG 5 FIX
+    const initKey = lensMap['Polarised']?.available !== false ? 'Polarised' : 'Non-Polarised';
+    pills.forEach(p => p.classList.toggle('active', p.textContent.startsWith(initKey)));
+    updateSelection(initKey);
     return;
   }
 }
 
-// 4-tab structure — Description always from raw.description, others from tabs if available
+// 4-tab structure — v4.2 tabs are fully populated; size_guide has images[] array
 function buildTabs(p) {
   const tabBar     = document.getElementById('tab-bar');
   const tabContent = document.getElementById('tab-content');
   tabBar.innerHTML = ''; tabContent.innerHTML = '';
 
-  const stripHtml = html => (html || '').replace(/<[^>]*>/g,' ').replace(/\s+/g,' ').trim();
+  const stripHtml = html => (html || '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
 
-  // Description: always use the real product description (tabs.description is "ABOUT US" junk)
   const descText = p.descFallback || '';
-
-  // Other tabs: only show if tabs object has real content
-  const matText  = stripHtml(p.tabs?.materials?.content_text  || p.tabs?.materials?.content_html  || '');
-  const dimText  = stripHtml(p.tabs?.dimensions?.content_text || p.tabs?.dimensions?.content_html || '');
+  const matText  = stripHtml(p.tabs?.materials?.content_text || p.tabs?.materials?.content_html || '');
   const shipText = stripHtml(p.tabs?.shipping_and_customs?.content_text || p.tabs?.shipping_and_customs?.content_html || '');
-  const dimHtml  = p.tabs?.dimensions?.content_html || '';
+
+  // Dimensions: use size_guide (not .dimensions — that key never existed)
+  // Prefer the structured images[] array; fall back to stripped text
+  const sg       = p.tabs?.size_guide;
+  const sgImages = Array.isArray(sg?.images) ? sg.images : [];
+  const sgText   = stripHtml(sg?.content_text || sg?.content_html || '');
+  const hasDim   = sgImages.length > 0 || sgText.length > 5;
 
   const TAB_DATA = [
-    { label: 'Description', text: descText, html: null },
-    ...(matText  && matText.length > 5  ? [{ label: 'Materials',         text: matText,  html: null  }] : []),
-    ...(dimText  && dimText.length > 5  ? [{ label: 'Dimensions',        text: dimText,  html: dimHtml  }] : []),
-    ...(shipText && shipText.length > 5 ? [{ label: 'Shipping & Customs',text: shipText, html: null  }] : []),
+    { label: 'Description',      text: descText, images: null      },
+    ...(matText.length > 5 ? [{ label: 'Materials',          text: matText,  images: null      }] : []),
+    ...(hasDim             ? [{ label: 'Dimensions',         text: sgText,   images: sgImages  }] : []),
+    ...(shipText.length > 5? [{ label: 'Shipping & Customs', text: shipText, images: null      }] : []),
   ];
 
-  if (TAB_DATA.length === 0 || !descText) {
-    document.getElementById('tabs-section').style.display = 'none';
-    return;
-  }
+  if (!descText) { document.getElementById('tabs-section').style.display = 'none'; return; }
   document.getElementById('tabs-section').style.display = '';
 
-  TAB_DATA.forEach(({ label, text, html }, i) => {
+  TAB_DATA.forEach(({ label, text, images }, i) => {
     const btn = document.createElement('button');
     btn.className = 'tab-btn' + (i === 0 ? ' active' : '');
     btn.textContent = label;
@@ -1813,13 +1806,16 @@ function buildTabs(p) {
     const panel = document.createElement('div');
     panel.className = 'tab-panel' + (i === 0 ? ' active' : '');
 
-    if (html && html.includes('<img')) {
-      // Dimensions: render images
-      panel.innerHTML = html;
-      // Make images responsive
-      panel.querySelectorAll('img').forEach(img => {
-        img.style.maxWidth = '100%'; img.style.height = 'auto'; img.loading = 'lazy';
+    if (images && images.length > 0) {
+      // Dimensions: render structured images[] from size_guide
+      images.forEach(({ src, alt }) => {
+        const img = document.createElement('img');
+        img.src = src; img.alt = alt || '';
+        img.style.cssText = 'max-width:100%;height:auto;display:block;margin-bottom:8px;border-radius:3px';
+        img.loading = 'lazy';
+        panel.appendChild(img);
       });
+      if (text) { const t = document.createElement('p'); t.style.marginTop = '4px'; t.textContent = text; panel.appendChild(t); }
     } else {
       panel.textContent = text;
     }
@@ -1860,7 +1856,7 @@ function buildRecommendations(p) {
 
     // Click: open in modal if found in dataset, else visit URL
     card.addEventListener('click', () => {
-      const found = r.id && window._productById?.[r.id];
+      const found = r.id && productById[r.id];
       if (found) populateModal(found);
       else if (r.url) window.open(r.url, '_blank');
     });
