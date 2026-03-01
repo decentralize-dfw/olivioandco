@@ -1,0 +1,398 @@
+{
+  "tab_structures": [
+    {
+      "type": "details",
+      "location": "PRODUCT",
+      "summary_text": "",
+      "element_classes": "drawer__container",
+      "parent_classes": "drawer drawer--left header__drawer mobile-drawer large-up-hide",
+      "parent_tag": "header-drawer",
+      "content_length": 1067
+    },
+    {
+      "type": "details",
+      "location": "PRODUCT",
+      "summary_text": "SUNGLASSES",
+      "element_classes": "accordion__section",
+      "parent_classes": "drawer__menu-item",
+      "parent_tag": "li",
+      "content_length": 189
+    },
+    {
+      "type": "details",
+      "location": "PRODUCT",
+      "summary_text": "SPORT SUNGLASSES",
+      "element_classes": "accordion__section",
+      "parent_classes": "drawer__menu-item",
+      "parent_tag": "li",
+      "content_length": 83
+    },
+    {
+      "type": "details",
+      "location": "PRODUCT",
+      "summary_text": "SCREEN GLASSES",
+      "element_classes": "accordion__section",
+      "parent_classes": "drawer__menu-item",
+      "parent_tag": "li",
+      "content_length": 69
+    },
+    {
+      "type": "details",
+      "location": "PRODUCT",
+      "summary_text": "EUR | €",
+      "element_classes": "drawer__container",
+      "parent_classes": "drawer",
+      "parent_tag": "menu-drawer",
+      "content_length": 652
+    },
+    {
+      "type": "details",
+      "location": "PRODUCT",
+      "summary_text": "",
+      "element_classes": "drawer__container",
+      "parent_classes": "drawer",
+      "parent_tag": "desktop-drawer",
+      "content_length": 45
+    },
+    {
+      "type": "details",
+      "location": "PRODUCT",
+      "summary_text": "",
+      "element_classes": "dropdown disclosure-has-popup no-js-hidden",
+      "parent_classes": "",
+      "parent_tag": "template",
+      "content_length": 0
+    },
+    {
+      "type": "details",
+      "location": "PRODUCT",
+      "summary_text": "",
+      "element_classes": "dropdown disclosure-has-popup no-js-hidden",
+      "parent_classes": "",
+      "parent_tag": "template",
+      "content_length": 0
+    },
+    {
+      "type": "details",
+      "location": "PRODUCT",
+      "summary_text": "",
+      "element_classes": "dropdown disclosure-has-popup no-js-hidden",
+      "parent_classes": "",
+      "parent_tag": "template",
+      "content_length": 0
+    },
+    {
+      "type": "details",
+      "location": "PRODUCT",
+      "summary_text": "",
+      "element_classes": "dropdown disclosure-has-popup no-js-hidden",
+      "parent_classes": "",
+      "parent_tag": "template",
+      "content_length": 0
+    },
+    {
+      "type": "details",
+      "location": "PRODUCT",
+      "summary_text": "",
+      "element_classes": "dropdown disclosure-has-popup no-js-hidden",
+      "parent_classes": "",
+      "parent_tag": "template",
+      "content_length": 0
+    },
+    {
+      "type": "details",
+      "location": "PRODUCT",
+      "summary_text": "",
+      "element_classes": "dropdown disclosure-has-popup no-js-hidden",
+      "parent_classes": "",
+      "parent_tag": "template",
+      "content_length": 0
+    },
+    {
+      "type": "details",
+      "location": "FOOTER",
+      "summary_text": "SHOP",
+      "element_classes": "accordion__section footer__links-details",
+      "parent_classes": "footer__links-mobile-item",
+      "parent_tag": "li",
+      "content_length": 66
+    },
+    {
+      "type": "details",
+      "location": "FOOTER",
+      "summary_text": "SUPPORT",
+      "element_classes": "accordion__section footer__links-details",
+      "parent_classes": "footer__links-mobile-item",
+      "parent_tag": "li",
+      "content_length": 106
+    },
+    {
+      "type": "details",
+      "location": "FOOTER",
+      "summary_text": "ABOUT US",
+      "element_classes": "accordion__section footer__links-details",
+      "parent_classes": "footer__links-mobile-item",
+      "parent_tag": "li",
+      "content_length": 25
+    },
+    {
+      "type": "details",
+      "location": "PRODUCT",
+      "summary_text": "",
+      "element_classes": "drawer__container",
+      "parent_classes": "drawer drawer--left header__drawer mobile-drawer large-up-hide",
+      "parent_tag": "header-drawer",
+      "content_length": 1067
+    },
+    {
+      "type": "details",
+      "location": "PRODUCT",
+      "summary_text": "SUNGLASSES",
+      "element_classes": "accordion__section",
+      "parent_classes": "drawer__menu-item",
+      "parent_tag": "li",
+      "content_length": 189
+    },
+    {
+      "type": "details",
+      "location": "PRODUCT",
+      "summary_text": "SPORT SUNGLASSES",
+      "element_classes": "accordion__section",
+      "parent_classes": "drawer__menu-item",
+      "parent_tag": "li",
+      "content_length": 83
+    },
+    {
+      "type": "details",
+      "location": "PRODUCT",
+      "summary_text": "SCREEN GLASSES",
+      "element_classes": "accordion__section",
+      "parent_classes": "drawer__menu-item",
+      "parent_tag": "li",
+      "content_length": 69
+    },
+    {
+      "type": "details",
+      "location": "PRODUCT",
+      "summary_text": "EUR | €",
+      "element_classes": "drawer__container",
+      "parent_classes": "drawer",
+      "parent_tag": "menu-drawer",
+      "content_length": 652
+    },
+    {
+      "type": "details",
+      "location": "PRODUCT",
+      "summary_text": "",
+      "element_classes": "drawer__container",
+      "parent_classes": "drawer",
+      "parent_tag": "desktop-drawer",
+      "content_length": 45
+    },
+    {
+      "type": "details",
+      "location": "PRODUCT",
+      "summary_text": "",
+      "element_classes": "dropdown disclosure-has-popup no-js-hidden",
+      "parent_classes": "",
+      "parent_tag": "template",
+      "content_length": 0
+    },
+    {
+      "type": "details",
+      "location": "PRODUCT",
+      "summary_text": "",
+      "element_classes": "dropdown disclosure-has-popup no-js-hidden",
+      "parent_classes": "",
+      "parent_tag": "template",
+      "content_length": 0
+    },
+    {
+      "type": "details",
+      "location": "PRODUCT",
+      "summary_text": "",
+      "element_classes": "dropdown disclosure-has-popup no-js-hidden",
+      "parent_classes": "",
+      "parent_tag": "template",
+      "content_length": 0
+    },
+    {
+      "type": "details",
+      "location": "PRODUCT",
+      "summary_text": "",
+      "element_classes": "dropdown disclosure-has-popup no-js-hidden",
+      "parent_classes": "",
+      "parent_tag": "template",
+      "content_length": 0
+    },
+    {
+      "type": "details",
+      "location": "FOOTER",
+      "summary_text": "SHOP",
+      "element_classes": "accordion__section footer__links-details",
+      "parent_classes": "footer__links-mobile-item",
+      "parent_tag": "li",
+      "content_length": 66
+    },
+    {
+      "type": "details",
+      "location": "FOOTER",
+      "summary_text": "SUPPORT",
+      "element_classes": "accordion__section footer__links-details",
+      "parent_classes": "footer__links-mobile-item",
+      "parent_tag": "li",
+      "content_length": 106
+    },
+    {
+      "type": "details",
+      "location": "FOOTER",
+      "summary_text": "ABOUT US",
+      "element_classes": "accordion__section footer__links-details",
+      "parent_classes": "footer__links-mobile-item",
+      "parent_tag": "li",
+      "content_length": 25
+    },
+    {
+      "type": "details",
+      "location": "PRODUCT",
+      "summary_text": "",
+      "element_classes": "drawer__container",
+      "parent_classes": "drawer drawer--left header__drawer mobile-drawer large-up-hide",
+      "parent_tag": "header-drawer",
+      "content_length": 1067
+    },
+    {
+      "type": "details",
+      "location": "PRODUCT",
+      "summary_text": "SUNGLASSES",
+      "element_classes": "accordion__section",
+      "parent_classes": "drawer__menu-item",
+      "parent_tag": "li",
+      "content_length": 189
+    },
+    {
+      "type": "details",
+      "location": "PRODUCT",
+      "summary_text": "SPORT SUNGLASSES",
+      "element_classes": "accordion__section",
+      "parent_classes": "drawer__menu-item",
+      "parent_tag": "li",
+      "content_length": 83
+    },
+    {
+      "type": "details",
+      "location": "PRODUCT",
+      "summary_text": "SCREEN GLASSES",
+      "element_classes": "accordion__section",
+      "parent_classes": "drawer__menu-item",
+      "parent_tag": "li",
+      "content_length": 69
+    },
+    {
+      "type": "details",
+      "location": "PRODUCT",
+      "summary_text": "EUR | €",
+      "element_classes": "drawer__container",
+      "parent_classes": "drawer",
+      "parent_tag": "menu-drawer",
+      "content_length": 652
+    },
+    {
+      "type": "details",
+      "location": "PRODUCT",
+      "summary_text": "",
+      "element_classes": "drawer__container",
+      "parent_classes": "drawer",
+      "parent_tag": "desktop-drawer",
+      "content_length": 45
+    },
+    {
+      "type": "details",
+      "location": "PRODUCT",
+      "summary_text": "",
+      "element_classes": "dropdown disclosure-has-popup no-js-hidden",
+      "parent_classes": "",
+      "parent_tag": "template",
+      "content_length": 0
+    },
+    {
+      "type": "details",
+      "location": "PRODUCT",
+      "summary_text": "",
+      "element_classes": "dropdown disclosure-has-popup no-js-hidden",
+      "parent_classes": "",
+      "parent_tag": "template",
+      "content_length": 0
+    },
+    {
+      "type": "details",
+      "location": "PRODUCT",
+      "summary_text": "",
+      "element_classes": "dropdown disclosure-has-popup no-js-hidden",
+      "parent_classes": "",
+      "parent_tag": "template",
+      "content_length": 0
+    },
+    {
+      "type": "details",
+      "location": "PRODUCT",
+      "summary_text": "",
+      "element_classes": "dropdown disclosure-has-popup no-js-hidden",
+      "parent_classes": "",
+      "parent_tag": "template",
+      "content_length": 0
+    },
+    {
+      "type": "details",
+      "location": "FOOTER",
+      "summary_text": "SHOP",
+      "element_classes": "accordion__section footer__links-details",
+      "parent_classes": "footer__links-mobile-item",
+      "parent_tag": "li",
+      "content_length": 66
+    },
+    {
+      "type": "details",
+      "location": "FOOTER",
+      "summary_text": "SUPPORT",
+      "element_classes": "accordion__section footer__links-details",
+      "parent_classes": "footer__links-mobile-item",
+      "parent_tag": "li",
+      "content_length": 106
+    },
+    {
+      "type": "details",
+      "location": "FOOTER",
+      "summary_text": "ABOUT US",
+      "element_classes": "accordion__section footer__links-details",
+      "parent_classes": "footer__links-mobile-item",
+      "parent_tag": "li",
+      "content_length": 25
+    }
+  ],
+  "swatch_structures": [],
+  "image_structures": [],
+  "recommendation_structures": [],
+  "raw_class_inventory": {},
+  "script_variables": [
+    "__st",
+    "item",
+    "payload",
+    "meta",
+    "Monorail",
+    "csapps",
+    "__st",
+    "item",
+    "payload",
+    "meta",
+    "Monorail",
+    "csapps",
+    "__st",
+    "item",
+    "payload",
+    "meta",
+    "Monorail",
+    "csapps"
+  ],
+  "footer_boundary": true
+}
