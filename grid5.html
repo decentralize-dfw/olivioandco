@@ -398,27 +398,28 @@
     }
     .modal-sec { padding: 12px 16px; border-bottom: 1px solid #eee; }
     .modal-sec:last-child { border-bottom: none; }
-    #modal-title { font-size: 14px; font-weight: 700; line-height: 1.4; padding-right: 28px; }
+    #modal-title { font-size: 14px; font-weight: 700; line-height: 1.4; padding-right: 28px;
+                   word-break: break-word; overflow-wrap: break-word; }
     .oos-badge   { color: #aaa; font-size: 12px; font-weight: 400; }
     #modal-price { font-size: 20px; font-weight: 800; }
     #modal-desc  { font-size: 11.5px; line-height: 1.65; color: #555; }
     .info-group  { display: flex; flex-direction: column; gap: 7px; }
-    .info-row    { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; font-size: 12px; }
+    .info-row    { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; font-size: 12px; min-width: 0; }
     .info-row .lbl { font-size: 10px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #999; flex-shrink: 0; }
-    .info-row .val { font-weight: 500; text-align: right; }
+    .info-row .val { font-weight: 500; text-align: right; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .color-lbl { font-size: 10px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #999; margin-bottom: 8px; }
     #color-selector { display: flex; flex-wrap: wrap; gap: 6px; }
 
-    /* Color swatch balls (CSS colors, no swatch images in data) */
+    /* Swatch balls — overflow:hidden clips background-image to the circle cleanly */
     .swatch-wrap {
       width: 24px; height: 24px; border-radius: 50%; flex-shrink: 0;
-      border: 2.5px solid transparent; cursor: pointer;
-      box-shadow: 0 0 0 1px rgba(0,0,0,0.18);
+      border: none; overflow: hidden; cursor: pointer;
+      box-shadow: 0 0 0 1.5px rgba(0,0,0,0.18);
       transition: transform .12s, box-shadow .12s;
     }
-    .swatch-wrap:hover  { transform: scale(1.15); }
-    .swatch-wrap.active { box-shadow: 0 0 0 2.5px #000; }
-    .swatch-wrap.oos    { opacity: .32; }
+    .swatch-wrap:hover  { transform: scale(1.18); box-shadow: 0 0 0 2px rgba(0,0,0,0.35); }
+    .swatch-wrap.active { box-shadow: 0 0 0 2.5px #000, 0 0 0 4px rgba(0,0,0,0.08); }
+    .swatch-wrap.oos    { opacity: .30; }
 
     /* Badges */
     .product-badges { display: flex; gap: 5px; flex-wrap: wrap; margin-top: 5px; }
@@ -444,9 +445,11 @@
     .lens-pill.active { border-color: #000; background: #000; color: #fff; }
     .lens-pill.unavail { opacity: 0.35; cursor: default; }
 
-    /* Flow mode — disable CSS card hover-scale so JS perspective scale is uncontested */
+    /* Flow mode — kill CSS transitions so JS scale updates every frame without lag.
+       We do NOT override hover transform here; the inline style.transform set by JS
+       already has higher specificity than the .element-card:hover rule, so the card
+       correctly stays frozen at its current perspective scale when paused. */
     .flow-active { transition: none !important; }
-    .flow-active:hover { transform: none !important; }
 
     /* Nav buttons visually disabled in flow mode */
     .nav-btn.flow-disabled { opacity: 0.32 !important; pointer-events: none !important; }
@@ -1279,30 +1282,30 @@ function enterFlowMode() {
   controls.enabled = false;
   TWEEN.removeAll();
 
-  // Snap camera to face straight down the tunnel (-Z direction)
-  new TWEEN.Tween(camera.position)
-    .to({x:0, y:0, z:FLOW_CAM_Z}, 900)
-    .easing(TWEEN.Easing.Cubic.Out).start();
-  new TWEEN.Tween(controls.target)
-    .to({x:0, y:0, z:0}, 900)
-    .easing(TWEEN.Easing.Cubic.Out).start();
+  // Hard-snap camera so the very first frame is perfectly straight-on.
+  // Tweening from the previous mode's position caused the "angled" look.
+  camera.position.set(0, 0, FLOW_CAM_Z);
+  camera.zoom = 1;
+  camera.updateProjectionMatrix();
+  controls.target.set(0, 0, 0);
+  controls.update(); // sync camera lookAt to new target
 
-  // Scatter all cards through the tunnel so the stream feels full from frame 1
+  // Scatter all cards through the tunnel at startup so the stream is full immediately.
+  // Wide X/Y spread (±2500, ±1500) fills the entire visible screen area.
   objects.forEach(obj => {
     obj.userData.active = true;
     obj.userData.flowZ     = FLOW_SPAWN_Z + Math.random() * FLOW_TUNNEL;
-    obj.userData.flowX     = (Math.random() - 0.5) * 2400;
-    obj.userData.flowY     = (Math.random() - 0.5) * 1600;
+    obj.userData.flowX     = (Math.random() - 0.5) * 5000;
+    obj.userData.flowY     = (Math.random() - 0.5) * 3000;
     obj.userData.flowSpeed = 30 + Math.random() * 50;
     obj.userData.center.set(0, 0, 0);
     obj.userData.offset.set(0, 0, 0);
-    // Disable CSS hover-scale so our JS perspective scale is authoritative
     obj.userData.cardEl.classList.add('flow-active');
     obj.userData.cardEl.style.pointerEvents = 'auto';
     obj.userData.cardEl.classList.remove('hiding');
   });
 
-  // Disable group-by and filter buttons during flow
+  // Grey-out group + filter buttons during flow
   document.querySelectorAll('.nav-btn[data-type="group"]')
     .forEach(b => b.classList.add('flow-disabled'));
   document.getElementById('filter-toggle-btn').classList.add('flow-disabled');
@@ -1395,20 +1398,22 @@ function animate() {
       objects.forEach(obj => {
         obj.userData.flowZ += obj.userData.flowSpeed;
 
-        // Card passed camera → teleport back to the far end with new lane
+        // Card passed camera → teleport back to far end with a fresh lane
         if (obj.userData.flowZ > FLOW_LOOP_Z) {
           obj.userData.flowZ     = FLOW_SPAWN_Z - Math.random() * 1500;
-          obj.userData.flowX     = (Math.random() - 0.5) * 2400;
-          obj.userData.flowY     = (Math.random() - 0.5) * 1600;
+          obj.userData.flowX     = (Math.random() - 0.5) * 5000;
+          obj.userData.flowY     = (Math.random() - 0.5) * 3000;
           obj.userData.flowSpeed = 30 + Math.random() * 50;
         }
 
         obj.position.set(obj.userData.flowX, obj.userData.flowY, obj.userData.flowZ);
         obj.rotation.set(0, 0, 0);
 
-        // Simulate perspective depth: quadratic scale from 0.05 (far) to 3.5 (near)
+        // Perspective scale: normZ^1.5 * 5 → grows from 0.05 (tiny dot) to 5×
+        // (5× = 775 px, fills 1080p screen height). Exponential feel: slow when
+        // far, explosive growth as it rushes past the camera.
         const normZ = Math.min(1, Math.max(0, (obj.userData.flowZ - FLOW_SPAWN_Z) / FLOW_TUNNEL));
-        const scale = Math.max(0.05, normZ * normZ * 3.5);
+        const scale = Math.max(0.05, Math.pow(normZ, 1.5) * 5);
         obj.userData.cardEl.style.transform = `scale(${scale.toFixed(3)})`;
       });
     }
@@ -1471,7 +1476,7 @@ function setupMenuButtons() {
           .forEach(b => b.classList.remove('active'));
 
         if (state.view === 'flat') buildFlatGrid();
-        else if (state.view !== 'flow') updateLayout();
+        else if (state.view !== 'flow') { updateLayout(); scheduleAutoFit(); }
         return;
       }
 
@@ -1495,8 +1500,9 @@ function setupMenuButtons() {
       } else if (val === 'flow') {
         enterFlowMode();
       } else {
-        // grid or sphere
+        // grid or sphere — layout tweens take 2300 ms; fit after they settle
         updateLayout();
+        scheduleAutoFit();
       }
     });
   });
@@ -1620,6 +1626,15 @@ function fitView() {
     .easing(TWEEN.Easing.Cubic.Out)
     .onUpdate(() => camera.updateProjectionMatrix())
     .start();
+}
+
+// Auto-fit after any layout tween (tweens take 2300 ms)
+let _autoFitTimer = null;
+function scheduleAutoFit() {
+  clearTimeout(_autoFitTimer);
+  _autoFitTimer = setTimeout(() => {
+    if (state.view !== 'flow' && state.view !== 'flat') fitView();
+  }, 2500);
 }
 
 function setupFitButton() {
@@ -1816,6 +1831,48 @@ function buildLensSelector(activeP) {
   }
 }
 
+// ── Tab content renderers ─────────────────────────────────────────────
+
+// Renders plain text as <p> paragraphs (split on double-newlines first, then single)
+function renderParagraphs(text, container) {
+  // Try double-newline paragraph split first
+  let paras = text.split(/\r?\n\r?\n+/).map(s => s.trim()).filter(Boolean);
+  // Fall back to single-newline split if no double-newlines found
+  if (paras.length <= 1) paras = text.split(/\r?\n/).map(s => s.trim()).filter(Boolean);
+  if (paras.length === 0) { container.textContent = text; return; }
+  paras.forEach(pt => {
+    const p = document.createElement('p');
+    p.style.margin = '0 0 0.65em';
+    p.textContent = pt;
+    container.appendChild(p);
+  });
+}
+
+// Renders shipping text as a bullet list; linkifies "Return & Refund" occurrences
+function renderShipping(text, container) {
+  const lines = text.split(/\r?\n/).map(s => s.trim()).filter(Boolean);
+  if (lines.length <= 1) { renderParagraphs(text, container); return; }
+  const ul = document.createElement('ul');
+  ul.style.cssText = 'margin:0; padding-left:1.3em; list-style:disc;';
+  for (const line of lines) {
+    const li = document.createElement('li');
+    li.style.marginBottom = '5px';
+    // Detect Return/Refund mentions → turn into a clickable link
+    if (/return|refund/i.test(line)) {
+      const a = document.createElement('a');
+      a.href = 'https://olivioandco.eu/pages/return-refund';
+      a.target = '_blank'; a.rel = 'noopener';
+      a.style.cssText = 'color:#000; font-weight:700; text-decoration:underline;';
+      a.textContent = line;
+      li.appendChild(a);
+    } else {
+      li.textContent = line;
+    }
+    ul.appendChild(li);
+  }
+  container.appendChild(ul);
+}
+
 // Auto-fit tab buttons to bar width — reduces font-size proportionally if buttons overflow
 function fitTabBar() {
   const bar  = document.getElementById('tab-bar');
@@ -1844,28 +1901,29 @@ function buildTabs(p) {
 
   const stripHtml = html => (html || '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
 
+  // Use content_text directly (preserves newlines for paragraph/bullet rendering).
+  // Fall back to HTML-stripped content_html only when content_text is missing.
   const descText = p.descFallback || '';
-  const matText  = stripHtml(p.tabs?.materials?.content_text || p.tabs?.materials?.content_html || '');
-  const shipText = stripHtml(p.tabs?.shipping_and_customs?.content_text || p.tabs?.shipping_and_customs?.content_html || '');
+  const matText  = (p.tabs?.materials?.content_text             || stripHtml(p.tabs?.materials?.content_html             || '')).trim();
+  const shipText = (p.tabs?.shipping_and_customs?.content_text  || stripHtml(p.tabs?.shipping_and_customs?.content_html  || '')).trim();
 
-  // Dimensions: use size_guide (not .dimensions — that key never existed)
-  // Prefer the structured images[] array; fall back to stripped text
+  // Dimensions: size_guide with structured images[] array
   const sg       = p.tabs?.size_guide;
   const sgImages = Array.isArray(sg?.images) ? sg.images : [];
   const sgText   = stripHtml(sg?.content_text || sg?.content_html || '');
   const hasDim   = sgImages.length > 0 || sgText.length > 5;
 
   const TAB_DATA = [
-    { label: 'Description',      text: descText, images: null      },
-    ...(matText.length > 5 ? [{ label: 'Materials',          text: matText,  images: null      }] : []),
-    ...(hasDim             ? [{ label: 'Dimensions',         text: sgText,   images: sgImages  }] : []),
-    ...(shipText.length > 5? [{ label: 'Shipping & Customs', text: shipText, images: null      }] : []),
+    { label: 'Description',      text: descText, images: null,     type: 'para' },
+    ...(matText.length > 5  ? [{ label: 'Materials',          text: matText,  images: null,     type: 'para' }] : []),
+    ...(hasDim              ? [{ label: 'Dimensions',          text: sgText,   images: sgImages, type: 'dim'  }] : []),
+    ...(shipText.length > 5 ? [{ label: 'Shipping & Customs', text: shipText, images: null,     type: 'ship' }] : []),
   ];
 
   if (!descText) { document.getElementById('tabs-section').style.display = 'none'; return; }
   document.getElementById('tabs-section').style.display = '';
 
-  TAB_DATA.forEach(({ label, text, images }, i) => {
+  TAB_DATA.forEach(({ label, text, images, type }, i) => {
 
     const btn = document.createElement('button');
     btn.className = 'tab-btn' + (i === 0 ? ' active' : '');
@@ -1875,8 +1933,8 @@ function buildTabs(p) {
     const panel = document.createElement('div');
     panel.className = 'tab-panel' + (i === 0 ? ' active' : '');
 
-    if (images && images.length > 0) {
-      // Dimensions: render structured images[] from size_guide
+    if (type === 'dim' && images && images.length > 0) {
+      // Dimensions: show size-guide images then optional text
       images.forEach(({ src, alt }) => {
         const img = document.createElement('img');
         img.src = src; img.alt = alt || '';
@@ -1884,9 +1942,13 @@ function buildTabs(p) {
         img.loading = 'lazy';
         panel.appendChild(img);
       });
-      if (text) { const t = document.createElement('p'); t.style.marginTop = '4px'; t.textContent = text; panel.appendChild(t); }
+      if (text) renderParagraphs(text, panel);
+    } else if (type === 'ship') {
+      // Shipping: bullet list + Return & Refund link
+      renderShipping(text, panel);
     } else {
-      panel.textContent = text;
+      // Description / Materials: paragraph layout
+      renderParagraphs(text, panel);
     }
     tabContent.appendChild(panel);
 
