@@ -2,8 +2,82 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <title>Olivio&amp;Co — Product Catalog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0">
+  <title>Luxury Sunglasses &amp; Eyewear Catalog | Olivio&amp;Co</title>
+
+  <!-- SEO: Primary Meta Tags -->
+  <meta name="description" content="Explore Olivio&Co's premium eyewear collection. Interactive 3D product catalog with advanced search, real-time filters by shape, colour &amp; lens type. Shop luxury sunglasses with polarised lenses and UV protection.">
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+  <meta name="author" content="Olivio&amp;Co">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="Content-Language" content="en">
+  <meta name="theme-color" content="#ffffff">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Olivio&amp;Co">
+  <meta name="format-detection" content="telephone=no">
+
+  <!-- SEO: Canonical & Alternate Languages -->
+  <link rel="canonical" href="https://olivioandco.eu/products/catalog">
+  <link rel="alternate" hreflang="x-default" href="https://olivioandco.eu/products/catalog">
+  <link rel="alternate" hreflang="en" href="https://olivioandco.eu/products/catalog">
+  <link rel="alternate" hreflang="fr" href="https://olivioandco.eu/fr/products/catalog">
+
+  <!-- SEO: Favicon & Brand Assets -->
+  <link rel="icon" type="image/png" href="//olivioandco.eu/cdn/shop/files/1654081682-favicon-_2.png?crop=center&height=32&v=1692099300&width=32">
+  <link rel="apple-touch-icon" href="//olivioandco.eu/cdn/shop/files/1654081682-favicon-_2.png?crop=center&height=180&v=1692099300&width=180">
+
+  <!-- SEO: Open Graph (Social Sharing) -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://olivioandco.eu/products/catalog">
+  <meta property="og:title" content="Luxury Sunglasses &amp; Eyewear Catalog | Olivio&amp;Co">
+  <meta property="og:description" content="Interactive 3D product explorer for premium sunglasses. Advanced filters by shape, colour &amp; lens type. Polarised lenses, UV protection. Shop Olivio&amp;Co.">
+  <meta property="og:image" content="https://olivioandco.eu/cdn/shop/files/catalog-og-image.jpg?width=1200&height=630">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:site_name" content="Olivio&amp;Co Store">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:locale:alternate" content="fr_FR">
+
+  <!-- SEO: Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Luxury Sunglasses Catalog | Olivio&amp;Co">
+  <meta name="twitter:description" content="Interactive 3D sunglasses catalog with intelligent search and real-time filters.">
+  <meta name="twitter:image" content="https://olivioandco.eu/cdn/shop/files/catalog-og-image.jpg?width=1200&height=630">
+
+  <!-- SEO: Performance — DNS prefetch & preconnect -->
+  <link rel="dns-prefetch" href="https://cdn.shopify.com">
+  <link rel="dns-prefetch" href="https://olivioandco.eu">
+  <link rel="preconnect" href="https://cdn.shopify.com" crossorigin>
+
+  <!-- SEO: Verification Tags -->
+  <meta name="google-site-verification" content="h-rzQ2Y5KNPvrhrSGr0-ChWcJwSg4QSTZBtAs7PghJk">
+  <meta name="facebook-domain-verification" content="7j0pgoyy1kqm0valfjti8lokli9wtg">
+
+  <!-- SEO: Structured Data (Schema.org CollectionPage) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": "Luxury Sunglasses & Eyewear Catalog",
+    "description": "Interactive 3D product catalog featuring premium sunglasses and eyewear with detailed specifications, real-time filters, and polarised lens options.",
+    "url": "https://olivioandco.eu/products/catalog",
+    "isPartOf": {
+      "@type": "WebSite",
+      "name": "Olivio&Co Store",
+      "url": "https://olivioandco.eu"
+    },
+    "breadcrumb": {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home",     "item": "https://olivioandco.eu" },
+        { "@type": "ListItem", "position": 2, "name": "Products", "item": "https://olivioandco.eu/collections/all-sunglasses" },
+        { "@type": "ListItem", "position": 3, "name": "Catalog",  "item": "https://olivioandco.eu/products/catalog" }
+      ]
+    }
+  }
+  </script>
   <script>
     const THUMBNAIL_WIDTH = 200;
     const IMAGE_WIDTH     = 1200;
@@ -454,22 +528,19 @@
     /* Nav buttons visually disabled in flow mode */
     .nav-btn.flow-disabled { opacity: 0.32 !important; pointer-events: none !important; }
 
-    /* Tabs */
+    /* Tabs — buttons wrap to two lines if needed so every label is fully readable */
     #tab-bar {
       display: flex; gap: 0; border-bottom: 1px solid #eee; flex-shrink: 0;
-      overflow-x: auto; scrollbar-width: none;
     }
-    #tab-bar::-webkit-scrollbar { display: none; }
     .tab-btn {
-      /* flex: 1 + min-width: 0 lets JS fitTabBar() fill the bar evenly on desktop */
       flex: 1; min-width: 0; text-align: center;
-      padding: 7px 8px;
-      font-size: 10px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase;
+      padding: 6px 4px;
+      font-size: 9px; font-weight: 700; letter-spacing: 0.03em; text-transform: uppercase;
       background: none; border: none; border-bottom: 2px solid transparent;
       color: rgba(0,0,0,0.38); cursor: pointer; font-family: inherit;
       transition: color .12s, border-color .12s;
       margin-bottom: -1px;
-      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      white-space: normal; word-break: break-word; line-height: 1.25;
     }
     .tab-btn:hover  { color: #000; }
     .tab-btn.active { color: #000; border-bottom-color: #000; }
@@ -479,6 +550,10 @@
       padding: 12px 16px; font-size: 11.5px; line-height: 1.65; color: #555;
       overflow-y: auto; scrollbar-width: thin; scrollbar-color: #ddd transparent;
     }
+    /* Paragraph + list spacing inside tab panels */
+    #tab-content p { margin: 0 0 0.6em; }
+    #tab-content ul { margin: 0.3em 0 0.6em; padding-left: 1.2em; list-style: disc; }
+    #tab-content li { margin-bottom: 4px; }
 
     /* Recommendations */
     #reco-section { flex-shrink: 0; }
@@ -1833,38 +1908,154 @@ function buildLensSelector(activeP) {
 
 // ── Tab content renderers ─────────────────────────────────────────────
 
-// Renders plain text as <p> paragraphs (split on double-newlines first, then single)
+// Safe inline tags to preserve when copying content from Shopify HTML
+const SAFE_INLINE = new Set(['A','B','STRONG','EM','I','BR','SPAN']);
+
+// Copy safe inline children (text + <a>, <b>…) from src node into dst element.
+// This lets us preserve Shopify's own <a href="/pages/return-refund">link</a> tags.
+function sanitizeInline(src, dst) {
+  src.childNodes.forEach(node => {
+    if (node.nodeType === Node.TEXT_NODE) {
+      dst.appendChild(document.createTextNode(node.textContent));
+    } else if (node.nodeType === Node.ELEMENT_NODE) {
+      if (node.tagName === 'A') {
+        const a = document.createElement('a');
+        let href = node.getAttribute('href') || '#';
+        if (href.startsWith('/')) href = 'https://olivioandco.eu' + href;
+        a.href = href; a.target = '_blank'; a.rel = 'noopener';
+        a.style.cssText = 'color:#000;font-weight:700;text-decoration:underline';
+        sanitizeInline(node, a);          // preserve nested text/formatting
+        dst.appendChild(a);
+      } else if (SAFE_INLINE.has(node.tagName)) {
+        const el = document.createElement(
+          node.tagName === 'STRONG' ? 'b' : node.tagName.toLowerCase()
+        );
+        sanitizeInline(node, el);
+        dst.appendChild(el);
+      } else {
+        sanitizeInline(node, dst);        // unknown tag → pass through children
+      }
+    }
+  });
+  if (!dst.hasChildNodes()) dst.textContent = src.textContent.trim();
+}
+
+// Parse Shopify content_html into structured <p> + <ul> elements.
+// Returns true if anything was rendered, false if the HTML had no block structure.
+function renderFromHtml(html, container) {
+  if (!html || !html.trim()) return false;
+  const tmp = document.createElement('div');
+  tmp.innerHTML = html;
+  let produced = 0;
+
+  const walk = (parent) => {
+    parent.childNodes.forEach(node => {
+      if (node.nodeType === Node.TEXT_NODE) {
+        const t = node.textContent.trim();
+        if (t) { const p = document.createElement('p'); p.textContent = t; container.appendChild(p); produced++; }
+        return;
+      }
+      if (node.nodeType !== Node.ELEMENT_NODE) return;
+      const tag = node.tagName;
+
+      if (tag === 'UL' || tag === 'OL') {
+        const ul = document.createElement('ul');
+        node.querySelectorAll(':scope > li').forEach(li => {
+          const liEl = document.createElement('li');
+          sanitizeInline(li, liEl);
+          if (liEl.textContent.trim()) ul.appendChild(liEl);
+        });
+        if (ul.children.length) { container.appendChild(ul); produced++; }
+
+      } else if (tag === 'LI') {
+        // orphan <li> (not wrapped in <ul>) — treat as one-item list
+        const ul = document.createElement('ul');
+        const liEl = document.createElement('li');
+        sanitizeInline(node, liEl);
+        if (liEl.textContent.trim()) { ul.appendChild(liEl); container.appendChild(ul); produced++; }
+
+      } else if (tag === 'P' || tag === 'DIV' || tag === 'SECTION') {
+        if (node.querySelector('ul,ol,li,p')) { walk(node); }
+        else {
+          const t = node.textContent.trim();
+          if (t) {
+            const p = document.createElement('p');
+            sanitizeInline(node, p);
+            if (p.textContent.trim()) { container.appendChild(p); produced++; }
+          }
+        }
+      } else if (/^H[1-6]$/.test(tag)) {
+        const t = node.textContent.trim();
+        if (t) {
+          const p = document.createElement('p');
+          p.style.fontWeight = '700';
+          p.textContent = t;
+          container.appendChild(p); produced++;
+        }
+      } else if (tag === 'BR' || tag === 'HR') {
+        // skip
+      } else {
+        // any other block: recurse
+        if (node.children.length) walk(node);
+        else { const t = node.textContent.trim(); if (t) { const p = document.createElement('p'); p.textContent = t; container.appendChild(p); produced++; } }
+      }
+    });
+  };
+
+  walk(tmp);
+  return produced > 0;
+}
+
+// Plain-text paragraph renderer (fallback when content_html is absent).
+// First block → <p>, subsequent single-line items → <ul> bullet list (Image-1 style).
 function renderParagraphs(text, container) {
-  // Try double-newline paragraph split first
-  let paras = text.split(/\r?\n\r?\n+/).map(s => s.trim()).filter(Boolean);
-  // Fall back to single-newline split if no double-newlines found
-  if (paras.length <= 1) paras = text.split(/\r?\n/).map(s => s.trim()).filter(Boolean);
-  if (paras.length === 0) { container.textContent = text; return; }
-  paras.forEach(pt => {
-    const p = document.createElement('p');
-    p.style.margin = '0 0 0.65em';
-    p.textContent = pt;
-    container.appendChild(p);
+  if (!text.trim()) return;
+  // Double-newline → true paragraph boundaries
+  let blocks = text.split(/\r?\n\r?\n+/).map(s => s.trim()).filter(Boolean);
+  if (blocks.length <= 1 && text.includes('\n')) {
+    // No double-newlines: split on single newline
+    blocks = text.split(/\r?\n/).map(s => s.trim()).filter(Boolean);
+    if (blocks.length > 1) {
+      // First item as prose paragraph, remainder as bullet list
+      const p = document.createElement('p'); p.textContent = blocks[0]; container.appendChild(p);
+      const ul = document.createElement('ul');
+      blocks.slice(1).forEach(line => { const li = document.createElement('li'); li.textContent = line; ul.appendChild(li); });
+      if (ul.children.length) container.appendChild(ul);
+      return;
+    }
+  }
+  blocks.forEach((b, idx) => {
+    const lines = b.split(/\r?\n/).map(s => s.trim()).filter(Boolean);
+    if (lines.length > 1 && idx > 0) {
+      // Second+ block with multiple lines → bullet list
+      const ul = document.createElement('ul');
+      lines.forEach(l => { const li = document.createElement('li'); li.textContent = l; ul.appendChild(li); });
+      container.appendChild(ul);
+    } else {
+      const p = document.createElement('p'); p.textContent = b; container.appendChild(p);
+    }
   });
 }
 
-// Renders shipping text as a bullet list; linkifies "Return & Refund" occurrences
+// Shipping tab: bullet list; for lines with "return/refund", only the word "link" is a hyperlink
 function renderShipping(text, container) {
   const lines = text.split(/\r?\n/).map(s => s.trim()).filter(Boolean);
-  if (lines.length <= 1) { renderParagraphs(text, container); return; }
+  if (!lines.length) return;
   const ul = document.createElement('ul');
-  ul.style.cssText = 'margin:0; padding-left:1.3em; list-style:disc;';
   for (const line of lines) {
     const li = document.createElement('li');
-    li.style.marginBottom = '5px';
-    // Detect Return/Refund mentions → turn into a clickable link
-    if (/return|refund/i.test(line)) {
+    const hasReturnRef = /return|refund/i.test(line);
+    const linkIdx      = hasReturnRef ? line.search(/\blink\b/i) : -1;
+    if (linkIdx >= 0) {
+      // Only the word "link" becomes a hyperlink — not the whole sentence
+      li.appendChild(document.createTextNode(line.slice(0, linkIdx)));
       const a = document.createElement('a');
       a.href = 'https://olivioandco.eu/pages/return-refund';
       a.target = '_blank'; a.rel = 'noopener';
-      a.style.cssText = 'color:#000; font-weight:700; text-decoration:underline;';
-      a.textContent = line;
+      a.style.cssText = 'color:#000;font-weight:700;text-decoration:underline';
+      a.textContent = line.slice(linkIdx, linkIdx + 4); // "link"
       li.appendChild(a);
+      li.appendChild(document.createTextNode(line.slice(linkIdx + 4)));
     } else {
       li.textContent = line;
     }
@@ -1901,11 +2092,13 @@ function buildTabs(p) {
 
   const stripHtml = html => (html || '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
 
-  // Use content_text directly (preserves newlines for paragraph/bullet rendering).
-  // Fall back to HTML-stripped content_html only when content_text is missing.
+  // Gather both html and text for each tab; html takes priority via renderFromHtml()
+  const descHtml = p.tabs?.description?.content_html || '';
   const descText = p.descFallback || '';
-  const matText  = (p.tabs?.materials?.content_text             || stripHtml(p.tabs?.materials?.content_html             || '')).trim();
-  const shipText = (p.tabs?.shipping_and_customs?.content_text  || stripHtml(p.tabs?.shipping_and_customs?.content_html  || '')).trim();
+  const matHtml  = p.tabs?.materials?.content_html || '';
+  const matText  = (p.tabs?.materials?.content_text || stripHtml(matHtml)).trim();
+  const shipHtml = p.tabs?.shipping_and_customs?.content_html || '';
+  const shipText = (p.tabs?.shipping_and_customs?.content_text || stripHtml(shipHtml)).trim();
 
   // Dimensions: size_guide with structured images[] array
   const sg       = p.tabs?.size_guide;
@@ -1914,16 +2107,16 @@ function buildTabs(p) {
   const hasDim   = sgImages.length > 0 || sgText.length > 5;
 
   const TAB_DATA = [
-    { label: 'Description',      text: descText, images: null,     type: 'para' },
-    ...(matText.length > 5  ? [{ label: 'Materials',          text: matText,  images: null,     type: 'para' }] : []),
-    ...(hasDim              ? [{ label: 'Dimensions',          text: sgText,   images: sgImages, type: 'dim'  }] : []),
-    ...(shipText.length > 5 ? [{ label: 'Shipping & Customs', text: shipText, images: null,     type: 'ship' }] : []),
+    { label: 'Description',      text: descText, html: descHtml, images: null,     type: 'para' },
+    ...(matText.length > 5  ? [{ label: 'Materials',          text: matText,  html: matHtml,  images: null,     type: 'para' }] : []),
+    ...(hasDim              ? [{ label: 'Dimensions',          text: sgText,   html: '',       images: sgImages, type: 'dim'  }] : []),
+    ...(shipText.length > 5 ? [{ label: 'Shipping & Customs', text: shipText, html: shipHtml, images: null,     type: 'ship' }] : []),
   ];
 
-  if (!descText) { document.getElementById('tabs-section').style.display = 'none'; return; }
+  if (!descText && !descHtml) { document.getElementById('tabs-section').style.display = 'none'; return; }
   document.getElementById('tabs-section').style.display = '';
 
-  TAB_DATA.forEach(({ label, text, images, type }, i) => {
+  TAB_DATA.forEach(({ label, text, html, images, type }, i) => {
 
     const btn = document.createElement('button');
     btn.className = 'tab-btn' + (i === 0 ? ' active' : '');
@@ -1944,11 +2137,34 @@ function buildTabs(p) {
       });
       if (text) renderParagraphs(text, panel);
     } else if (type === 'ship') {
-      // Shipping: bullet list + Return & Refund link
-      renderShipping(text, panel);
+      // Shipping: parse HTML first; fall back to plain-text bullet renderer
+      if (!renderFromHtml(html, panel)) {
+        renderShipping(text, panel);
+      } else {
+        // Post-process: lines with return/refund text but no <a> → link just the word "link"
+        panel.querySelectorAll('li').forEach(li => {
+          if (/return|refund/i.test(li.textContent) && !li.querySelector('a')) {
+            const t = li.textContent;
+            const linkIdx = t.search(/\blink\b/i);
+            if (linkIdx >= 0) {
+              li.innerHTML = '';
+              li.appendChild(document.createTextNode(t.slice(0, linkIdx)));
+              const a = document.createElement('a');
+              a.href = 'https://olivioandco.eu/pages/return-refund';
+              a.target = '_blank'; a.rel = 'noopener';
+              a.style.cssText = 'color:#000;font-weight:700;text-decoration:underline';
+              a.textContent = t.slice(linkIdx, linkIdx + 4);
+              li.appendChild(a);
+              li.appendChild(document.createTextNode(t.slice(linkIdx + 4)));
+            }
+          }
+        });
+      }
     } else {
-      // Description / Materials: paragraph layout
-      renderParagraphs(text, panel);
+      // Description / Materials: parse Shopify HTML; fall back to plain-text paragraphs
+      if (!renderFromHtml(html, panel)) {
+        renderParagraphs(text, panel);
+      }
     }
     tabContent.appendChild(panel);
 
