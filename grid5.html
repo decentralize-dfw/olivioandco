@@ -963,6 +963,9 @@
     <button class="nav-btn"        data-type="group" data-val="shape">Shape</button>
     <button class="nav-btn"        data-type="group" data-val="type">Type</button>
     <button class="nav-btn"        data-type="group" data-val="lens">Lens</button>
+    <div class="menu-sep"></div>
+    <a href="about-existing.html" class="nav-btn" style="text-decoration:none;">About</a>
+    <a href="blog/index.html"     class="nav-btn" style="text-decoration:none;">Blog</a>
   </div>
 
   <!-- Mobile row 1: view modes -->
@@ -975,6 +978,9 @@
     <button class="nav-btn"        data-type="view" data-val="sphere">Sphere</button>
     <button class="nav-btn"        data-type="view" data-val="flat">Flat</button>
     <button class="nav-btn"        data-type="view" data-val="flow">Flow</button>
+    <div class="menu-sep"></div>
+    <a href="about-existing.html" class="nav-btn" style="text-decoration:none;">About</a>
+    <a href="blog/index.html"     class="nav-btn" style="text-decoration:none;">Blog</a>
   </div>
 
   <!-- Mobile row 2: group -->
@@ -1011,7 +1017,7 @@
   <footer id="flat-footer">
     <a href="index.html">Home</a><span class="ft-sep">·</span>
     <a href="about-existing.html">About</a><span class="ft-sep">·</span>
-    <a href="blog/why-kids-need-sunglasses.html">Blog</a><span class="ft-sep">·</span>
+    <a href="blog/index.html">Blog</a><span class="ft-sep">·</span>
     <a href="https://olivioandco.eu" target="_blank" rel="noopener">olivioandco.eu ↗</a>
   </footer>
 </div>
@@ -1352,9 +1358,10 @@ function normaliseProduct(raw) {
   const isSwitchable = pol.is_switchable || false;
 
   // Collections
-  const isBestSeller  = 'best-seller' in allCols;
-  const bestSellerPos = isBestSeller ? (allCols['best-seller']?.position ?? 9999) : 9999;
-  const isFeatured    = 'news-2025' in allCols || col.is_featured === true;
+  const isBestSeller      = 'best-seller' in allCols;
+  const bestSellerPos     = isBestSeller ? (allCols['best-seller']?.position ?? 9999) : 9999;
+  const isFeatured        = 'news-2025' in allCols || col.is_featured === true;
+  const collectionHandles = Object.keys(allCols);
 
   return {
     id:          raw.id,
@@ -1379,6 +1386,7 @@ function normaliseProduct(raw) {
     isBestSeller,
     bestSellerPos,
     isFeatured,
+    collectionHandles,
     _base,
   };
 }
@@ -1388,6 +1396,7 @@ const state = {
   view:  'grid',
   group: 'all',
   search: '',
+  paramAge: null,   // set from ?age= URL param
   ticks: {
     age: new Set(), shape: new Set(), type: new Set(),
     lens: new Set(), stock: new Set(), collection: new Set()
@@ -1430,6 +1439,48 @@ fetch('https://decentralize-dfw.github.io/olivioandco/olivio_mega_v4_2_flat.json
 
     init();
     animate();
+
+    // Apply URL params (e.g. ?collection=creative-d&age=kids&type=ski)
+    (function applyUrlParams() {
+      const params = new URLSearchParams(window.location.search);
+      const collectionMap = {
+        'creative-d':    'creative-edition-d',
+        'coral-reef':    'coral-reef',
+        'citrus-garden': 'citrus-graden',
+        'greenhouse':    'greenhouse-sunglasses',
+        'deep-sea':      'deepseasunglasses',
+        'olympia':       'olympia',
+        'classic':       'classicsunglasses',
+        'ski-goggles':   'ski-goggles',
+        'screen':        'screenglasses',
+        'sport':         'sport-sunglasses',
+        'creative-shield':'creative-shield',
+        'breakfast-art': 'breakfast-art',
+      };
+      const ageMap = {
+        'baby':    'Baby',
+        'toddler': 'Toddler',
+        'kids':    'Kids',
+        'junior':  'Junior',
+        'teen':    'Teen & Adult',
+        'adult':   'Teen & Adult',
+      };
+      const typeMap = {
+        'ski':        'Ski Goggles',
+        'screen':     'Screen Glasses',
+        'sport':      'Sports Sunglasses',
+        'sunglasses': 'Sunglasses',
+      };
+      let changed = false;
+      const col = params.get('collection');
+      if (col && collectionMap[col]) { state.ticks.collection.add(collectionMap[col]); changed = true; }
+      const age = params.get('age');
+      if (age && ageMap[age]) { state.paramAge = ageMap[age]; changed = true; }
+      const type = params.get('type');
+      if (type && typeMap[type]) { state.ticks.type.add(typeMap[type]); changed = true; }
+      if (changed) { updateLayout(); scheduleAutoFit(); }
+    })();
+
     const l = document.getElementById('loader');
     l.style.opacity = '0';
     setTimeout(() => l.remove(), 400);
@@ -1601,8 +1652,16 @@ function visibleIndices() {
     if (tc.size > 0) {
       const wantFeat = tc.has('featured');
       const wantBest = tc.has('bestseller');
-      if (!(wantFeat && p.isFeatured) && !(wantBest && p.isBestSeller)) return false;
+      // Named collection handles (e.g. 'creative-edition-d', 'coral-reef')
+      const namedHandles = [...tc].filter(v => v !== 'featured' && v !== 'bestseller');
+      const matchFeat    = wantFeat && p.isFeatured;
+      const matchBest    = wantBest && p.isBestSeller;
+      const matchHandle  = namedHandles.length > 0 && namedHandles.some(h => p.collectionHandles.includes(h));
+      if (!matchFeat && !matchBest && !matchHandle) return false;
     }
+
+    // URL-param age filter (separate from tick UI, stored in state.paramAge)
+    if (state.paramAge && p.age !== state.paramAge) return false;
 
     return true;
   });
@@ -2147,7 +2206,7 @@ function setupSearch() {
     debounce = setTimeout(() => {
       state.search = input.value;
       if      (state.view === 'flat') buildFlatGrid();
-      else if (state.view !== 'flow') updateLayout();
+      else if (state.view !== 'flow') { updateLayout(); scheduleAutoFit(); }
     }, 120);
   });
   // Prevent drag while typing
