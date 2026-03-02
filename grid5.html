@@ -756,6 +756,119 @@
     }
     #modal-visit:hover { background: #000; color: #fff; }
 
+    /* ─── LOGO IN MENU BAR ──────────────────────────── */
+    .nav-logo-img {
+      display: flex; align-items: center;
+      flex-shrink: 0;
+    }
+    .nav-logo-img img {
+      height: 20px; width: auto; display: block;
+      opacity: 0.8; transition: opacity .15s;
+      user-select: none; pointer-events: auto;
+    }
+    .nav-logo-img:hover img { opacity: 1; }
+
+    /* ─── WELCOME POPUP ──────────────────────────────── */
+    #welcome-overlay {
+      position: fixed; inset: 0; z-index: 9000;
+      background: rgba(0,0,0,0.45); backdrop-filter: blur(4px);
+      display: flex; align-items: center; justify-content: center;
+      padding: 16px;
+      opacity: 0; visibility: hidden;
+      transition: opacity .25s, visibility .25s;
+    }
+    #welcome-overlay.open { opacity: 1; visibility: visible; }
+    #welcome-box {
+      background: #fff; border: 1px solid #000; border-radius: 12px;
+      width: 100%; max-width: 320px;
+      padding: 28px 24px 24px;
+      position: relative;
+      font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+    }
+    #welcome-close {
+      position: absolute; top: 12px; right: 12px;
+      background: none; border: 1px solid rgba(0,0,0,0.2); border-radius: 50%;
+      width: 26px; height: 26px; cursor: pointer; font-size: 12px;
+      display: flex; align-items: center; justify-content: center;
+      color: rgba(0,0,0,0.55); transition: background .12s, color .12s;
+    }
+    #welcome-close:hover { background: #000; color: #fff; border-color: #000; }
+    .wp-step { display: none; }
+    .wp-step.active { display: block; }
+    .wp-eyebrow {
+      font-size: 9px; font-weight: 800; letter-spacing: .14em;
+      text-transform: uppercase; color: rgba(0,0,0,0.38);
+      margin-bottom: 10px;
+    }
+    .wp-title {
+      font-size: 18px; font-weight: 800; letter-spacing: -.02em;
+      color: #000; margin-bottom: 6px; line-height: 1.2;
+    }
+    .wp-sub {
+      font-size: 12px; color: rgba(0,0,0,0.5); line-height: 1.5;
+      margin-bottom: 18px;
+    }
+    .wp-regions {
+      display: flex; gap: 8px; margin-bottom: 18px;
+    }
+    .wp-region {
+      flex: 1; display: flex; flex-direction: column; align-items: center; gap: 7px;
+      padding: 12px 8px;
+      border: 1px solid rgba(0,0,0,0.18); border-radius: 8px;
+      cursor: pointer; background: transparent;
+      transition: border-color .12s, background .12s;
+      font-family: inherit;
+    }
+    .wp-region img { width: 28px; height: 20px; object-fit: cover; border-radius: 2px; }
+    .wp-region span { font-size: 11px; font-weight: 700; color: rgba(0,0,0,0.55); letter-spacing: .04em; }
+    .wp-region.selected { border-color: #000; background: rgba(0,0,0,0.04); }
+    .wp-region.selected span { color: #000; }
+    .wp-btn {
+      display: block; width: 100%; padding: 10px;
+      background: #000; color: #fff; border: none; border-radius: 20px;
+      font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
+      cursor: pointer; transition: background .12s; font-family: inherit;
+    }
+    .wp-btn:hover { background: rgba(0,0,0,0.8); }
+    .wp-discount-badge {
+      display: inline-block;
+      background: #000; color: #fff;
+      font-size: 28px; font-weight: 900; letter-spacing: -.03em;
+      padding: 6px 14px; border-radius: 6px;
+      margin-bottom: 12px;
+    }
+    .wp-email {
+      width: 100%; padding: 9px 14px;
+      border: 1px solid rgba(0,0,0,0.2); border-radius: 20px;
+      font-size: 12px; font-family: inherit; outline: none;
+      margin-bottom: 10px; color: #000;
+      transition: border-color .15s;
+    }
+    .wp-email:focus { border-color: #000; }
+    .wp-email::placeholder { color: rgba(0,0,0,0.35); }
+    .wp-skip {
+      display: block; text-align: center; margin-top: 10px;
+      font-size: 10px; color: rgba(0,0,0,0.35); cursor: pointer;
+      background: none; border: none; font-family: inherit; letter-spacing: .04em;
+      text-transform: uppercase; transition: color .12s;
+    }
+    .wp-skip:hover { color: #000; }
+
+    /* ─── FLAT FOOTER ────────────────────────────────── */
+    #flat-footer {
+      text-align: center; padding: 28px 16px 16px;
+      font-size: 10px; color: rgba(0,0,0,0.32);
+      letter-spacing: .1em; text-transform: uppercase;
+      border-top: 1px solid rgba(0,0,0,0.07);
+      margin-top: 20px;
+    }
+    #flat-footer a {
+      color: rgba(0,0,0,0.32); text-decoration: none;
+      transition: color .12s;
+    }
+    #flat-footer a:hover { color: #000; }
+    #flat-footer .ft-sep { margin: 0 8px; opacity: 0.4; }
+
     /* ─── MOBILE ≤ 639px ─────────────────────────────── */
     @media (max-width: 639px) {
       #desktop-nav { display: none; }
@@ -789,6 +902,42 @@
 <!-- SEO: Accessible H1 (screen-reader + crawlers) -->
 <h1 class="sr-only">Kids Sunglasses &amp; UV400 Eyewear — Buy Toddler, Junior &amp; Teen Sunglasses | Olivio&amp;Co</h1>
 
+<!-- ── Welcome Popup ───────────────────────────────── -->
+<div id="welcome-overlay">
+  <div id="welcome-box">
+    <button id="welcome-close" aria-label="Close">✕</button>
+
+    <!-- Step 1: Region -->
+    <div class="wp-step active" id="wp-step1">
+      <div class="wp-eyebrow">Olivio&amp;Co</div>
+      <div class="wp-title">Select your region</div>
+      <div class="wp-sub">We'll show you prices and shipping options for your area.</div>
+      <div class="wp-regions">
+        <button class="wp-region" data-region="com" type="button">
+          <img src="https://cdn.shopify.com/s/files/1/0804/6411/8043/files/us.png?v=1728910229" alt="US flag">
+          <span>United States</span>
+        </button>
+        <button class="wp-region selected" data-region="eu" type="button">
+          <img src="https://cdn.shopify.com/s/files/1/0804/6411/8043/files/europe.png?v=1728910229" alt="Europe flag">
+          <span>Europe</span>
+        </button>
+      </div>
+      <button class="wp-btn" id="wp-continue">Continue →</button>
+    </div>
+
+    <!-- Step 2: Discount -->
+    <div class="wp-step" id="wp-step2">
+      <div class="wp-eyebrow">Welcome gift</div>
+      <div class="wp-discount-badge">10% OFF</div>
+      <div class="wp-title">Your first order</div>
+      <div class="wp-sub">Subscribe to our newsletter and get 10% off your first purchase.</div>
+      <input class="wp-email" type="email" id="wp-email" placeholder="your@email.com" autocomplete="email">
+      <button class="wp-btn" id="wp-claim">Claim 10% Off</button>
+      <button class="wp-skip" id="wp-skip">No thanks, continue without discount</button>
+    </div>
+  </div>
+</div>
+
 <!-- Loader -->
 <div id="loader">
   <div id="loader-title">Olivio &amp; Co</div>
@@ -800,6 +949,10 @@
 
   <!-- Desktop single nav bar -->
   <div class="menu-bar" id="desktop-nav">
+    <a href="index.html" class="nav-logo-img" title="Olivio&amp;Co — Home">
+      <img src="//olivioandco.eu/cdn/shop/files/OLIVIO_CO_logo_fb1da4ab-6722-4685-a6ab-c7b01dd588a7.png?v=1713417602&width=130" alt="Olivio&amp;Co">
+    </a>
+    <div class="menu-sep"></div>
     <button class="nav-btn active" data-type="view"  data-val="grid">Grid</button>
     <button class="nav-btn"        data-type="view"  data-val="sphere">Sphere</button>
     <button class="nav-btn"        data-type="view"  data-val="flat">Flat</button>
@@ -814,6 +967,10 @@
 
   <!-- Mobile row 1: view modes -->
   <div class="menu-bar" id="mobile-view-bar">
+    <a href="index.html" class="nav-logo-img" title="Olivio&amp;Co">
+      <img src="//olivioandco.eu/cdn/shop/files/OLIVIO_CO_logo_fb1da4ab-6722-4685-a6ab-c7b01dd588a7.png?v=1713417602&width=130" alt="Olivio&amp;Co">
+    </a>
+    <div class="menu-sep"></div>
     <button class="nav-btn active" data-type="view" data-val="grid">Grid</button>
     <button class="nav-btn"        data-type="view" data-val="sphere">Sphere</button>
     <button class="nav-btn"        data-type="view" data-val="flat">Flat</button>
@@ -851,6 +1008,12 @@
 <!-- ── Flat overlay ────────────────────────────────── -->
 <div id="flat-overlay">
   <div id="flat-content"></div>
+  <footer id="flat-footer">
+    <a href="index.html">Home</a><span class="ft-sep">·</span>
+    <a href="about-existing.html">About</a><span class="ft-sep">·</span>
+    <a href="blog/why-kids-need-sunglasses.html">Blog</a><span class="ft-sep">·</span>
+    <a href="https://olivioandco.eu" target="_blank" rel="noopener">olivioandco.eu ↗</a>
+  </footer>
 </div>
 
 <!-- ── Bottom-left: Filters + Controls ────────────── -->
@@ -2492,6 +2655,60 @@ function setMainImage(idx) {
   main.src = shopifyImg(_imgs[idx], IMAGE_WIDTH);
   document.querySelectorAll('.c-thumb').forEach((t,i) => t.classList.toggle('active', i===idx));
 }
+
+/* ── Welcome Popup Logic ──────────────────────────── */
+(function() {
+  const overlay  = document.getElementById('welcome-overlay');
+  const closeBtn = document.getElementById('welcome-close');
+  const step1    = document.getElementById('wp-step1');
+  const step2    = document.getElementById('wp-step2');
+  const continueBtn = document.getElementById('wp-continue');
+  const claimBtn = document.getElementById('wp-claim');
+  const skipBtn  = document.getElementById('wp-skip');
+  const emailEl  = document.getElementById('wp-email');
+
+  function closePopup() {
+    overlay.classList.remove('open');
+    localStorage.setItem('oc_popup_seen', '1');
+  }
+
+  if (!localStorage.getItem('oc_popup_seen')) {
+    setTimeout(() => overlay.classList.add('open'), 2000);
+  }
+
+  // Region selection
+  document.querySelectorAll('.wp-region').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.wp-region').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+    });
+  });
+
+  // Step 1 → Step 2
+  continueBtn.addEventListener('click', () => {
+    const sel = document.querySelector('.wp-region.selected');
+    if (sel) localStorage.setItem('oc_region', sel.dataset.region);
+    step1.classList.remove('active');
+    step2.classList.add('active');
+  });
+
+  // Claim discount
+  claimBtn.addEventListener('click', () => {
+    if (emailEl.value.trim()) {
+      localStorage.setItem('oc_email', emailEl.value.trim());
+    }
+    closePopup();
+  });
+
+  // Skip
+  skipBtn.addEventListener('click', closePopup);
+
+  // Close button
+  closeBtn.addEventListener('click', closePopup);
+
+  // Backdrop click
+  overlay.addEventListener('click', e => { if (e.target === overlay) closePopup(); });
+})();
 </script>
 </body>
 </html>

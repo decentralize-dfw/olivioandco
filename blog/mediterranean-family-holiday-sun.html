@@ -358,21 +358,77 @@
       .env-grid { grid-template-columns: 1fr 1fr; }
       .dest-stats { grid-template-columns: 1fr 1fr; }
     }
+
+    /* ─── grid5 minimalist overrides ─── */
+    :root {
+      --coral: #000; --coral-dark: rgba(0,0,0,0.78);
+      --teal: #000;
+      --sand: #f5f5f5; --warm-white: #fff; --white: #fff;
+      --text: #000; --text-mid: rgba(0,0,0,0.55); --text-muted: rgba(0,0,0,0.38);
+      --border: rgba(0,0,0,0.12);
+      --blue: rgba(0,0,0,0.7); --blue-light: rgba(0,0,0,0.04);
+      --med-blue: rgba(0,0,0,0.7); --med-blue-light: rgba(0,0,0,0.04);
+      --amber-light: rgba(0,0,0,0.04);
+    }
+    body { background: #fff !important; padding-top: 60px; }
+    .nav, nav:not(#page-nav):not([aria-label="Breadcrumb"]), .announcement-bar { display: none !important; }
+    .nav-cta { display: none !important; }
+
+    .stat-hero { background: #000 !important; }
+    .article-tag { background: rgba(0,0,0,0.06) !important; color: rgba(0,0,0,0.55) !important; }
+    .article-header h1 em, h1 em { color: #000 !important; }
+    .breadcrumb a:hover { color: #000 !important; }
+    .uv-table th { background: #000 !important; color: #fff !important; }
+    .uv-calendar .uv-extreme { background: #000 !important; color: #fff !important; }
+    .uv-calendar .uv-high { background: rgba(0,0,0,0.75) !important; color: #fff !important; }
+    .uv-calendar .uv-moderate { background: rgba(0,0,0,0.5) !important; color: #fff !important; }
+    .tip-box, .info-box { background: rgba(0,0,0,0.04) !important; border-left-color: #000 !important; }
+    .dest-card .dest-highlight { background: rgba(0,0,0,0.06) !important; border-color: rgba(0,0,0,0.12) !important; }
+    .packing-category-header { background: #000 !important; color: #fff !important; }
+    .cta-section, .cta-block { background: #000 !important; color: #fff !important; }
+    .cta-section a, .cta-section .btn { background: #fff !important; color: #000 !important; border-radius: 20px !important; }
+    .section-label { color: rgba(0,0,0,0.4) !important; }
+    .site-footer { background: #fff !important; color: #000 !important; border-top: 1px solid rgba(0,0,0,0.12) !important; }
+    .site-footer a { color: rgba(0,0,0,0.55) !important; }
+    .site-footer .footer-brand { color: #000 !important; }
+    .site-footer a:hover { color: #000 !important; }
+
+    /* ─── Floating pill nav ─── */
+    #page-nav {
+      position: fixed; top: 12px; left: 16px; z-index: 100;
+      display: flex; align-items: center; gap: 3px;
+      background: rgba(255,255,255,0.94);
+      border: 1px solid #000; border-radius: 30px;
+      padding: 5px 11px; backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+    }
+    .pnav-logo img { height: 20px; width: auto; display: block; }
+    .pnav-sep { width: 1px; height: 14px; background: rgba(0,0,0,0.2); margin: 0 5px; flex-shrink: 0; }
+    .pnav-btn {
+      color: rgba(0,0,0,0.42); font-size: 11px; font-weight: 700;
+      letter-spacing: .06em; text-transform: uppercase;
+      padding: 2px 10px; border-radius: 4px;
+      border: 1px solid transparent; text-decoration: none;
+      transition: color .12s, border-color .12s, background .12s;
+      white-space: nowrap;
+    }
+    .pnav-btn:hover { color: #000; border-color: rgba(0,0,0,0.28); }
+    .pnav-btn.pnav-active { background: #000; color: #fff; border-color: #000; }
+    @media (max-width: 480px) { .pnav-btn { padding: 2px 7px; font-size: 10px; } }
   </style>
 </head>
 <body>
 
   <!-- ── NAV ── -->
-  <nav class="nav" aria-label="Main navigation">
-    <div class="nav-inner">
-      <a href="../index.html" class="nav-logo">Olivio &amp; Co</a>
-      <ul class="nav-links">
-        <li><a href="../grid5.html">Shop</a></li>
-        <li><a href="../about-existing.html">About</a></li>
-        <li><a href="why-kids-need-sunglasses.html">UV Guide</a></li>
-      </ul>
-      <a href="../grid5.html" class="nav-cta">Shop UV400 Sunglasses</a>
-    </div>
+  <nav id="page-nav" aria-label="Main navigation">
+    <a href="../index.html" class="pnav-logo" title="Olivio&amp;Co — Home">
+      <img src="//olivioandco.eu/cdn/shop/files/OLIVIO_CO_logo_fb1da4ab-6722-4685-a6ab-c7b01dd588a7.png?v=1713417602&width=130" alt="Olivio&amp;Co" loading="eager">
+    </a>
+    <div class="pnav-sep"></div>
+    <a href="../grid5.html" class="pnav-btn">Shop</a>
+    <a href="../about-existing.html" class="pnav-btn">About</a>
+    <a href="why-kids-need-sunglasses.html" class="pnav-btn pnav-active">Blog</a>
   </nav>
 
   <!-- ── BREADCRUMB ── -->
