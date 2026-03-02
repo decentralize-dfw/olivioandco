@@ -747,14 +747,24 @@
       display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
     .reco-price { font-size: 9px; font-weight: 700; color: #000; margin-top: 1px; }
 
-    #modal-visit {
-      display: block; text-align: center;
-      padding: 9px; border: 1px solid #000; border-radius: 3px;
-      text-decoration: none; color: #000;
-      font-size: 12px; font-weight: 600;
-      transition: background .12s, color .12s;
+    .modal-cta-row {
+      display: flex; gap: 8px;
     }
-    #modal-visit:hover { background: #000; color: #fff; }
+    .btn-add-cart, .btn-buy-now {
+      flex: 1; display: block; text-align: center;
+      padding: 10px 8px; border-radius: 3px;
+      text-decoration: none;
+      font-size: 11px; font-weight: 700; letter-spacing: .03em;
+      transition: background .12s, color .12s, border-color .12s;
+    }
+    .btn-add-cart {
+      border: 1.5px solid #000; color: #000; background: #fff;
+    }
+    .btn-add-cart:hover { background: #f5f5f5; }
+    .btn-buy-now {
+      background: #000; color: #fff; border: 1.5px solid #000;
+    }
+    .btn-buy-now:hover { background: #222; }
 
     /* ─── LOGO IN MENU BAR ──────────────────────────── */
     .nav-logo-img {
@@ -1198,9 +1208,12 @@
           <div class="reco-lbl">You may also like</div>
           <div id="reco-scroll"></div>
         </div>
-        <!-- Visit -->
+        <!-- CTA Buttons -->
         <div class="modal-sec">
-          <a id="modal-visit" href="#" target="_blank" rel="noopener">View on store →</a>
+          <div class="modal-cta-row">
+            <a id="modal-add-cart" href="#" target="_blank" rel="noopener" class="btn-add-cart">Add to Cart</a>
+            <a id="modal-buy-now" href="#" target="_blank" rel="noopener" class="btn-buy-now">Buy Now →</a>
+          </div>
         </div>
       </div>
     </div>
@@ -2234,6 +2247,19 @@ function setupModal() {
 function openModal(p)  { populateModal(p); document.getElementById('modal-overlay').classList.add('open'); }
 function closeModal()  { document.getElementById('modal-overlay').classList.remove('open'); }
 
+// Sets both CTA buttons: Add to Cart + Buy Now
+function setCtaUrls(variantUrl) {
+  const base = 'https://olivioandco.eu';
+  let cartUrl = variantUrl || '#';
+  try {
+    const u = new URL(variantUrl, base);
+    const vid = u.searchParams.get('variant');
+    if (vid) cartUrl = base + '/cart/add?id=' + vid + '&quantity=1';
+  } catch(e) {}
+  document.getElementById('modal-add-cart').href = cartUrl;
+  document.getElementById('modal-buy-now').href = variantUrl || '#';
+}
+
 function populateModal(p) {
   _imgs = (p.images || []).filter(Boolean);
 
@@ -2264,7 +2290,7 @@ function populateModal(p) {
     </div>`;
 
   buildColorSelector(p);
-  buildLensSelector(p);  // may override modal-visit href for switchable products
+  buildLensSelector(p);  // may override CTA button hrefs for switchable products
   buildTabs(p);
   buildRecommendations(p);
 
@@ -2272,7 +2298,7 @@ function populateModal(p) {
   // (buildLensSelector will override this for switchable products)
   if (!p.isSwitchable) {
     const firstVariant = p.variants?.find(v => v.available !== false) || p.variants?.[0];
-    document.getElementById('modal-visit').href = firstVariant?.variant_url || p.url || '#';
+    setCtaUrls(firstVariant?.variant_url || p.url || '#');
   }
   buildCarousel(_imgs);
   if (_imgs.length) setMainImage(0);
@@ -2347,8 +2373,8 @@ function buildLensSelector(activeP) {
       if (!v) return;
       // Price
       document.getElementById('modal-price').textContent = '€' + Number(v.price).toFixed(2);
-      // "View on store" with correct ?variant= param  ← BUG 1 FIX
-      document.getElementById('modal-visit').href = v.variant_url || activeP.url;
+      // Update CTA buttons with correct ?variant= param  ← BUG 1 FIX
+      setCtaUrls(v.variant_url || activeP.url);
       // Per-variant stock badge  ← BUG 3 FIX
       const stockEl = document.querySelector('#modal-meta .val[data-stock]');
       if (stockEl) {
