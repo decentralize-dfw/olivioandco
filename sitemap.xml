@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+
+  <!-- Homepage -->
+  <url>
+    <loc>https://olivioandco.eu/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://olivioandco.eu/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://olivioandco.eu/fr"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://olivioandco.eu/"/>
+    <lastmod>2026-03-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+
+  <!-- Product Catalog -->
+  <url>
+    <loc>https://olivioandco.eu/products/catalog</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://olivioandco.eu/products/catalog"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://olivioandco.eu/products/catalog"/>
+    <lastmod>2026-03-01</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- About Us -->
+  <url>
+    <loc>https://olivioandco.eu/pages/about-us</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://olivioandco.eu/pages/about-us"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://olivioandco.eu/fr/pages/about-us"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://olivioandco.eu/pages/about-us"/>
+    <lastmod>2026-02-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Blog Hub -->
+  <url>
+    <loc>https://olivioandco.eu/blogs/eyewear-guide</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://olivioandco.eu/blogs/eyewear-guide"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://olivioandco.eu/blogs/eyewear-guide"/>
+    <lastmod>2026-02-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Blog Article 1: Why Kids Need Sunglasses -->
+  <url>
+    <loc>https://olivioandco.eu/blogs/eyewear-guide/why-children-need-sunglasses</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://olivioandco.eu/blogs/eyewear-guide/why-children-need-sunglasses"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://olivioandco.eu/blogs/eyewear-guide/why-children-need-sunglasses"/>
+    <lastmod>2026-01-20</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Blog Article 2: Kids Sunglasses Size Guide -->
+  <url>
+    <loc>https://olivioandco.eu/blogs/eyewear-guide/kids-sunglasses-size-guide</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://olivioandco.eu/blogs/eyewear-guide/kids-sunglasses-size-guide"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://olivioandco.eu/blogs/eyewear-guide/kids-sunglasses-size-guide"/>
+    <lastmod>2026-01-25</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Blog Article 3: Ski Goggles vs Sunglasses -->
+  <url>
+    <loc>https://olivioandco.eu/blogs/eyewear-guide/ski-goggles-vs-sunglasses-kids</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://olivioandco.eu/blogs/eyewear-guide/ski-goggles-vs-sunglasses-kids"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://olivioandco.eu/blogs/eyewear-guide/ski-goggles-vs-sunglasses-kids"/>
+    <lastmod>2025-10-01</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Blog Article 4: Blue Light Screen Glasses -->
+  <url>
+    <loc>https://olivioandco.eu/blogs/eyewear-guide/blue-light-screen-glasses-kids</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://olivioandco.eu/blogs/eyewear-guide/blue-light-screen-glasses-kids"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://olivioandco.eu/blogs/eyewear-guide/blue-light-screen-glasses-kids"/>
+    <lastmod>2025-09-01</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Blog Article 5: Mediterranean Family Holiday -->
+  <url>
+    <loc>https://olivioandco.eu/blogs/eyewear-guide/mediterranean-family-holiday-sun-protection</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://olivioandco.eu/blogs/eyewear-guide/mediterranean-family-holiday-sun-protection"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://olivioandco.eu/blogs/eyewear-guide/mediterranean-family-holiday-sun-protection"/>
+    <lastmod>2025-05-01</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+</urlset>
