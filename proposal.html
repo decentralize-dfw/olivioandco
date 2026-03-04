@@ -678,6 +678,34 @@
     font-size: 7.5pt;
     color: var(--muted);
   }
+
+  /* ─── MOBILE ──────────────────────────── */
+  @media (max-width: 768px) {
+    .cover { padding: 36px 24px 32px; }
+    .cover-meta { flex-wrap: wrap; gap: 16px; }
+    .section { padding: 40px 24px; }
+    .phase-header { flex-direction: column; gap: 12px; }
+    .del { flex-direction: column; gap: 6px; }
+    .del-price { text-align: left; font-size: 13pt; }
+    .compare-grid { grid-template-columns: 1fr; }
+    .reels-grid { grid-template-columns: 1fr; }
+    .sig-grid { grid-template-columns: 1fr; gap: 32px; }
+    .doc-footer { flex-direction: column; gap: 6px; padding: 20px 24px; }
+    .social-divider { padding: 40px 24px; }
+    .note-box { padding: 14px 16px; }
+    .grand-block { flex-direction: column; gap: 8px; }
+    .gb-amount { font-size: 28pt; }
+    .cover-title { font-size: 52pt; }
+
+    /* tables: horizontal scroll */
+    .audit-table, .inv-table, .pay-table, .timeline-table {
+      display: block;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    .audit-table td, .audit-table th { white-space: normal; min-width: 120px; }
+    .timeline-table td, .timeline-table th { white-space: normal; min-width: 110px; }
+  }
 </style>
 </head>
 <body>
@@ -707,8 +735,12 @@
         <strong>10–12 Weeks</strong>
       </div>
       <div class="cover-meta-item">
-        <label>Investment</label>
+        <label>Website Investment</label>
         <strong>€ 18,000</strong>
+      </div>
+      <div class="cover-meta-item">
+        <label>+ Social Media Add-on</label>
+        <strong>€ 500 – € 3,800</strong>
       </div>
       <div class="cover-meta-item">
         <label>Date</label>
@@ -739,18 +771,22 @@
   <table class="audit-table no-break">
     <thead>
       <tr>
-        <th>Issue</th>
-        <th>What we found</th>
+        <th>Finding</th>
+        <th>What we reviewed</th>
       </tr>
     </thead>
     <tbody>
+      <tr>
+        <td>Generic Shopify theme</td>
+        <td>The site runs on a default Shopify template with a standard product grid. There is no custom interface — no age-based navigation, no immersive browsing, no brand-specific experience. This will be replaced entirely.</td>
+      </tr>
       <tr>
         <td>Search is broken</td>
         <td>"Something went wrong. Please try again!" appears on every page load. Visitors cannot search the catalogue.</td>
       </tr>
       <tr>
         <td>Typo in a live URL</td>
-        <td>Collection URL reads <code>/collections/citrus-graden</code> — a misspelling visible in the navigation and indexed by Google.</td>
+        <td>Collection URL reads <code>/collections/citrus-graden</code> — a misspelling visible in the navigation and indexed by search engines.</td>
       </tr>
       <tr>
         <td>Button copy error</td>
@@ -761,32 +797,28 @@
         <td>The awards carousel repeats the same image file twice. One slot is empty.</td>
       </tr>
       <tr>
-        <td>No social media links</td>
-        <td>No Instagram, Facebook, TikTok or any other social link anywhere on the site — not in the header, footer, or homepage.</td>
+        <td>Social media links missing</td>
+        <td>No Instagram, Facebook, TikTok or any other social link anywhere on the site — not in the header, footer, or homepage. Social channels are active but the site does not connect to them.</td>
       </tr>
       <tr>
         <td>Blog hidden from navigation</td>
         <td>A blog exists at /blogs/news and is linked in the footer. It does not appear in the main navigation. Most visitors never find it.</td>
       </tr>
       <tr>
-        <td>Reviews invisible in listings</td>
+        <td>Reviews not visible in listings</td>
         <td>Some products have star ratings and written reviews, but they are buried at the bottom of individual product pages. No star count appears in any product listing. The homepage shows zero social proof.</td>
       </tr>
       <tr>
-        <td>No email capture</td>
-        <td>A newsletter form exists in the footer. There is no popup, no exit-intent prompt, and no mechanism to capture a visitor who is about to leave without buying.</td>
+        <td>Email capture not optimised</td>
+        <td>A newsletter form exists in the footer. There is no popup, no exit-intent prompt, and no mechanism to capture a visitor who is about to leave without buying. This leaves most visitors unretained.</td>
       </tr>
       <tr>
-        <td>Return policy invisible</td>
-        <td>A full return policy page exists, but nothing on the homepage or product pages references it. Parents buying for a child need to know this before committing to a purchase.</td>
+        <td>Return &amp; purchase terms</td>
+        <td>Purchase terms and conditions are not clearly surfaced on product pages. Parents buying for a child need to understand the terms before committing — making this visible reduces hesitation and increases confidence.</td>
       </tr>
       <tr>
-        <td>Generic Shopify theme</td>
-        <td>The site runs on a default Shopify template with a standard product grid. There is no custom interface — no age-based navigation, no immersive browsing, no brand-specific experience.</td>
-      </tr>
-      <tr>
-        <td>No analytics tracking</td>
-        <td>No GA4 or equivalent tracking code is active. There is currently no way to measure what visitors do, which products they view, or where they leave.</td>
+        <td>Analytics &amp; tracking</td>
+        <td>Visitor analytics and conversion tracking have been reviewed. Whether current tracking is in place or missing, we will verify, install, and improve everything needed to measure what visitors do, which products they view, and where they leave.</td>
       </tr>
       <tr>
         <td>Partner programme hidden</td>
@@ -797,28 +829,28 @@
 
   <div class="compare-grid no-break">
     <div class="compare-col now">
-      <div class="compare-col-head now">Today</div>
+      <div class="compare-col-head now">Current state</div>
       <ul>
-        <li>Standard Shopify theme — no custom interface</li>
+        <li>Default Shopify theme — no custom brand experience</li>
         <li>Search broken on every page load</li>
-        <li>Reviews exist but invisible in listings</li>
-        <li>No social media links anywhere on the site</li>
-        <li>Blog hidden from the navigation</li>
-        <li>Return policy not referenced on product pages</li>
-        <li>No analytics — nothing is measurable</li>
+        <li>Reviews exist but not visible in product listings</li>
+        <li>Social media channels active but not linked from the site</li>
+        <li>Blog hidden from the main navigation</li>
+        <li>Purchase terms not surfaced on product pages</li>
+        <li>Analytics &amp; conversion tracking to be audited and improved</li>
         <li>Partner programme not visible to potential retailers</li>
       </ul>
     </div>
     <div class="compare-col after">
       <div class="compare-col-head after">After this project</div>
       <ul>
-        <li>Bespoke interface built for this brand — not a theme</li>
+        <li>Bespoke immersive interface built for this brand — not a theme</li>
         <li>Search working; all errors and typos fixed</li>
         <li>Reviews prominent in listings and on the homepage</li>
-        <li>Social links in header and footer</li>
+        <li>Social links in header, footer, and homepage</li>
         <li>Blog in the main navigation, featured on homepage</li>
-        <li>Returns and guarantee visible on every product page</li>
-        <li>Full Google Analytics with conversion tracking</li>
+        <li>Purchase terms clearly visible on every product page</li>
+        <li>Full conversion tracking installed and verified</li>
         <li>Partner programme integrated into the main navigation</li>
       </ul>
     </div>
@@ -848,7 +880,7 @@
     <div>
       <div class="del-title">Homepage</div>
       <div class="del-desc">
-        Built around a single clear opening: who the brand is, what it makes, and why a parent should trust it — before any scrolling. Age-based visual navigation (Toddler → Kids → Junior → Junior+ → Teen &amp; Adult) so any visitor finds their section in one click. All seven design awards named individually — not just logos, but what each one recognises. Customer reviews moved to the homepage, where they actually convert. Returns and guarantee policy made visible. Instagram feed embedded. Social media links in header and footer. "Become a Partner" entry point added to navigation.
+        Built around a single clear opening: who the brand is, what it makes, and why a parent should trust it — before any scrolling. Age-based visual navigation (Toddler → Kids → Junior → Junior+ → Teen &amp; Adult) so any visitor finds their section in one click. All seven design awards named individually — not just logos, but what each one recognises. Customer reviews moved to the homepage, where they actually convert. Purchase terms made visible. Social media links in header and footer. "Become a Partner" entry point added to navigation. The homepage is designed to be immersive and interactive — fluid 3D-influenced visual flow, animated transitions, and layered depth that draw the visitor through the brand story before they even reach the catalogue.
       </div>
     </div>
     <div class="del-price">€ 2,500</div>
@@ -913,7 +945,7 @@
     <div>
       <div class="del-title">SEO Technical Setup</div>
       <div class="del-desc">
-        Every page title and meta description rewritten with the right keywords. Structured data added across the full site: Organisation, WebSite with search action, Product, AggregateRating, FAQPage, BreadcrumbList, and ShippingDetails — the markup that enables star ratings, rich results, and product information to appear directly in Google search. Hreflang tags set correctly between .com and .eu to prevent duplicate content penalties. Sitemap and robots.txt written and submitted. Google Analytics 4 installed with add-to-cart, product view, and purchase events tracked from day one. A GDPR-compliant cookie consent banner added — a legal requirement for any brand serving European customers, currently absent from the site. All URL typos corrected.
+        Every page title and description rewritten to match what parents actually search for online. Behind-the-scenes markup added across the full site so search engines can display star ratings, product details, and pricing directly in results — not just a plain link. The site's two domains (.com and .eu) are connected correctly so they reinforce rather than compete with each other. A site map and discovery file submitted so the full catalogue gets indexed properly. Visitor tracking and analytics reviewed, verified, and where needed improved or installed from scratch — measuring add-to-carts, product views, and completed purchases from day one. A cookie consent notice added that meets EU legal requirements. All URL spelling errors corrected.
       </div>
     </div>
     <div class="del-price">€ 4,000</div>
@@ -931,9 +963,9 @@
 
   <div class="del no-break">
     <div>
-      <div class="del-title">Google Business Profile</div>
+      <div class="del-title">Digital Growth &amp; Visibility</div>
       <div class="del-desc">
-        The existing profile is brought fully up to date. A 12-week content calendar is delivered along with ten ready-to-publish post templates covering summer, back-to-school, and ski season. Q&amp;A section populated with the ten questions parents ask most often.
+        Online presence reviewed and improved across key digital touchpoints. A 12-week content calendar delivered along with ten ready-to-publish post templates covering summer, back-to-school, and ski season. The brand's most common customer questions answered in a format suitable for publishing wherever the client chooses.
       </div>
     </div>
     <div class="del-price">€ 600</div>
@@ -972,9 +1004,9 @@
 
   <div class="del no-break">
     <div>
-      <div class="del-title">Instagram Gallery</div>
+      <div class="del-title">Shopify Liquid Integration</div>
       <div class="del-desc">
-        The brand's Instagram feed embedded on the homepage — live content, updated automatically. Social proof that requires no manual maintenance.
+        The entire custom design is integrated into Shopify's theme system using Liquid — Shopify's native templating language. Every page, component, and interaction is wired directly into the live store: product data, cart, checkout, collections, and customer accounts all connected and working. Tested end-to-end before go-live.
       </div>
     </div>
     <div class="del-price">€ 400</div>
@@ -1033,13 +1065,13 @@
       </tr>
       <tr>
         <td>Phase 2</td>
-        <td>Visibility — SEO, Five Articles, Google Business Profile</td>
+        <td>Visibility — Search Optimisation, Five Articles, Digital Growth</td>
         <td>4–8</td>
         <td>€ 6,500</td>
       </tr>
       <tr>
         <td>Phase 3</td>
-        <td>Launch — Reviews, Gallery, Conversion tools, QA &amp; deployment</td>
+        <td>Launch — Reviews, Shopify Integration, Conversion Tools, QA &amp; Deployment</td>
         <td>8–12</td>
         <td>€ 2,500</td>
       </tr>
@@ -1086,7 +1118,7 @@
       </tr>
       <tr>
         <td>Phase 2 delivery</td>
-        <td>SEO setup, articles, and Google Business Profile approved by client.</td>
+        <td>Search optimisation, articles, and digital growth deliverables approved by client.</td>
         <td>€ 5,500</td>
       </tr>
       <tr>
@@ -1098,12 +1130,11 @@
   </table>
 
   <div class="note-box" style="margin-top:24px;">
-    <div class="note-box-title">Included &amp; excluded</div>
+    <div class="note-box-title">Included &amp; notes</div>
     <ul>
-      <li>Shopify deployment requires the client to provide store admin access at Phase 3.</li>
+      <li>All pages are prototyped and presented as a working demo during development. Phase 3 delivers the full Shopify integration — every page converted and deployed live to the client's store. Store admin access required at Phase 3.</li>
       <li>Existing product data and catalogue structure is used as-is — no manual product re-entry.</li>
-      <li>Google Business Profile optimisation requires the client's Google account credentials for publishing; we provide the content and calendar, the client publishes.</li>
-      <li>Photography and video production are not included. All visual assets use existing product imagery.</li>
+      <li>Digital production assets (social media, content) are fully digital — no physical shoots, actors, or location production required.</li>
       <li>Ongoing monthly maintenance and content updates are available as a separate retainer engagement.</li>
     </ul>
   </div>
@@ -1174,19 +1205,19 @@
       <tr class="milestone">
         <td>W8 <span class="wk-badge b2">P2</span></td>
         <td>GBP + Phase 2 complete <span class="milestone-tag">Delivery</span></td>
-        <td>Google Business Profile updated, 12-week calendar and 10 post templates delivered. Full Phase 2 submitted for approval.</td>
+        <td>Digital growth deliverables completed. 12-week content calendar and 10 post templates delivered. Full Phase 2 submitted for approval.</td>
         <td>Approval required before Phase 3 begins</td>
       </tr>
       <tr>
         <td>W9 <span class="wk-badge b3">P3</span></td>
-        <td>Reviews</td>
-        <td>Review platform integrated, configured, and connected to schema. Automated post-purchase email set up. Past-customer review campaign prepared.</td>
+        <td>Reviews &amp; Shopify Integration</td>
+        <td>Review platform integrated and configured. Automated post-purchase review request set up. Shopify Liquid integration begun — custom design wired into live store.</td>
         <td>Shopify admin access required</td>
       </tr>
       <tr>
         <td>W10 <span class="wk-badge b3">P3</span></td>
         <td>Conversion tools</td>
-        <td>Instagram gallery embedded. Exit-intent popup, save-for-later, and back-in-stock notification built and tested.</td>
+        <td>Exit-intent popup, save-for-later, and back-in-stock notification built and tested. Shopify Liquid integration completed.</td>
         <td>Confirm discount offer and popup messaging</td>
       </tr>
       <tr>
@@ -1267,7 +1298,7 @@
   <div class="eyebrow">Social Media Proposal</div>
   <div class="section-title" style="color:white; margin-bottom:12px;">Short-form video.<br>Built for the feed.</div>
   <div class="section-lead">
-    30–60 second reels for Instagram and TikTok. Eyewear-focused, culture-led. The kind of content that earns attention rather than buying it — and keeps working long after it is posted.
+    30–60 second reels for Instagram and TikTok. Fully digital — AI-assisted production, no physical shoot required. Eyewear-focused, culture-led. The kind of content that earns attention rather than buying it — and keeps working long after it is posted.
   </div>
 
   <div class="reels-grid">
@@ -1299,7 +1330,7 @@
         <div class="reel-save">Save € 250 vs. individual</div>
         <ul class="reel-features">
           <li>5 × 30–60 second vertical reels</li>
-          <li>Full production per video</li>
+          <li>Full digital production per video</li>
           <li>One seasonal campaign — summer, ski, or back-to-school</li>
           <li>Delivered in a single batch</li>
         </ul>
@@ -1316,7 +1347,7 @@
         <div class="reel-save">Save € 1,200 vs. individual</div>
         <ul class="reel-features">
           <li>10 × 30–60 second vertical reels</li>
-          <li>Full production per video</li>
+          <li>Full digital production per video</li>
           <li>Mix of product, culture &amp; education</li>
           <li>Content calendar included</li>
           <li>Delivered in two batches of 5</li>
@@ -1326,7 +1357,7 @@
   </div>
 
   <p style="font-size:9pt; color:rgba(255,255,255,0.3); margin-top:24px; line-height:1.65; max-width:600px;">
-    Each reel includes concept, script direction, and edit. Themes are planned around specific moments — a product launch, a seasonal campaign, an educational angle, or a cultural reference. Delivered as final files with a suggested caption and hashtag set. The 5-reel pack suits a single seasonal push. The 10-reel pack provides consistent output across two seasons at the volume rate.
+    Each reel is fully digitally produced — concept, direction, and edit. No actors, no location shoots, no physical production. Themes are planned around specific moments — a product launch, a seasonal campaign, an educational angle, or a cultural reference. Delivered as final files with a suggested caption and hashtag set. The 5-reel pack suits a single seasonal push. The 10-reel pack provides consistent output across two seasons at the volume rate.
   </p>
 </div>
 
