@@ -318,7 +318,7 @@
 
   <div class="context-strip">
     <p>OLIVIO &amp; Co has the product, the design credentials, the sustainability story, and a market positioning — Mediterranean-inspired family eyewear with nine international design awards — that most competitors cannot replicate. The primary challenge is that none of these strengths are being communicated effectively within the purchase journey.</p>
-    <p>The fixes required are largely <strong>technical and marketing-operational, not product-related</strong>. A parent arriving on the homepage today sees no awards, no reviews, no value proposition, and a broken search bar. They see the same parent arriving on Babiators' homepage sees a guarantee badge, celebrity endorsements, and hundreds of star ratings. This gap is closable.</p>
+    <p>The fixes required are largely <strong>technical and marketing-operational, not product-related</strong>. A parent arriving on the homepage today sees no awards, no value proposition, a broken search bar — and on the Best Sellers carousel, Add to Cart buttons that also throw an error. A parent arriving on Babiators sees a guarantee badge, celebrity endorsements, and hundreds of star ratings. This gap is closable.</p>
   </div>
 
   <div class="score-grid">
@@ -336,7 +336,7 @@
     </div>
     <div class="score-card">
       <div class="score-num score-num--mid">5.0</div>
-      <div class="score-label">Conversion</div>
+      <div class="score-label">High impact</div>
     </div>
     <div class="score-card">
       <div class="score-num score-num--mid">6.0</div>
@@ -456,6 +456,16 @@
       <div class="status-card-body">The Breakfast Art collection's discover button in the lower homepage section links to /collections/citrus-graden — a different collection entirely, and with another URL typo ("graden" instead of "garden"). A visitor clicking Breakfast Art lands on Citrus Garden.</div>
     </div>
     <div class="status-card">
+      <span class="status-tag status-tag--bug">Bug · Homepage</span>
+      <div class="status-card-title">"Something went wrong" on Add to Cart in Best Sellers carousel</div>
+      <div class="status-card-body">The Best Sellers product carousel on the homepage shows "Something went wrong! Please try again later." beneath every Add to Cart button. This is a separate bug from the search error — a visitor who finds a product they want on the homepage cannot add it to cart without clicking through to the product page first.</div>
+    </div>
+    <div class="status-card">
+      <span class="status-tag status-tag--bug">Broken link · Collection</span>
+      <div class="status-card-title">Olivio Classic "discover" links to /collections/classicsunglasses</div>
+      <div class="status-card-body">In the Sunglasses Collections section, the Olivio Classic "discover" button routes to /collections/classicsunglasses — a URL that does not match the correct /collections/classic slug used in the navigation menu. Visitors clicking it may land on a 404 or wrong page.</div>
+    </div>
+    <div class="status-card">
       <span class="status-tag status-tag--ok">Positive</span>
       <div class="status-card-title">Navigation structure is logically organised</div>
       <div class="status-card-body">The mega-menu separates Sunglasses / Sport Glasses / Screen Glasses / Accessories clearly. The Shop by Age, Shop by Collection, and Shop by Style sub-groupings within Sunglasses are well-considered for a parental buyer navigating for a child's age group.</div>
@@ -486,7 +496,7 @@
       <li>Mediterranean brand statement — "Inspired by the Mediterranean" with lifestyle imagery</li>
       <li>Sunglasses Collections grid — Breakfast Art, Olivio Classic, Creative Edition D with editorial descriptions</li>
       <li>Sport Glasses section — with the Amazon-linked Discover button</li>
-      <li>Best Sellers product carousel — 10+ products with prices and add-to-cart</li>
+      <li>Best Sellers product carousel — 10+ products with prices, but <strong>Add to Cart buttons throw an error</strong> ("Something went wrong! Please try again later") on homepage — a separate bug from the search error</li>
       <li>Awards section — 9 logo images in a horizontal scroll strip, no names or context</li>
     </ul>
   </div>
@@ -496,9 +506,9 @@
     <h2 class="finding-title">What a first-time visitor never sees without scrolling</h2>
     <p class="finding-body">No tagline or value proposition explains what makes OLIVIO &amp; Co different from any other children's eyewear brand. A new visitor has no immediate answer to "why this brand?" — only a collection name and a Shop Now button. Every competitor in the premium segment leads with their differentiation above the fold.</p>
     <ul class="finding-list">
-      <li><strong>No customer reviews or star ratings</strong> — the most powerful purchase trigger for parents buying children's products online is absent from the most-trafficked page on the site</li>
+      <li><strong>No customer reviews visible on the homepage</strong> — reviews do exist on product pages (confirmed: 5 reviews on Toddler Round Shark White, 9 reviews on #D Olive Green), but the homepage shows zero social proof; the most-trafficked page on the site has no peer validation</li>
       <li><strong>No award badges with context</strong> — Red Dot, iF Design, ADC logos appear far down the page with no names, years, or categories; they function as decoration rather than trust signals</li>
-      <li><strong>No guarantee or warranty statement</strong> — 13-month warranty and 30-day returns exist but are only visible as small icon strips at the bottom of individual product pages</li>
+      <li><strong>No guarantee or warranty prominently visible</strong> — 13-month warranty and 30-day return window exist but are only visible as small icon strips at the bottom of individual product pages. Critically: <strong>returns are NOT free</strong> — the customer pays return shipping. This is a significant trust gap versus Babiators whose Lost &amp; Found guarantee is unconditional.</li>
       <li><strong>No UV certification or safety badge</strong> — parents of young children make safety-first purchase decisions; CE mark and UV400 certification are not featured prominently</li>
       <li><strong>No email capture</strong> — no popup, no inline sign-up with incentive; the newsletter subscription exists only in the footer</li>
       <li><strong>No press or media mentions</strong> — if the brand has had coverage, it is not showcased</li>
@@ -517,7 +527,7 @@
 <!-- ══════════════════════════════════════════════════════════ -->
 <div class="page">
   <span class="eyebrow">Product Pages &amp; Catalogue</span>
-  <h1 class="section-title">Eight collections.<br>No reviews on any of them.</h1>
+  <h1 class="section-title">Eight collections.<br>Reviews exist — but not where they convert.</h1>
 
   <table class="product-table">
     <thead>
@@ -558,14 +568,14 @@
 
   <div class="status-grid">
     <div class="status-card">
-      <span class="status-tag status-tag--critical">Critical · Conversion</span>
-      <div class="status-card-title">No customer review system on any product page</div>
-      <div class="status-card-body">No star ratings, no text reviews, no photo reviews. For a brand selling children's products at $39–$59 per unit, the absence of social proof from other parents is the single largest conversion blocker on the site. Some products show review counts in the HTML (e.g., "9 reviews") suggesting a previous review system was installed but is no longer rendering.</div>
+      <span class="status-tag status-tag--weak">Weak · Not prominent</span>
+      <div class="status-card-title">Reviews exist on product pages — but volume is very low</div>
+      <div class="status-card-body">Reviews are present and rendering on product pages (confirmed: 5 reviews on Toddler Round Shark White, 9 reviews on #D Olive Green). The review system works. The gap is in volume and activation: most products have very few reviews, no photo reviews are visible, and stars do not appear in Google search results because AggregateRating schema is missing. No reviews appear on the homepage at all.</div>
     </div>
     <div class="status-card">
-      <span class="status-tag status-tag--missing">Missing · Purchase confidence</span>
-      <div class="status-card-title">No size guide linked from product pages</div>
-      <div class="status-card-body">A size guide exists on the B2B wholesale platform. On the consumer site, the 3–4 year overlap between Kids (2–4y) and Junior (3–7y) leaves parents without guidance on which category to buy. Cart abandonment from fit uncertainty is one of the most documented friction points in children's clothing and eyewear.</div>
+      <span class="status-tag status-tag--weak">Present but hidden</span>
+      <div class="status-card-title">Size guide exists — buried in a product page tab</div>
+      <div class="status-card-body">A Size Guide tab exists directly on product pages (alongside Description / Materials / Shipping tabs) — it is not missing entirely. The problem is discoverability: a parent browsing the collection page or the homepage never sees it. There is no standalone /pages/size-guide to link to, share, or rank in search. The 3–4 year overlap between Kids (2–4y) and Junior (3–7y) is still not addressed with a clear comparison chart.</div>
     </div>
     <div class="status-card">
       <span class="status-tag status-tag--weak">Positive but underused</span>
@@ -602,7 +612,7 @@
 <div class="page">
   <span class="eyebrow">Trust &amp; Social Proof</span>
   <h1 class="section-title">The trust signals<br>exist. They're just invisible.</h1>
-  <p class="section-intro">The brand's strongest trust assets — nine design awards, eco-certified packaging, a 13-month warranty, 30-day returns — are all present but positioned where they don't convert. Awards are logos. The warranty is an icon strip. Neither is in the purchase flow.</p>
+  <p class="section-intro">The brand's strongest trust assets — nine design awards, eco-certified packaging, a 13-month warranty — are all present but positioned where they don't convert. Awards are uncontextualised logos. The warranty icon strip is at the bottom of product pages. Reviews exist but in low volume and are invisible to Google. And the 30-day return window carries a catch: <strong>returns are not free</strong>.</p>
 
   <div class="finding-block">
     <span class="finding-tag">What exists — verified</span>
@@ -610,7 +620,8 @@
     <ul class="finding-list">
       <li><strong>Nine design awards</strong> — Red Dot (2020), iF Design (2021, 2022), D&amp;AD Shortlist (2021), ADC Bronze Cube (2022), Junior Design Awards Bronze (2021), Green Product Award Best of 2022 — all verified</li>
       <li><strong>Eco-sustainability credentials</strong> — biodegradable sugarcane pulp packaging, 100% recycled PET cleaning cloth, FSC-certified materials; present on product pages as spec bullets</li>
-      <li><strong>13-month warranty + 30-day returns</strong> — present as icon strips at the bottom of product pages; not visible on homepage or in the checkout flow</li>
+      <li><strong>13-month warranty + 30-day return window</strong> — present as icon strips at the bottom of product pages; critically, <strong>returns are not free</strong> (customer pays return shipping, stated in FAQ) — this should be disclosed proactively rather than buried</li>
+      <li><strong>Customer reviews</strong> — a review system is active and rendering on product pages; confirmed reviews on multiple products. Low volume overall, no photo reviews, not connected to Google via schema markup.</li>
       <li><strong>B2B wholesale portal</strong> — b2b.olivioandco.com signals trade credibility and distribution scale</li>
       <li><strong>Secure checkout</strong> — HTTPS confirmed; Shopify Payments with all major cards and PayPal</li>
       <li><strong>FAQ page</strong> — covers order tracking, modifications, promo codes, guest checkout, account management</li>
@@ -621,7 +632,7 @@
     <span class="finding-tag">What is missing</span>
     <h2 class="finding-title">Critical gaps in the trust layer</h2>
     <ul class="finding-list">
-      <li><strong>No customer review system</strong> — no star ratings, text reviews, or photo reviews on any page of the site; Trustpilot profile not confirmed</li>
+      <li><strong>Review volume is critically low</strong> — the system works, but most products have fewer than 10 reviews; no photo reviews; no star ratings in Google Search results due to missing AggregateRating schema; no reviews surfaced anywhere on the homepage</li>
       <li><strong>Award logos have no context</strong> — nine logos on the homepage with no award name, no year, no category; they are invisible as trust signals to a parent who does not recognise the logo</li>
       <li><strong>No UV certification badge displayed</strong> — CE mark, UV400, ANSI Z80.3 certifications are mentioned in text but not shown as verified certification icons; parents of young children specifically look for these</li>
       <li><strong>No Green Product Award badge on product pages</strong> — the 2022 eco award is not displayed at the point of purchase where it would influence eco-conscious parents</li>
@@ -656,6 +667,7 @@
       <li><strong>Problem 3</strong>: No seasonal content — summer eye protection, back-to-school screen glasses, ski season goggle guide; all three are major search windows this brand is uniquely positioned for</li>
       <li><strong>Problem 4</strong>: No internal linking from articles to product collection pages — blog content does not feed the purchase funnel</li>
       <li><strong>Problem 5</strong>: No content specific to OLIVIO &amp; Co's collections, story, awards, or Mediterranean identity — the brand's differentiators do not appear in the blog</li>
+      <li><strong>Problem 6</strong>: Some blog article URLs return 404 errors — content that was indexed by Google is now returning dead links, actively damaging SEO authority</li>
     </ul>
   </div>
 
@@ -776,23 +788,23 @@
         <div class="issue-row-title">1. Country-selector modal — before any product is seen</div>
         <div class="issue-row-desc">Full-screen friction on every visit, no geolocation, no memory of previous choice. Fix: Shopify Markets with IP detection, auto-routing, dismissible banner.</div>
       </div>
-      <div class="issue-row-tag">Immediate</div>
+      <div class="issue-row-tag">High impact</div>
     </div>
     <div class="issue-row">
       <div class="issue-dot issue-dot--critical"></div>
       <div class="issue-row-content">
-        <div class="issue-row-title">2. Broken search — "Something went wrong" on load</div>
-        <div class="issue-row-desc">Visible on every page, every visit. Visitors who use search to navigate the 40+ product range hit a dead end before typing a single character.</div>
+        <div class="issue-row-title">2. Two broken functions — search and Add to Cart on homepage</div>
+        <div class="issue-row-desc">"Something went wrong" appears on search before a character is typed. A separate error ("Something went wrong! Please try again later") fires on every Add to Cart button in the homepage Best Sellers carousel. Both bugs are visible to every visitor on every visit. A parent who finds a product they want cannot add it from the homepage.</div>
       </div>
-      <div class="issue-row-tag">Immediate</div>
+      <div class="issue-row-tag">High impact</div>
     </div>
     <div class="issue-row">
       <div class="issue-dot issue-dot--critical"></div>
       <div class="issue-row-content">
-        <div class="issue-row-title">3. No customer reviews — the largest single blocker</div>
-        <div class="issue-row-desc">Parents purchasing children's eyewear at $39–$59 rely on peer validation more than almost any other signal. Zero reviews on any product means zero social proof at the decision point. Some products show a review count in the HTML suggesting a previous system exists but is not rendering.</div>
+        <div class="issue-row-title">3. Reviews exist — but volume is critically low and invisible to Google</div>
+        <div class="issue-row-desc">A review system is active and rendering (confirmed 5–9 reviews on tested products). The gaps: most products have very few reviews, photo reviews are absent, no star ratings appear in Google Search results (missing AggregateRating schema), and zero reviews are surfaced on the homepage. The infrastructure is there — it needs activation, not installation.</div>
       </div>
-      <div class="issue-row-tag">Immediate</div>
+      <div class="issue-row-tag">High impact</div>
     </div>
     <div class="issue-row">
       <div class="issue-dot issue-dot--critical"></div>
@@ -800,15 +812,15 @@
         <div class="issue-row-title">4. Trust signals and awards hidden from the purchase flow</div>
         <div class="issue-row-desc">Nine design awards, a 13-month warranty, eco-certification — none appear on product pages near the Add to Cart button or in the checkout. Trust signals convert when they appear at the decision moment, not on the About Us page.</div>
       </div>
-      <div class="issue-row-tag">Immediate</div>
+      <div class="issue-row-tag">High impact</div>
     </div>
     <div class="issue-row">
       <div class="issue-dot issue-dot--mid"></div>
       <div class="issue-row-content">
-        <div class="issue-row-title">5. No size guide — fit uncertainty causes cart abandonment</div>
-        <div class="issue-row-desc">Kids (2–4y) and Junior (3–7y) overlap. No guide exists on the consumer site. A parent buying for a 3-year-old cannot confidently choose a size without leaving the site to research.</div>
+        <div class="issue-row-title">5. Size guide buried in product page tab — not discoverable</div>
+        <div class="issue-row-desc">A size guide tab exists on product pages (confirmed). The problem is discoverability: a parent on the collection page or homepage cannot find it. No standalone /pages/size-guide URL means it cannot be linked, shared, or indexed in search. The Kids/Junior overlap is still unresolved at the point where parents are choosing.</div>
       </div>
-      <div class="issue-row-tag">Early</div>
+      <div class="issue-row-tag">Medium impact</div>
     </div>
   </div>
 
@@ -906,7 +918,7 @@
 
   <div style="border-top:1px solid #2A2A2A; padding-top:28px;">
     <span style="font-family:'Xanh Mono',monospace; font-size:8px; font-weight:700; letter-spacing:0.22em; text-transform:uppercase; color:#555; margin-bottom:16px; display:block;">B2B &amp; Wholesale — b2b.olivioandco.com</span>
-    <p style="font-size:13px; font-weight:300; color:#AAAAAA; line-height:1.7; max-width:560px;">A dedicated wholesale portal exists with full product range, Terms &amp; Conditions, a Size Guide, and an Image Bank for retail partners. This signals genuine distribution scale. On the consumer site, there is no "Find a Retailer" page — consumers who prefer to buy in-store have no route. The size guide on the B2B platform should also be accessible to retail buyers on the consumer site.</p>
+    <p style="font-size:13px; font-weight:300; color:#AAAAAA; line-height:1.7; max-width:560px;">A dedicated wholesale portal exists with full product range, Terms &amp; Conditions, a Size Guide, and an Image Bank for retail partners. This signals genuine distribution scale. Note: a size guide tab does exist on individual consumer product pages — but it is not a standalone page and cannot be linked, shared, or found via search. On the consumer site there is also no "Find a Retailer" page — consumers who prefer to buy in-store have no route.</p>
   </div>
 
   <div class="page-footer" style="border-color:#2A2A2A; color:#555;">
@@ -925,19 +937,19 @@
   <p class="section-intro">High priority items are correctable in hours and directly suppress revenue today. Medium priority items build the conversion infrastructure. Growth items compound both.</p>
 
   <div style="font-family:'Xanh Mono',monospace; font-size:8px; font-weight:700; letter-spacing:0.22em; text-transform:uppercase; color:var(--stone); margin-bottom:16px; display:flex; gap:20px; flex-wrap:wrap;">
-    <span style="display:flex; align-items:center; gap:6px;"><span style="width:8px; height:8px; border-radius:50%; background:#B03030; display:inline-block;"></span> Fix immediately</span>
-    <span style="display:flex; align-items:center; gap:6px;"><span style="width:8px; height:8px; border-radius:50%; background:#A06020; display:inline-block;"></span> Within 60 days</span>
-    <span style="display:flex; align-items:center; gap:6px;"><span style="width:8px; height:8px; border-radius:50%; background:#2A7A2A; display:inline-block;"></span> Growth · 90–180 days</span>
+    <span style="display:flex; align-items:center; gap:6px;"><span style="width:8px; height:8px; border-radius:50%; background:#B03030; display:inline-block;"></span> High impact</span>
+    <span style="display:flex; align-items:center; gap:6px;"><span style="width:8px; height:8px; border-radius:50%; background:#A06020; display:inline-block;"></span> Medium impact</span>
+    <span style="display:flex; align-items:center; gap:6px;"><span style="width:8px; height:8px; border-radius:50%; background:#2A7A2A; display:inline-block;"></span> Growth</span>
   </div>
 
   <div class="issue-rows">
     <div class="issue-row">
       <div class="issue-dot issue-dot--critical"></div>
       <div class="issue-row-content">
-        <div class="issue-row-title">Fix the broken search function</div>
-        <div class="issue-row-desc">"Something went wrong" appears on every page load before a character is typed. Debug in the Shopify theme.</div>
+        <div class="issue-row-title">Fix both broken functions — search error and homepage Add to Cart error</div>
+        <div class="issue-row-desc">Two separate bugs, both visible on every visit. Search: "Something went wrong" fires before a character is typed. Add to Cart on Best Sellers carousel: "Something went wrong! Please try again later" on every button. Debug both in the Shopify theme — likely a JavaScript conflict or app integration failure.</div>
       </div>
-      <div class="issue-row-tag">Quick fix</div>
+      <div class="issue-row-tag">High impact</div>
     </div>
     <div class="issue-row">
       <div class="issue-dot issue-dot--critical"></div>
@@ -945,15 +957,23 @@
         <div class="issue-row-title">Correct "CREATIVE DEDITION" → "CREATIVE EDITION" in homepage carousel</div>
         <div class="issue-row-desc">The brand's most distinctive collection is misspelled in its hero banner and image alt text. One copy correction.</div>
       </div>
-      <div class="issue-row-tag">Quick fix</div>
+      <div class="issue-row-tag">High impact</div>
     </div>
     <div class="issue-row">
       <div class="issue-dot issue-dot--critical"></div>
       <div class="issue-row-content">
-        <div class="issue-row-title">Fix Breakfast Art "discover" link — currently routes to Citrus Garden</div>
-        <div class="issue-row-desc">/collections/citrus-graden is a different collection with a URL typo. Visitors clicking Breakfast Art land on the wrong page.</div>
+        <div class="issue-row-title">Fix all broken collection links — Breakfast Art, Olivio Classic, and 404 blog URLs</div>
+        <div class="issue-row-desc">Breakfast Art "discover" → /collections/citrus-graden (wrong collection + URL typo). Olivio Classic "discover" → /collections/classicsunglasses (likely 404). Some blog article URLs return 404 — previously indexed pages that now return dead links actively damage Google rankings. Audit and redirect all broken URLs.</div>
       </div>
-      <div class="issue-row-tag">Quick fix</div>
+      <div class="issue-row-tag">High impact</div>
+    </div>
+    <div class="issue-row">
+      <div class="issue-dot issue-dot--critical"></div>
+      <div class="issue-row-content">
+        <div class="issue-row-title">Disclose return shipping cost proactively — or make returns free</div>
+        <div class="issue-row-desc">Returns are not free — the customer pays return shipping. This is currently buried in the FAQ. Displaying it proactively (as part of the returns policy strip on product pages) is the honest approach and prevents post-purchase frustration. The stronger fix is to absorb return shipping costs — Babiators' unconditional replacement guarantee is their #1 conversion driver.</div>
+      </div>
+      <div class="issue-row-tag">High impact</div>
     </div>
     <div class="issue-row">
       <div class="issue-dot issue-dot--critical"></div>
@@ -961,15 +981,15 @@
         <div class="issue-row-title">Redirect Sport Sunglasses "Discover" CTA from Amazon to /collections/sport-glasses</div>
         <div class="issue-row-desc">Every conversion from this button currently goes to Amazon. One URL change recovers it entirely.</div>
       </div>
-      <div class="issue-row-tag">Quick fix</div>
+      <div class="issue-row-tag">High impact</div>
     </div>
     <div class="issue-row">
       <div class="issue-dot issue-dot--critical"></div>
       <div class="issue-row-content">
-        <div class="issue-row-title">Install a customer review system — Judge.me or Yotpo</div>
-        <div class="issue-row-desc">The single highest-impact conversion improvement available. Activate post-purchase review request emails immediately. Some products already have review counts in the HTML — confirm whether a previous system can be reactivated.</div>
+        <div class="issue-row-title">Activate the review system — it exists, it needs volume</div>
+        <div class="issue-row-desc">The review system is confirmed working. Priority actions: (1) activate post-purchase automated review request emails for all past orders, (2) add AggregateRating schema so stars appear in Google Search, (3) surface existing reviews on the homepage, (4) enable photo reviews. Installation is not needed — activation is.</div>
       </div>
-      <div class="issue-row-tag">Critical</div>
+      <div class="issue-row-tag">High impact</div>
     </div>
     <div class="issue-row">
       <div class="issue-dot issue-dot--critical"></div>
@@ -977,7 +997,7 @@
         <div class="issue-row-title">Display award badges with names and years on homepage + product pages</div>
         <div class="issue-row-desc">Red Dot, iF Design, ADC Bronze Cube, Green Product Award — these are world-class credentials. Each badge should appear with its name and year near the Add to Cart button and below the hero.</div>
       </div>
-      <div class="issue-row-tag">Critical</div>
+      <div class="issue-row-tag">High impact</div>
     </div>
     <div class="issue-row">
       <div class="issue-dot issue-dot--critical"></div>
@@ -985,7 +1005,7 @@
         <div class="issue-row-title">Replace or optimise the country-selector modal</div>
         <div class="issue-row-desc">Use IP-based geolocation (Shopify Markets / MaxMind) to auto-route. Present a dismissible banner instead of a full-screen blocker.</div>
       </div>
-      <div class="issue-row-tag">Critical</div>
+      <div class="issue-row-tag">High impact</div>
     </div>
     <div class="issue-row">
       <div class="issue-dot issue-dot--critical"></div>
@@ -993,7 +1013,7 @@
         <div class="issue-row-title">Fix URL typos — /sungalsses-oval and /sungalsses-round</div>
         <div class="issue-row-desc">Redirect misspelled slugs to corrected versions. Affects SEO and link credibility if shared externally.</div>
       </div>
-      <div class="issue-row-tag">SEO · Quick</div>
+      <div class="issue-row-tag">SEO</div>
     </div>
     <div class="issue-row">
       <div class="issue-dot issue-dot--mid"></div>
@@ -1001,7 +1021,7 @@
         <div class="issue-row-title">Add a homepage value proposition above the fold</div>
         <div class="issue-row-desc">e.g. "Award-winning eyewear for kids who don't sit still — UV400 protection, flexible frames, eco-friendly." No new visitor currently understands why to choose OLIVIO &amp; Co without scrolling.</div>
       </div>
-      <div class="issue-row-tag">60 days</div>
+      <div class="issue-row-tag">Medium impact</div>
     </div>
     <div class="issue-row">
       <div class="issue-dot issue-dot--mid"></div>
@@ -1009,15 +1029,15 @@
         <div class="issue-row-title">Move warranty + returns to homepage prominence</div>
         <div class="issue-row-desc">13-month warranty and 30-day returns are buried on product pages. For both main competitors, this is the #1 homepage trust signal. A positioning fix, not a policy creation.</div>
       </div>
-      <div class="issue-row-tag">60 days</div>
+      <div class="issue-row-tag">Medium impact</div>
     </div>
     <div class="issue-row">
       <div class="issue-dot issue-dot--mid"></div>
       <div class="issue-row-content">
-        <div class="issue-row-title">Create a size guide at /pages/size-guide and link from every product page</div>
-        <div class="issue-row-desc">Age ranges, head circumference in cm/inches, clarification of the Kids/Junior overlap. Reduces cart abandonment and ranks for "children's sunglasses size guide" — a search cluster the brand is uniquely positioned to own.</div>
+        <div class="issue-row-title">Create a standalone /pages/size-guide — the tab is not enough</div>
+        <div class="issue-row-desc">A size guide tab exists on product pages — good. But it cannot be linked from collection pages, shared externally, or ranked in search. A dedicated page with age ranges, head circumference in cm/inches, and a Kids/Junior overlap clarification would reduce cart abandonment and rank for "children's sunglasses size guide."</div>
       </div>
-      <div class="issue-row-tag">60 days</div>
+      <div class="issue-row-tag">Medium impact</div>
     </div>
     <div class="issue-row">
       <div class="issue-dot issue-dot--mid"></div>
@@ -1025,7 +1045,7 @@
         <div class="issue-row-title">Write unique meta descriptions for every collection page</div>
         <div class="issue-row-desc">The same UV/outdoor description appears on dozens of pages. Duplicate meta descriptions reduce organic reach. Each collection page needs a unique, keyword-targeted description.</div>
       </div>
-      <div class="issue-row-tag">60 days · SEO</div>
+      <div class="issue-row-tag">SEO</div>
     </div>
     <div class="issue-row">
       <div class="issue-dot issue-dot--mid"></div>
@@ -1033,7 +1053,7 @@
         <div class="issue-row-title">Add blog to main navigation + publish brand-specific content</div>
         <div class="issue-row-desc">40+ articles are footer-only. Navigation fix first, then replace generic copy with brand-owned articles: ski goggles guide (before October), blue-light screen glasses guide, children's eye health (the 70% UV fact).</div>
       </div>
-      <div class="issue-row-tag">60 days</div>
+      <div class="issue-row-tag">Medium impact</div>
     </div>
     <div class="issue-row">
       <div class="issue-dot issue-dot--mid"></div>
@@ -1041,7 +1061,7 @@
         <div class="issue-row-title">Add UV certification + lens standard badges to product pages</div>
         <div class="issue-row-desc">CE mark, UV400, ANSI Z80.3. Parents of young children make safety-first decisions. Visual certification icons convert; spec text does not.</div>
       </div>
-      <div class="issue-row-tag">60 days</div>
+      <div class="issue-row-tag">Medium impact</div>
     </div>
     <div class="issue-row">
       <div class="issue-dot issue-dot--mid"></div>
@@ -1049,7 +1069,7 @@
         <div class="issue-row-title">Implement a wishlist feature — Wishlist Plus or Swym</div>
         <div class="issue-row-desc">Parents research and save before purchasing, especially for gifting. Wishlists recover consideration intent that would otherwise be lost between sessions.</div>
       </div>
-      <div class="issue-row-tag">60 days</div>
+      <div class="issue-row-tag">Medium impact</div>
     </div>
     <div class="issue-row">
       <div class="issue-dot issue-dot--mid"></div>
@@ -1057,7 +1077,7 @@
         <div class="issue-row-title">Launch a loyalty rewards program — Smile.io or Yotpo Loyalty</div>
         <div class="issue-row-desc">Parents buying for growing children are a natural multi-year repeat customer base. Points for purchases, reviews, and referrals. The product ladder from toddler to teen is five natural repurchase moments.</div>
       </div>
-      <div class="issue-row-tag">60 days</div>
+      <div class="issue-row-tag">Medium impact</div>
     </div>
     <div class="issue-row">
       <div class="issue-dot issue-dot--low"></div>
@@ -1124,22 +1144,22 @@
       <tr>
         <td class="feat-label">Site Navigation</td>
         <td class="cell-weak">5.5 / 10</td>
-        <td>Country modal, broken search, URL typos, wrong collection links</td>
+        <td>Country modal, search broken, Add to Cart broken, 3 wrong collection links, URL typos</td>
       </tr>
       <tr>
         <td class="feat-label">Homepage Effectiveness</td>
         <td class="cell-miss">5 / 10</td>
-        <td>No USP above fold, no reviews, no trust badges, Amazon CTA</td>
+        <td>No USP above fold, no homepage reviews, Amazon CTA, Add to Cart bug</td>
       </tr>
       <tr>
         <td class="feat-label">Product Pages</td>
         <td class="cell-weak">6 / 10</td>
-        <td>No reviews, no cross-sell, no size guide link, no wishlist</td>
+        <td>Reviews exist but volume low + not on homepage; size guide buried in tab; no cross-sell</td>
       </tr>
       <tr>
         <td class="feat-label">Trust &amp; Social Proof</td>
         <td class="cell-miss">4 / 10</td>
-        <td>Awards uncontextualised, no reviews, no certification badges visible</td>
+        <td>Reviews exist but low volume; awards uncontextualised; returns not free (undisclosed)</td>
       </tr>
       <tr>
         <td class="feat-label">SEO — Technical</td>
@@ -1210,7 +1230,7 @@
         Nine design awards. Eco-verified packaging. A ski goggles category that neither Babiators nor Roshambo offers. A Mediterranean identity that no competitor can replicate. A five-tier age system the market's most granular.
       </p>
       <p style="font-size:15px; font-weight:300; font-style:italic; color:#CCCCCC; line-height:1.85; margin-top:14px;">
-        A parent arriving on the homepage today sees none of it. They see a country modal, a broken search bar, and a collection called "Creative Dedition." The gap between what this brand is and what the website communicates is the entire opportunity.
+        A review system exists — it has five reviews. An Add to Cart button exists — it throws an error on the homepage. A size guide exists — it is in a tab that a parent browsing a collection page will never find. A return policy exists — the customer pays return shipping, which is buried in the FAQ. The brand has built the right infrastructure. Almost none of it is positioned where it converts.
       </p>
     </div>
 
