@@ -1,0 +1,1396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Olivio & Co — Website &amp; Social Media Proposal 2026</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300&display=swap');
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --red:      #E03040;
+    --navy:     #0C0C1A;
+    --ink:      #1E1E32;
+    --slate:    #404060;
+    --muted:    #9090B0;
+    --border:   #E4E4EE;
+    --bg:       #F7F7FB;
+    --white:    #FFFFFF;
+    --green:    #0E9E70;
+    --amber:    #C08010;
+  }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--white);
+    color: var(--ink);
+    font-size: 10.5pt;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  @media print {
+    body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .pb { page-break-before: always; }
+    .no-break { page-break-inside: avoid; }
+  }
+  .pb { page-break-before: always; }
+  .no-break { page-break-inside: avoid; }
+
+  /* ─── COVER ─────────────────────────────── */
+  .cover {
+    background: var(--navy);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 64px 72px 48px;
+    color: white;
+    position: relative;
+    overflow: hidden;
+  }
+  .cover::before {
+    content: '';
+    position: absolute;
+    top: -120px; right: -120px;
+    width: 480px; height: 480px;
+    background: radial-gradient(circle, rgba(224,48,64,0.14) 0%, transparent 68%);
+    pointer-events: none;
+  }
+  .cover::after {
+    content: '';
+    position: absolute;
+    bottom: -80px; left: -80px;
+    width: 360px; height: 360px;
+    background: radial-gradient(circle, rgba(224,48,64,0.07) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .cover-agency {
+    font-size: 8.5pt;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.38);
+    position: relative; z-index:1;
+  }
+  .cover-body { position: relative; z-index: 1; }
+  .cover-tag {
+    display: inline-block;
+    font-size: 7.5pt;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--red);
+    border: 1px solid rgba(224,48,64,0.45);
+    padding: 5px 14px;
+    border-radius: 20px;
+    margin-bottom: 28px;
+  }
+  .cover-title {
+    font-size: 62pt;
+    font-weight: 900;
+    line-height: 0.92;
+    letter-spacing: -0.035em;
+    margin-bottom: 10px;
+  }
+  .cover-title em { color: var(--red); font-style: normal; }
+  .cover-sub {
+    font-size: 13pt;
+    font-weight: 300;
+    color: rgba(255,255,255,0.42);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 44px;
+  }
+  .cover-rule {
+    width: 48px; height: 2px;
+    background: var(--red);
+    margin-bottom: 36px;
+  }
+  .cover-meta {
+    display: flex;
+    gap: 48px;
+    margin-bottom: 0;
+  }
+  .cover-meta-item label {
+    display: block;
+    font-size: 7pt;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.28);
+    margin-bottom: 3px;
+  }
+  .cover-meta-item strong {
+    font-size: 9.5pt;
+    font-weight: 600;
+    color: rgba(255,255,255,0.68);
+  }
+  .cover-footer {
+    display: flex;
+    justify-content: space-between;
+    font-size: 7.5pt;
+    color: rgba(255,255,255,0.18);
+    border-top: 1px solid rgba(255,255,255,0.06);
+    padding-top: 18px;
+    position: relative; z-index: 1;
+  }
+
+  /* ─── SECTION WRAPPER ─────────────────── */
+  .section {
+    padding: 52px 72px;
+    border-bottom: 1px solid var(--border);
+  }
+  .section:last-child { border-bottom: none; }
+
+  .eyebrow {
+    font-size: 7.5pt;
+    font-weight: 800;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 10px;
+  }
+  .section-title {
+    font-size: 24pt;
+    font-weight: 900;
+    line-height: 1.08;
+    letter-spacing: -0.025em;
+    color: var(--navy);
+    margin-bottom: 12px;
+  }
+  .section-lead {
+    font-size: 10.5pt;
+    font-weight: 300;
+    color: var(--slate);
+    line-height: 1.72;
+    max-width: 660px;
+    margin-bottom: 36px;
+  }
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 32px 0;
+  }
+
+  /* ─── AUDIT TABLE ─────────────────────── */
+  .audit-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 9.5pt;
+    margin-bottom: 32px;
+  }
+  .audit-table thead th {
+    padding: 10px 16px;
+    background: var(--navy);
+    color: rgba(255,255,255,0.55);
+    font-size: 7.5pt;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-align: left;
+  }
+  .audit-table thead th:first-child { border-radius: 8px 0 0 0; width: 30%; }
+  .audit-table thead th:last-child  { border-radius: 0 8px 0 0; }
+  .audit-table tbody tr {
+    border-bottom: 1px solid var(--border);
+  }
+  .audit-table tbody tr:nth-child(even) td { background: var(--bg); }
+  .audit-table td {
+    padding: 12px 16px;
+    color: var(--slate);
+    vertical-align: top;
+    line-height: 1.5;
+  }
+  .audit-table td:first-child {
+    font-weight: 700;
+    color: var(--navy);
+  }
+
+  /* ─── COMPARE BOX ─────────────────────── */
+  .compare-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-top: 8px;
+  }
+  .compare-col {
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .compare-col.after { border-color: var(--green); }
+  .compare-col-head {
+    padding: 14px 20px;
+    font-size: 8pt;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+  .compare-col-head.now  { background: #F7F0F0; color: #A02030; }
+  .compare-col-head.after { background: #F0FAF5; color: #0A7050; }
+  .compare-col ul {
+    list-style: none;
+    padding: 12px 20px 20px;
+  }
+  .compare-col ul li {
+    font-size: 9.5pt;
+    color: var(--slate);
+    padding: 5px 0;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    gap: 9px;
+    line-height: 1.45;
+  }
+  .compare-col ul li:last-child { border-bottom: none; }
+  .compare-col.now ul li::before  { content: '—'; color: #C04050; flex-shrink: 0; }
+  .compare-col.after ul li::before { content: '✓'; color: var(--green); flex-shrink: 0; font-weight: 700; }
+
+  /* ─── PHASE HEADER ─────────────────────── */
+  .phase-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 22px;
+    margin-bottom: 30px;
+  }
+  .phase-num {
+    width: 50px; height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13pt;
+    font-weight: 900;
+    color: white;
+    flex-shrink: 0;
+  }
+  .pn1 { background: var(--navy); }
+  .pn2 { background: var(--slate); }
+  .pn3 { background: var(--red); }
+
+  .phase-label {
+    font-size: 7.5pt;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 3px;
+  }
+  .phase-title {
+    font-size: 17pt;
+    font-weight: 900;
+    letter-spacing: -0.02em;
+    color: var(--navy);
+    margin-bottom: 2px;
+  }
+  .phase-sub {
+    font-size: 9.5pt;
+    color: var(--muted);
+    font-weight: 300;
+  }
+
+  /* ─── DELIVERABLE ROW ─────────────────── */
+  .del {
+    display: grid;
+    grid-template-columns: 1fr 96px;
+    gap: 16px;
+    padding: 20px 0;
+    border-bottom: 1px solid var(--border);
+    align-items: start;
+  }
+  .del:first-of-type { border-top: 1px solid var(--border); }
+  .del-title {
+    font-size: 10pt;
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 4px;
+  }
+  .del-desc {
+    font-size: 9.5pt;
+    color: var(--slate);
+    line-height: 1.58;
+  }
+  .del-price {
+    font-size: 11pt;
+    font-weight: 900;
+    color: var(--navy);
+    text-align: right;
+    white-space: nowrap;
+    padding-top: 1px;
+  }
+
+  .phase-total-row {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 14px;
+    padding-top: 16px;
+  }
+  .phase-total-label {
+    font-size: 8pt;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .phase-total-num {
+    font-size: 15pt;
+    font-weight: 900;
+    color: var(--navy);
+  }
+
+  /* ─── INVESTMENT SUMMARY ──────────────── */
+  .inv-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 10pt;
+    margin-top: 24px;
+  }
+  .inv-table thead th {
+    padding: 10px 18px;
+    background: var(--navy);
+    color: rgba(255,255,255,0.5);
+    font-size: 7.5pt;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-align: left;
+  }
+  .inv-table thead th:last-child { text-align: right; }
+  .inv-table thead th:first-child { border-radius: 8px 0 0 0; }
+  .inv-table thead th:last-child  { border-radius: 0 8px 0 0; }
+  .inv-table tbody td {
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+    color: var(--slate);
+  }
+  .inv-table tbody td:first-child { font-weight: 700; color: var(--navy); width: 100px; }
+  .inv-table tbody td:last-child  { text-align: right; font-weight: 800; color: var(--navy); white-space: nowrap; }
+  .inv-table tbody tr:nth-child(even) td { background: var(--bg); }
+  .inv-table tfoot td {
+    padding: 16px 18px;
+    font-size: 11pt;
+    font-weight: 900;
+    background: var(--navy);
+    color: white;
+    border-top: 2px solid var(--red);
+  }
+  .inv-table tfoot td:first-child { border-radius: 0 0 0 8px; }
+  .inv-table tfoot td:last-child  { border-radius: 0 0 8px 0; text-align: right; }
+
+  .grand-block {
+    background: var(--navy);
+    border-radius: 16px;
+    padding: 34px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 32px;
+  }
+  .gb-label {
+    font-size: 8pt;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.35);
+    margin-bottom: 6px;
+  }
+  .gb-note {
+    font-size: 8.5pt;
+    color: rgba(255,255,255,0.25);
+    margin-top: 5px;
+  }
+  .gb-amount {
+    font-size: 38pt;
+    font-weight: 900;
+    color: white;
+    letter-spacing: -0.04em;
+  }
+  .gb-amount span { font-size: 18pt; color: rgba(255,255,255,0.38); }
+
+  /* ─── PAYMENT SCHEDULE ────────────────── */
+  .pay-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 9.5pt;
+    margin-top: 24px;
+  }
+  .pay-table thead th {
+    padding: 9px 16px;
+    background: var(--bg);
+    color: var(--muted);
+    font-size: 7.5pt;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-align: left;
+    border-bottom: 2px solid var(--border);
+  }
+  .pay-table thead th:last-child { text-align: right; }
+  .pay-table tbody td {
+    padding: 13px 16px;
+    border-bottom: 1px solid var(--border);
+    color: var(--slate);
+    vertical-align: top;
+  }
+  .pay-table tbody td:first-child { font-weight: 700; color: var(--navy); width: 160px; }
+  .pay-table tbody td:last-child  { text-align: right; font-weight: 800; color: var(--navy); }
+  .pay-table tbody tr:last-child td { border-bottom: none; }
+
+  /* ─── TIMELINE ────────────────────────── */
+  .timeline-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 9.5pt;
+    margin-top: 24px;
+  }
+  .timeline-table thead th {
+    padding: 10px 16px;
+    background: var(--navy);
+    color: rgba(255,255,255,0.5);
+    font-size: 7.5pt;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-align: left;
+  }
+  .timeline-table thead th:first-child { border-radius: 8px 0 0 0; width: 70px; }
+  .timeline-table thead th:last-child  { border-radius: 0 8px 0 0; }
+  .timeline-table tbody tr { border-bottom: 1px solid var(--border); }
+  .timeline-table tbody tr.milestone { background: #F7F0F0; }
+  .timeline-table tbody tr:nth-child(even):not(.milestone) td { background: var(--bg); }
+  .timeline-table tbody tr.milestone td { font-weight: 600; }
+  .timeline-table td {
+    padding: 12px 16px;
+    color: var(--slate);
+    vertical-align: top;
+    line-height: 1.5;
+  }
+  .timeline-table td:first-child { font-weight: 800; color: var(--navy); white-space: nowrap; }
+  .timeline-table td:nth-child(2){ font-weight: 600; color: var(--navy); width: 180px; }
+  .wk-badge {
+    display: inline-block;
+    font-size: 6.5pt;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    border-radius: 20px;
+    margin-left: 5px;
+    vertical-align: middle;
+  }
+  .b1 { background: #EEEEFF; color: #3030A0; }
+  .b2 { background: #EEFFEE; color: #206040; }
+  .b3 { background: #FFEEEE; color: #A02030; }
+  .milestone-tag {
+    display: inline-block;
+    font-size: 7pt;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 2px 10px;
+    border-radius: 20px;
+    background: var(--red);
+    color: white;
+    margin-left: 6px;
+    vertical-align: middle;
+  }
+
+  /* ─── IMPACT ─────────────────────────── */
+  .impact-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-top: 24px;
+  }
+  .impact-card {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 22px 20px;
+  }
+  .impact-num {
+    font-size: 22pt;
+    font-weight: 900;
+    color: var(--red);
+    line-height: 1;
+    letter-spacing: -0.03em;
+    margin-bottom: 8px;
+  }
+  .impact-label {
+    font-size: 9pt;
+    color: var(--slate);
+    line-height: 1.5;
+  }
+  .impact-note {
+    font-size: 7.5pt;
+    color: var(--muted);
+    margin-top: 5px;
+    font-style: italic;
+  }
+
+  /* ─── SOCIAL MEDIA SECTION ────────────── */
+  .social-divider {
+    background: var(--navy);
+    padding: 44px 72px 36px;
+    color: white;
+    margin-top: 0;
+  }
+  .social-divider .eyebrow { color: var(--red); }
+  .social-divider .section-title { color: white; }
+  .social-divider .section-lead  { color: rgba(255,255,255,0.45); }
+
+  .reels-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-top: 28px;
+  }
+  .reel-card {
+    border: 1.5px solid rgba(255,255,255,0.1);
+    border-radius: 14px;
+    overflow: hidden;
+    position: relative;
+  }
+  .reel-card.featured { border-color: var(--red); }
+  .reel-badge {
+    position: absolute;
+    top: 0; right: 0;
+    background: var(--red);
+    color: white;
+    font-size: 7pt;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 0 12px 0 10px;
+  }
+  .reel-head {
+    padding: 22px 20px 14px;
+    background: rgba(255,255,255,0.04);
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+  }
+  .reel-type {
+    font-size: 7.5pt;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.35);
+    margin-bottom: 5px;
+  }
+  .reel-name {
+    font-size: 11pt;
+    font-weight: 800;
+    color: white;
+  }
+  .reel-body { padding: 16px 20px 20px; }
+  .reel-price {
+    font-size: 26pt;
+    font-weight: 900;
+    color: white;
+    line-height: 1;
+    letter-spacing: -0.03em;
+  }
+  .reel-price sup {
+    font-size: 12pt;
+    vertical-align: super;
+    font-weight: 700;
+    color: rgba(255,255,255,0.5);
+  }
+  .reel-save {
+    font-size: 8.5pt;
+    color: var(--green);
+    font-weight: 700;
+    margin: 6px 0 14px;
+  }
+  .reel-save.ghost { color: transparent; }
+  .reel-features {
+    list-style: none;
+    border-top: 1px solid rgba(255,255,255,0.07);
+    padding-top: 12px;
+  }
+  .reel-features li {
+    font-size: 9pt;
+    color: rgba(255,255,255,0.5);
+    padding: 4px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    display: flex;
+    gap: 8px;
+    line-height: 1.4;
+  }
+  .reel-features li:last-child { border-bottom: none; }
+  .reel-features li::before { content: '—'; color: rgba(255,255,255,0.2); flex-shrink:0; }
+
+  /* ─── NOTE BOX ───────────────────────── */
+  .note-box {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--muted);
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-top: 24px;
+  }
+  .note-box-title {
+    font-size: 7.5pt;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 7px;
+  }
+  .note-box p, .note-box ul {
+    font-size: 9.5pt;
+    color: var(--slate);
+    line-height: 1.65;
+  }
+  .note-box ul { margin: 6px 0 0 14px; }
+
+  /* ─── SIGNATURE ─────────────────────── */
+  .sig-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 56px;
+    margin-top: 44px;
+  }
+  .sig-label {
+    font-size: 7.5pt;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 60px;
+  }
+  .sig-line {
+    border-top: 1px solid var(--navy);
+    padding-top: 8px;
+  }
+  .sig-name { font-size: 9.5pt; font-weight: 700; color: var(--navy); }
+  .sig-role { font-size: 8.5pt; color: var(--muted); }
+
+  /* ─── DOC FOOTER ─────────────────────── */
+  .doc-footer {
+    background: var(--bg);
+    border-top: 1px solid var(--border);
+    padding: 24px 72px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 7.5pt;
+    color: var(--muted);
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════
+     COVER
+═══════════════════════════════════════ -->
+<div class="cover">
+  <div class="cover-agency">Virtually Ever After · Luxembourg</div>
+
+  <div class="cover-body">
+    <div class="cover-tag">Website Proposal — 2026</div>
+    <div class="cover-title">Olivio<br><em>&amp;Co</em></div>
+    <div class="cover-sub">Children's Eyewear · Digital Project</div>
+    <div class="cover-rule"></div>
+    <div class="cover-meta">
+      <div class="cover-meta-item">
+        <label>Prepared by</label>
+        <strong>Virtually Ever After</strong>
+      </div>
+      <div class="cover-meta-item">
+        <label>Client</label>
+        <strong>Olivio &amp; Co</strong>
+      </div>
+      <div class="cover-meta-item">
+        <label>Timeline</label>
+        <strong>10–12 Weeks</strong>
+      </div>
+      <div class="cover-meta-item">
+        <label>Investment</label>
+        <strong>€ 18,000</strong>
+      </div>
+      <div class="cover-meta-item">
+        <label>Date</label>
+        <strong>March 2026</strong>
+      </div>
+    </div>
+  </div>
+
+  <div class="cover-footer">
+    <span>Confidential — Prepared exclusively for Olivio &amp; Co</span>
+    <span>olivioandco.com · olivioandco.eu</span>
+    <span>© 2026 Virtually Ever After</span>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════
+     SITE AUDIT
+═══════════════════════════════════════ -->
+<div class="pb"></div>
+<div class="section">
+  <div class="eyebrow">01 — Site Audit</div>
+  <div class="section-title">What the current site<br>actually looks like.</div>
+  <div class="section-lead">
+    We reviewed the live site at olivioandco.com directly. Every issue below is observable in the published site right now — nothing here is assumed.
+  </div>
+
+  <table class="audit-table no-break">
+    <thead>
+      <tr>
+        <th>Issue</th>
+        <th>What we found</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Search is broken</td>
+        <td>"Something went wrong. Please try again!" appears on every page load. Visitors cannot search the catalogue.</td>
+      </tr>
+      <tr>
+        <td>Typo in a live URL</td>
+        <td>Collection URL reads <code>/collections/citrus-graden</code> — a misspelling visible in the navigation and indexed by Google.</td>
+      </tr>
+      <tr>
+        <td>Button copy error</td>
+        <td>Sport Sunglasses section shows "VieDiscover" — a visible typo in the published page that sends clicks to Amazon, not the store.</td>
+      </tr>
+      <tr>
+        <td>Duplicate award image</td>
+        <td>The awards carousel repeats the same image file twice. One slot is empty.</td>
+      </tr>
+      <tr>
+        <td>No social media links</td>
+        <td>No Instagram, Facebook, TikTok or any other social link anywhere on the site — not in the header, footer, or homepage.</td>
+      </tr>
+      <tr>
+        <td>Blog hidden from navigation</td>
+        <td>A blog exists at /blogs/news and is linked in the footer. It does not appear in the main navigation. Most visitors never find it.</td>
+      </tr>
+      <tr>
+        <td>Reviews invisible in listings</td>
+        <td>Some products have star ratings and written reviews, but they are buried at the bottom of individual product pages. No star count appears in any product listing. The homepage shows zero social proof.</td>
+      </tr>
+      <tr>
+        <td>No email capture</td>
+        <td>A newsletter form exists in the footer. There is no popup, no exit-intent prompt, and no mechanism to capture a visitor who is about to leave without buying.</td>
+      </tr>
+      <tr>
+        <td>Return policy invisible</td>
+        <td>A full return policy page exists, but nothing on the homepage or product pages references it. Parents buying for a child need to know this before committing to a purchase.</td>
+      </tr>
+      <tr>
+        <td>Generic Shopify theme</td>
+        <td>The site runs on a default Shopify template with a standard product grid. There is no custom interface — no age-based navigation, no immersive browsing, no brand-specific experience.</td>
+      </tr>
+      <tr>
+        <td>No analytics tracking</td>
+        <td>No GA4 or equivalent tracking code is active. There is currently no way to measure what visitors do, which products they view, or where they leave.</td>
+      </tr>
+      <tr>
+        <td>Partner programme hidden</td>
+        <td>A "Become a Partner" page exists on the site. It is not featured in the navigation or anywhere in the main experience — a channel for B2B growth that is currently invisible.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="compare-grid no-break">
+    <div class="compare-col now">
+      <div class="compare-col-head now">Today</div>
+      <ul>
+        <li>Standard Shopify theme — no custom interface</li>
+        <li>Search broken on every page load</li>
+        <li>Reviews exist but invisible in listings</li>
+        <li>No social media links anywhere on the site</li>
+        <li>Blog hidden from the navigation</li>
+        <li>Return policy not referenced on product pages</li>
+        <li>No analytics — nothing is measurable</li>
+        <li>Partner programme not visible to potential retailers</li>
+      </ul>
+    </div>
+    <div class="compare-col after">
+      <div class="compare-col-head after">After this project</div>
+      <ul>
+        <li>Bespoke interface built for this brand — not a theme</li>
+        <li>Search working; all errors and typos fixed</li>
+        <li>Reviews prominent in listings and on the homepage</li>
+        <li>Social links in header and footer</li>
+        <li>Blog in the main navigation, featured on homepage</li>
+        <li>Returns and guarantee visible on every product page</li>
+        <li>Full Google Analytics with conversion tracking</li>
+        <li>Partner programme integrated into the main navigation</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════
+     PHASE 1 — DESIGN
+═══════════════════════════════════════ -->
+<div class="pb"></div>
+<div class="section">
+  <div class="phase-header">
+    <div class="phase-num pn1">1</div>
+    <div>
+      <div class="phase-label">Phase One · Weeks 1–4</div>
+      <div class="phase-title">Design</div>
+      <div class="phase-sub">The entire site rebuilt from scratch — custom code, not a theme.</div>
+    </div>
+  </div>
+
+  <p style="font-size:10pt; color:var(--slate); line-height:1.72; max-width:680px; margin-bottom:28px;">
+    The current site is a default Shopify theme. What replaces it is a custom HTML/CSS/JS build designed specifically for Olivio &amp; Co — every page, every interaction, every layout decision made for this brand and no other. The quality of the interface will match the quality of the product.
+  </p>
+
+  <div class="del no-break">
+    <div>
+      <div class="del-title">Homepage</div>
+      <div class="del-desc">
+        Built around a single clear opening: who the brand is, what it makes, and why a parent should trust it — before any scrolling. Age-based visual navigation (Toddler → Kids → Junior → Junior+ → Teen &amp; Adult) so any visitor finds their section in one click. All seven design awards named individually — not just logos, but what each one recognises. Customer reviews moved to the homepage, where they actually convert. Returns and guarantee policy made visible. Instagram feed embedded. Social media links in header and footer. "Become a Partner" entry point added to navigation.
+      </div>
+    </div>
+    <div class="del-price">€ 2,500</div>
+  </div>
+
+  <div class="del no-break">
+    <div>
+      <div class="del-title">Immersive Product Catalogue</div>
+      <div class="del-desc">
+        A fully custom product browser replaces the default Shopify collection grid. 155+ products, filterable in real time by age group, product type, collection, and lens. Each product opens in a full-detail panel: multiple images, colour selector, lens options, sizing information, and a direct add-to-cart — no page reload, no redirect. Existing product data pulled directly from the Shopify database. Add to Cart and Buy Now as two distinct actions. The size guide opens inline on every product — parents get the measurement table without leaving the page.
+      </div>
+    </div>
+    <div class="del-price">€ 4,500</div>
+  </div>
+
+  <div class="del no-break">
+    <div>
+      <div class="del-title">About Page</div>
+      <div class="del-desc">
+        A brand story page that earns trust. Founding context, design philosophy, and why this is not just another eyewear brand. All seven design awards listed with name, year, and what they recognise. Sustainability credentials — sugarcane packaging, recycled cleaning cloth, FSC-certified materials — made explicit. A feature comparison against Babiators and Roshambo: ski goggles, European presence, named collections, age granularity — advantages that are currently invisible on the site.
+      </div>
+    </div>
+    <div class="del-price">€ 1,200</div>
+  </div>
+
+  <div class="del no-break">
+    <div>
+      <div class="del-title">Size &amp; Fit Guide</div>
+      <div class="del-desc">
+        A dedicated page with a head-circumference table for all six age categories, measurements in centimetres, and direct links to shop each size. Parents buying for a child who is not present need to confirm fit before committing to a purchase. This page removes the most common reason for cart abandonment in children's product categories.
+      </div>
+    </div>
+    <div class="del-price">€ 800</div>
+  </div>
+
+  <div class="phase-total-row">
+    <div class="phase-total-label">Phase 1 Total</div>
+    <div class="phase-total-num">€ 9,000</div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════
+     PHASE 2 — VISIBILITY
+═══════════════════════════════════════ -->
+<div class="pb"></div>
+<div class="section">
+  <div class="phase-header">
+    <div class="phase-num pn2">2</div>
+    <div>
+      <div class="phase-label">Phase Two · Weeks 4–8</div>
+      <div class="phase-title">Visibility</div>
+      <div class="phase-sub">Everything the site needs to be found by people who do not know the brand yet.</div>
+    </div>
+  </div>
+
+  <p style="font-size:10pt; color:var(--slate); line-height:1.72; max-width:680px; margin-bottom:28px;">
+    A well-built site that no one can find is still a problem. This phase builds the technical foundation for organic search visibility — and creates the content that captures parents actively looking for what Olivio &amp; Co sells.
+  </p>
+
+  <div class="del no-break">
+    <div>
+      <div class="del-title">SEO Technical Setup</div>
+      <div class="del-desc">
+        Every page title and meta description rewritten with the right keywords. Structured data added across the full site: Organisation, WebSite with search action, Product, AggregateRating, FAQPage, BreadcrumbList, and ShippingDetails — the markup that enables star ratings, rich results, and product information to appear directly in Google search. Hreflang tags set correctly between .com and .eu to prevent duplicate content penalties. Sitemap and robots.txt written and submitted. Google Analytics 4 installed with add-to-cart, product view, and purchase events tracked from day one. A GDPR-compliant cookie consent banner added — a legal requirement for any brand serving European customers, currently absent from the site. All URL typos corrected.
+      </div>
+    </div>
+    <div class="del-price">€ 4,000</div>
+  </div>
+
+  <div class="del no-break">
+    <div>
+      <div class="del-title">Five Expert Articles</div>
+      <div class="del-desc">
+        The blog is currently empty. These five articles target search topics that neither Babiators nor Roshambo has written about — which means early, uncontested rankings. Each piece is 1,500–2,000 words, properly sourced, and written to be genuinely useful to the parent reading it, not just to the algorithm. Topics: why children need UV protection, the complete size guide from baby to teen, ski goggles versus sunglasses for children, blue light glasses for kids — what the evidence actually says, and protecting children's eyes on a family holiday. Each article links naturally to the relevant product range.
+      </div>
+    </div>
+    <div class="del-price">€ 1,900</div>
+  </div>
+
+  <div class="del no-break">
+    <div>
+      <div class="del-title">Google Business Profile</div>
+      <div class="del-desc">
+        The existing profile is brought fully up to date. A 12-week content calendar is delivered along with ten ready-to-publish post templates covering summer, back-to-school, and ski season. Q&amp;A section populated with the ten questions parents ask most often.
+      </div>
+    </div>
+    <div class="del-price">€ 600</div>
+  </div>
+
+  <div class="phase-total-row">
+    <div class="phase-total-label">Phase 2 Total</div>
+    <div class="phase-total-num">€ 6,500</div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════
+     PHASE 3 — LAUNCH
+═══════════════════════════════════════ -->
+<div class="pb"></div>
+<div class="section">
+  <div class="phase-header">
+    <div class="phase-num pn3">3</div>
+    <div>
+      <div class="phase-label">Phase Three · Weeks 8–12</div>
+      <div class="phase-title">Launch</div>
+      <div class="phase-sub">The tools that turn visitors into buyers. Then a full quality check before go-live.</div>
+    </div>
+  </div>
+
+  <div class="del no-break">
+    <div>
+      <div class="del-title">Review System</div>
+      <div class="del-desc">
+        Reviews already exist on the site — they are just invisible. A review platform is integrated and configured to display ratings prominently in product listings, on product pages, and in a homepage section. Post-purchase review requests automated. Once the review schema is live and ratings accumulate, Google search results begin showing star ratings next to the listing. Listings with stars consistently receive around 30% more clicks than those without — at no additional cost.
+      </div>
+    </div>
+    <div class="del-price">€ 600</div>
+  </div>
+
+  <div class="del no-break">
+    <div>
+      <div class="del-title">Instagram Gallery</div>
+      <div class="del-desc">
+        The brand's Instagram feed embedded on the homepage — live content, updated automatically. Social proof that requires no manual maintenance.
+      </div>
+    </div>
+    <div class="del-price">€ 400</div>
+  </div>
+
+  <div class="del no-break">
+    <div>
+      <div class="del-title">Conversion Tools</div>
+      <div class="del-desc">
+        An exit-intent popup offering a first-order discount — converts roughly 8–12% of visitors who are about to leave into newsletter subscribers and future buyers. A save-for-later option on product cards — parents often browse for a child who is not present; this gives them a way to return without losing their selection. Out-of-stock products show a "Notify me when available" prompt with email capture.
+      </div>
+    </div>
+    <div class="del-price">€ 700</div>
+  </div>
+
+  <div class="del no-break">
+    <div>
+      <div class="del-title">Testing, Performance &amp; Launch</div>
+      <div class="del-desc">
+        Every page tested across mobile, tablet, and desktop. All links, all filters, all cart interactions. Page load speed measured against Core Web Vitals thresholds and optimised where needed. Final client walkthrough before go-live. Full deployment to Shopify production. Client handover package: all access credentials, a brief usage guide, and a recommended roadmap for the quarter following launch.
+      </div>
+    </div>
+    <div class="del-price">€ 800</div>
+  </div>
+
+  <div class="phase-total-row">
+    <div class="phase-total-label">Phase 3 Total</div>
+    <div class="phase-total-num">€ 2,500</div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════
+     INVESTMENT SUMMARY
+═══════════════════════════════════════ -->
+<div class="pb"></div>
+<div class="section">
+  <div class="eyebrow">Investment</div>
+  <div class="section-title">Project summary<br>&amp; payment schedule.</div>
+
+  <table class="inv-table mt-16 no-break" style="margin-top:24px;">
+    <thead>
+      <tr>
+        <th>Phase</th>
+        <th>Scope</th>
+        <th>Weeks</th>
+        <th>Fee</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Phase 1</td>
+        <td>Design — Homepage, Immersive Catalogue, About, Size Guide</td>
+        <td>1–4</td>
+        <td>€ 9,000</td>
+      </tr>
+      <tr>
+        <td>Phase 2</td>
+        <td>Visibility — SEO, Five Articles, Google Business Profile</td>
+        <td>4–8</td>
+        <td>€ 6,500</td>
+      </tr>
+      <tr>
+        <td>Phase 3</td>
+        <td>Launch — Reviews, Gallery, Conversion tools, QA &amp; deployment</td>
+        <td>8–12</td>
+        <td>€ 2,500</td>
+      </tr>
+    </tbody>
+    <tfoot>
+      <tr>
+        <td colspan="3">Fixed project fee</td>
+        <td>€ 18,000</td>
+      </tr>
+    </tfoot>
+  </table>
+
+  <div class="grand-block no-break">
+    <div>
+      <div class="gb-label">Total Investment</div>
+      <div class="gb-note">Fixed fee · 12 weeks · Three phases · Full delivery</div>
+    </div>
+    <div class="gb-amount"><span>€ </span>18,000</div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div style="font-size:8pt; font-weight:800; letter-spacing:0.14em; text-transform:uppercase; color:var(--muted); margin-bottom:4px;">Payment Schedule</div>
+  <p style="font-size:9.5pt; color:var(--slate); margin-bottom:0; line-height:1.6;">Four milestones. Each invoice is raised only after the preceding phase is approved and signed off.</p>
+
+  <table class="pay-table no-break">
+    <thead>
+      <tr>
+        <th>When</th>
+        <th>Trigger</th>
+        <th>Amount</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>On signing</td>
+        <td>Project begins. Discovery, access, and Week 1 setup.</td>
+        <td>€ 4,500</td>
+      </tr>
+      <tr>
+        <td>Phase 1 delivery</td>
+        <td>Homepage, catalogue, about, and size guide approved by client.</td>
+        <td>€ 5,500</td>
+      </tr>
+      <tr>
+        <td>Phase 2 delivery</td>
+        <td>SEO setup, articles, and Google Business Profile approved by client.</td>
+        <td>€ 5,500</td>
+      </tr>
+      <tr>
+        <td>Launch day</td>
+        <td>Site goes live. Handover package delivered.</td>
+        <td>€ 2,500</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="note-box" style="margin-top:24px;">
+    <div class="note-box-title">Included &amp; excluded</div>
+    <ul>
+      <li>Shopify deployment requires the client to provide store admin access at Phase 3.</li>
+      <li>Existing product data and catalogue structure is used as-is — no manual product re-entry.</li>
+      <li>Google Business Profile optimisation requires the client's Google account credentials for publishing; we provide the content and calendar, the client publishes.</li>
+      <li>Photography and video production are not included. All visual assets use existing product imagery.</li>
+      <li>Ongoing monthly maintenance and content updates are available as a separate retainer engagement.</li>
+    </ul>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════
+     12-WEEK ROADMAP
+═══════════════════════════════════════ -->
+<div class="pb"></div>
+<div class="section">
+  <div class="eyebrow">Delivery Schedule</div>
+  <div class="section-title">12-week roadmap.</div>
+  <div class="section-lead">Bold rows are client approval points. No invoice for the following phase is raised until the preceding one is signed off.</div>
+
+  <table class="timeline-table">
+    <thead>
+      <tr>
+        <th>Week</th>
+        <th>Milestone</th>
+        <th>Work</th>
+        <th>Client</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>W1 <span class="wk-badge b1">P1</span></td>
+        <td>Kickoff</td>
+        <td>Site reviewed, all issues logged, design direction confirmed, Shopify access granted, product catalogue connected.</td>
+        <td>Required — kickoff call, asset &amp; access delivery</td>
+      </tr>
+      <tr>
+        <td>W2 <span class="wk-badge b1">P1</span></td>
+        <td>Homepage build</td>
+        <td>Age navigation, awards section, review zone, guarantee placement, social feed, social links, partner programme entry built.</td>
+        <td>Review draft, provide feedback</td>
+      </tr>
+      <tr>
+        <td>W3 <span class="wk-badge b1">P1</span></td>
+        <td>Catalogue build</td>
+        <td>Custom product browser, filter system, product modals, colour and lens selectors, inline size guide, cart integration.</td>
+        <td>Review draft, provide feedback</td>
+      </tr>
+      <tr class="milestone">
+        <td>W4 <span class="wk-badge b1">P1</span></td>
+        <td>About + Size Guide <span class="milestone-tag">Delivery</span></td>
+        <td>About page, size guide, all Phase 1 typos and broken links fixed. Full Phase 1 submitted for approval.</td>
+        <td>Approval required before Phase 2 begins</td>
+      </tr>
+      <tr>
+        <td>W5 <span class="wk-badge b2">P2</span></td>
+        <td>SEO setup</td>
+        <td>All page titles and meta descriptions rewritten. Structured data coded for all page types. Hreflang implemented.</td>
+        <td>Low involvement</td>
+      </tr>
+      <tr>
+        <td>W6 <span class="wk-badge b2">P2</span></td>
+        <td>Technical completion</td>
+        <td>Sitemap, robots.txt, GDPR cookie banner, GA4 with conversion tracking installed and verified. Five article drafts begun.</td>
+        <td>Low involvement</td>
+      </tr>
+      <tr>
+        <td>W7 <span class="wk-badge b2">P2</span></td>
+        <td>Content</td>
+        <td>Five articles completed and formatted. Internal links to product pages mapped and applied.</td>
+        <td>Review articles before publication</td>
+      </tr>
+      <tr class="milestone">
+        <td>W8 <span class="wk-badge b2">P2</span></td>
+        <td>GBP + Phase 2 complete <span class="milestone-tag">Delivery</span></td>
+        <td>Google Business Profile updated, 12-week calendar and 10 post templates delivered. Full Phase 2 submitted for approval.</td>
+        <td>Approval required before Phase 3 begins</td>
+      </tr>
+      <tr>
+        <td>W9 <span class="wk-badge b3">P3</span></td>
+        <td>Reviews</td>
+        <td>Review platform integrated, configured, and connected to schema. Automated post-purchase email set up. Past-customer review campaign prepared.</td>
+        <td>Shopify admin access required</td>
+      </tr>
+      <tr>
+        <td>W10 <span class="wk-badge b3">P3</span></td>
+        <td>Conversion tools</td>
+        <td>Instagram gallery embedded. Exit-intent popup, save-for-later, and back-in-stock notification built and tested.</td>
+        <td>Confirm discount offer and popup messaging</td>
+      </tr>
+      <tr>
+        <td>W11 <span class="wk-badge b3">P3</span></td>
+        <td>QA</td>
+        <td>Full cross-device testing across mobile, tablet, and desktop. All links, filters, and cart flows verified. Load speed measured and optimised.</td>
+        <td>Low involvement</td>
+      </tr>
+      <tr class="milestone">
+        <td>W12 <span class="wk-badge b3">P3</span></td>
+        <td>Launch <span class="milestone-tag">Go Live</span></td>
+        <td>Final client walkthrough. Deployment to Shopify production. Review campaign sent to past customers. Handover package delivered.</td>
+        <td>Required — final approval before go-live</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+
+<!-- ═══════════════════════════════════════
+     EXPECTED IMPACT
+═══════════════════════════════════════ -->
+<div class="pb"></div>
+<div class="section">
+  <div class="eyebrow">What to Expect</div>
+  <div class="section-title">Observed outcomes from<br>closing gaps like these.</div>
+  <div class="section-lead">
+    These are directional estimates based on comparable projects and the specific issues identified in this site — not guarantees.
+  </div>
+
+  <div class="impact-grid">
+    <div class="impact-card">
+      <div class="impact-num">+30%</div>
+      <div class="impact-label">Click-through rate from Google search results</div>
+      <div class="impact-note">Activated by review schema — star ratings appear next to search listings once ratings accumulate</div>
+    </div>
+    <div class="impact-card">
+      <div class="impact-num">+150%</div>
+      <div class="impact-label">Organic traffic within six months of launch</div>
+      <div class="impact-note">Driven by five articles targeting search topics with no competition from Babiators or Roshambo</div>
+    </div>
+    <div class="impact-card">
+      <div class="impact-card-inner">
+      <div class="impact-num">1% → 3%</div>
+      <div class="impact-label">Estimated conversion rate improvement</div>
+      <div class="impact-note">Reviews, size guide, and visible guarantee remove the three most common reasons parents leave without buying</div>
+    </div>
+    </div>
+    <div class="impact-card">
+      <div class="impact-num">8–12%</div>
+      <div class="impact-label">Exit popup conversion rate to subscriber</div>
+      <div class="impact-note">Industry benchmark for a well-timed first-order discount offer — builds a direct channel for future launches</div>
+    </div>
+    <div class="impact-card">
+      <div class="impact-num">Top 10</div>
+      <div class="impact-label">Google ranking for target keywords within 4–6 months</div>
+      <div class="impact-note">"Kids ski goggles," "screen glasses for children," "polarized toddler sunglasses" — currently unranked</div>
+    </div>
+    <div class="impact-card">
+      <div class="impact-num">~40 orders</div>
+      <div class="impact-label">Break-even point on the total project investment</div>
+      <div class="impact-note">Conservative estimate at current average order value with no AOV uplift factored in</div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+  <p style="font-size:10pt; color:var(--slate); line-height:1.72; max-width:680px;">
+    Each phase builds on the one before it. The new site brings people in. The SEO and blog bring people who would never have found the site otherwise. The reviews, size guide, and guarantee turn browsers into buyers. These changes do not work in isolation — together, they close the gap between the quality of the product and the quality of the experience around it.
+  </p>
+</div>
+
+
+<!-- ═══════════════════════════════════════
+     ─ ─ ─  SOCIAL MEDIA PROPOSAL  ─ ─ ─
+═══════════════════════════════════════ -->
+<div class="pb"></div>
+<div class="social-divider">
+  <div class="eyebrow">Social Media Proposal</div>
+  <div class="section-title" style="color:white; margin-bottom:12px;">Short-form video.<br>Built for the feed.</div>
+  <div class="section-lead">
+    30–60 second reels for Instagram and TikTok. Eyewear-focused, culture-led. The kind of content that earns attention rather than buying it — and keeps working long after it is posted.
+  </div>
+
+  <div class="reels-grid">
+    <div class="reel-card">
+      <div class="reel-head">
+        <div class="reel-type">Single</div>
+        <div class="reel-name">One Reel</div>
+      </div>
+      <div class="reel-body">
+        <div class="reel-price"><sup>€</sup>500</div>
+        <div class="reel-save ghost">–</div>
+        <ul class="reel-features">
+          <li>30–60 seconds, vertical (9:16)</li>
+          <li>Concept, direction &amp; edit included</li>
+          <li>Eyewear or culture theme</li>
+          <li>Delivered ready to post</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="reel-card featured">
+      <div class="reel-badge">Popular</div>
+      <div class="reel-head">
+        <div class="reel-type">5-Reel Pack</div>
+        <div class="reel-name">One Campaign</div>
+      </div>
+      <div class="reel-body">
+        <div class="reel-price"><sup>€</sup>2,250</div>
+        <div class="reel-save">Save € 250 vs. individual</div>
+        <ul class="reel-features">
+          <li>5 × 30–60 second vertical reels</li>
+          <li>Full production per video</li>
+          <li>One seasonal campaign — summer, ski, or back-to-school</li>
+          <li>Delivered in a single batch</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="reel-card">
+      <div class="reel-head">
+        <div class="reel-type">10-Reel Pack</div>
+        <div class="reel-name">Two Seasons</div>
+      </div>
+      <div class="reel-body">
+        <div class="reel-price"><sup>€</sup>3,800</div>
+        <div class="reel-save">Save € 1,200 vs. individual</div>
+        <ul class="reel-features">
+          <li>10 × 30–60 second vertical reels</li>
+          <li>Full production per video</li>
+          <li>Mix of product, culture &amp; education</li>
+          <li>Content calendar included</li>
+          <li>Delivered in two batches of 5</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <p style="font-size:9pt; color:rgba(255,255,255,0.3); margin-top:24px; line-height:1.65; max-width:600px;">
+    Each reel includes concept, script direction, and edit. Themes are planned around specific moments — a product launch, a seasonal campaign, an educational angle, or a cultural reference. Delivered as final files with a suggested caption and hashtag set. The 5-reel pack suits a single seasonal push. The 10-reel pack provides consistent output across two seasons at the volume rate.
+  </p>
+</div>
+
+
+<!-- ═══════════════════════════════════════
+     TERMS & SIGNATURE
+═══════════════════════════════════════ -->
+<div class="pb"></div>
+<div class="section">
+  <div class="eyebrow">Terms &amp; Agreement</div>
+  <div class="section-title">How we move forward.</div>
+
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:40px; margin-top:28px;">
+    <div>
+      <div style="font-size:7.5pt; font-weight:800; letter-spacing:0.14em; text-transform:uppercase; color:var(--muted); margin-bottom:10px;">Key Terms</div>
+      <p style="font-size:9.5pt; color:var(--slate); line-height:1.75;">
+        Proposal valid for <strong style="color:var(--navy);">30 days</strong> from date of issue.<br><br>
+        Up to two rounds of revisions included per phase. Additional rounds billed at € 140 per hour.<br><br>
+        All deliverables become the property of Olivio &amp; Co upon receipt of the final payment.<br><br>
+        Timeline starts from the date the deposit clears and all required assets and access are provided by the client.<br><br>
+        The social media content package is a separate engagement and can be added at any point during or after the main project.
+      </p>
+    </div>
+    <div>
+      <div style="font-size:7.5pt; font-weight:800; letter-spacing:0.14em; text-transform:uppercase; color:var(--muted); margin-bottom:10px;">What we need from you at the start</div>
+      <p style="font-size:9.5pt; color:var(--slate); line-height:1.75;">
+        Shopify store read access (upgraded to admin at Phase 3).<br><br>
+        All current brand assets: logos, product images, and any other visual files.<br><br>
+        Written confirmation of the returns and warranty policy wording to be displayed on the site.<br><br>
+        Confirmation of the discount percentage for the exit-intent popup.<br><br>
+        One designated point of contact for feedback and approvals.
+      </p>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div style="font-size:7.5pt; font-weight:800; letter-spacing:0.14em; text-transform:uppercase; color:var(--muted); margin-bottom:6px;">Agreement</div>
+  <p style="font-size:9.5pt; color:var(--slate);">By signing below, both parties agree to the scope, timeline, and payment schedule described in this proposal.</p>
+
+  <div class="sig-grid">
+    <div>
+      <div class="sig-label">Client · Olivio &amp; Co</div>
+      <div class="sig-line">
+        <div class="sig-name">Authorised Signatory</div>
+        <div class="sig-role">Date: ____________________</div>
+      </div>
+    </div>
+    <div>
+      <div class="sig-label">Agency · Virtually Ever After</div>
+      <div class="sig-line">
+        <div class="sig-name">Virtually Ever After</div>
+        <div class="sig-role">Date: ____________________</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="doc-footer">
+  <span>Olivio &amp; Co Website &amp; Social Media Proposal · March 2026</span>
+  <span>Confidential</span>
+  <span>Virtually Ever After · Luxembourg</span>
+</div>
+
+</body>
+</html>
