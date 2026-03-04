@@ -1,0 +1,1248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Olivio &amp; Co — Website Analysis · Virtually Ever After</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Xanh+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:       #F4F4F2;
+    --ink:      #111111;
+    --charcoal: #3D3D3D;
+    --mid:      #6B6B6B;
+    --stone:    #909090;
+    --border:   #DDDDD8;
+    --light:    #EAEAE6;
+    --cover-bg: #161616;
+    --accent:   #2A2A2A;
+    --ff-mono:  'Xanh Mono', 'Courier New', monospace;
+    --ff-sans:  'Helvetica Neue', Helvetica, Arial, sans-serif;
+  }
+
+  html { font-size: 16px; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body { background: var(--bg); color: var(--ink); font-family: var(--ff-sans); font-weight: 400; line-height: 1.65; }
+
+  /* ─── PAGES ──────────────────────────────────────────────── */
+  .page {
+    min-height: 100vh;
+    padding: 80px 72px 120px;
+    max-width: 860px;
+    margin: 0 auto;
+    position: relative;
+    page-break-before: always;
+  }
+  .page:first-child { page-break-before: auto; }
+
+  /* ─── COVER ──────────────────────────────────────────────── */
+  .page--cover {
+    background: var(--cover-bg);
+    color: #F4F4F2;
+    max-width: 100%;
+    padding: 72px 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 100vh;
+  }
+  .cover-agency { font-family: var(--ff-mono); font-size: 10px; letter-spacing: 0.12em; color: #888; }
+  .cover-hero { flex: 1; display: flex; flex-direction: column; justify-content: center; padding: 48px 0 40px; }
+  .cover-title {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: clamp(52px, 9vw, 96px);
+    font-weight: 700;
+    line-height: 0.92;
+    letter-spacing: -0.04em;
+    color: #F4F4F2;
+  }
+  .cover-subtitle { margin-top: 28px; font-family: var(--ff-mono); font-size: 10px; letter-spacing: 0.18em; color: #888; }
+  .cover-rule { width: 48px; height: 1px; background: #333; margin: 32px 0; }
+  .cover-scope {
+    border: 1px solid #2A2A2A;
+    padding: 20px 24px;
+    margin-bottom: 32px;
+    display: inline-block;
+    max-width: 480px;
+  }
+  .cover-scope-label {
+    font-family: var(--ff-mono); font-size: 8px; font-weight: 700;
+    letter-spacing: 0.22em; color: #888; text-transform: uppercase;
+    margin-bottom: 14px; display: block;
+  }
+  .cover-scope-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 7px 0; border-top: 1px solid #2E2E2E;
+    font-size: 11px; color: #B0B0B0; font-family: var(--ff-mono); gap: 24px;
+  }
+  .cover-scope-row:last-of-type { border-bottom: 1px solid #2E2E2E; }
+  .cover-scope-tag { font-size: 8px; letter-spacing: 0.1em; text-transform: uppercase; color: #666; font-family: var(--ff-mono); white-space: nowrap; }
+  .cover-meta { display: flex; gap: 40px; flex-wrap: wrap; }
+  .cover-meta-label { font-family: var(--ff-mono); font-size: 8px; letter-spacing: 0.18em; text-transform: uppercase; color: #777; margin-bottom: 4px; }
+  .cover-meta-value { font-size: 12px; font-weight: 400; color: #C8C8C8; font-family: var(--ff-sans); }
+  .cover-footer { font-family: var(--ff-mono); font-size: 9px; color: #666; letter-spacing: 0.06em; }
+
+  /* ─── DARK PAGES ─────────────────────────────────────────── */
+  .page--dark {
+    background: var(--cover-bg);
+    color: #F4F4F2;
+    max-width: 100%;
+    padding: 80px 100px 100px;
+  }
+
+  /* ─── TYPOGRAPHY ─────────────────────────────────────────── */
+  .eyebrow {
+    display: block; font-family: var(--ff-mono); font-size: 8px; font-weight: 700;
+    letter-spacing: 0.24em; text-transform: uppercase; color: var(--mid); margin-bottom: 14px;
+  }
+  .section-title {
+    font-family: var(--ff-sans); font-size: clamp(26px, 4vw, 38px); font-weight: 700;
+    line-height: 1.15; color: var(--ink); margin-bottom: 20px; letter-spacing: -0.03em;
+  }
+  .section-intro {
+    font-size: 15px; font-weight: 300; color: var(--charcoal);
+    max-width: 560px; line-height: 1.72; margin-bottom: 48px;
+  }
+
+  /* ─── SCORE GRID ─────────────────────────────────────────── */
+  .score-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2px;
+    background: var(--border);
+    margin-bottom: 40px;
+  }
+  .score-card { background: #fff; padding: 20px 22px 18px; }
+  .score-card:nth-child(even) { background: var(--light); }
+  .score-num {
+    font-family: var(--ff-mono); font-size: 32px; font-weight: 700;
+    color: var(--ink); line-height: 1; margin-bottom: 4px; letter-spacing: -0.03em;
+  }
+  .score-num--low { color: #B03030; }
+  .score-num--mid { color: #A06020; }
+  .score-num--high { color: #2A7A2A; }
+  .score-label { font-family: var(--ff-mono); font-size: 8px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--stone); line-height: 1.4; }
+
+  /* ─── CONTEXT STRIP ──────────────────────────────────────── */
+  .context-strip {
+    border-left: 3px solid var(--accent); padding: 18px 24px;
+    background: #fff; margin-bottom: 40px;
+  }
+  .context-strip p { font-size: 14px; font-weight: 400; color: var(--charcoal); line-height: 1.7; }
+  .context-strip p + p { margin-top: 10px; }
+  .context-strip strong { font-weight: 600; color: var(--ink); }
+
+  /* ─── FINDING BLOCKS ─────────────────────────────────────── */
+  .finding-block {
+    background: #fff; border-left: 4px solid var(--accent);
+    padding: 28px 32px; margin-bottom: 20px;
+  }
+  .finding-tag {
+    font-family: var(--ff-mono); font-size: 8px; font-weight: 700;
+    letter-spacing: 0.24em; text-transform: uppercase; color: var(--stone); margin-bottom: 10px; display: block;
+  }
+  .finding-title { font-size: clamp(15px, 2vw, 18px); font-weight: 700; color: var(--ink); margin-bottom: 10px; line-height: 1.25; letter-spacing: -0.02em; }
+  .finding-body { font-size: 13px; font-weight: 300; color: var(--charcoal); line-height: 1.75; margin-bottom: 16px; }
+  .finding-list { list-style: none; padding: 0; }
+  .finding-list li {
+    font-size: 12px; color: var(--charcoal); padding: 7px 0 7px 16px;
+    position: relative; border-top: 1px solid var(--border); line-height: 1.55;
+  }
+  .finding-list li:last-child { border-bottom: 1px solid var(--border); }
+  .finding-list li::before {
+    content: ''; position: absolute; left: 0; top: 50%; transform: translateY(-50%);
+    width: 5px; height: 1px; background: var(--stone);
+  }
+  .finding-list li strong { font-weight: 600; color: var(--ink); }
+
+  /* ─── STATUS CARDS ───────────────────────────────────────── */
+  .status-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; background: var(--border); margin-bottom: 40px; }
+  .status-card { background: #fff; padding: 22px 24px; }
+  .status-card:nth-child(even) { background: var(--light); }
+  .status-tag { font-family: var(--ff-mono); font-size: 7px; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; margin-bottom: 8px; display: block; }
+  .status-tag--critical { color: #B03030; }
+  .status-tag--missing { color: #B03030; }
+  .status-tag--weak { color: #A06020; }
+  .status-tag--bug { color: #B03030; }
+  .status-tag--ok { color: #2A7A2A; }
+  .status-card-title { font-size: 13px; font-weight: 700; color: var(--ink); margin-bottom: 6px; letter-spacing: -0.01em; line-height: 1.3; }
+  .status-card-body { font-size: 11px; font-weight: 300; color: var(--charcoal); line-height: 1.6; }
+
+  /* ─── COMPARISON TABLE ───────────────────────────────────── */
+  .comp-table { width: 100%; border-collapse: collapse; font-size: 11px; margin-bottom: 32px; }
+  .comp-table th {
+    font-family: var(--ff-mono); font-size: 8px; font-weight: 700; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--stone); padding: 10px 12px;
+    border-bottom: 2px solid var(--ink); text-align: left; background: var(--bg);
+  }
+  .comp-table td { padding: 10px 12px; border-bottom: 1px solid var(--border); color: var(--charcoal); font-weight: 300; vertical-align: top; }
+  .comp-table tr:nth-child(even) td { background: #FAFAF8; }
+  .comp-table .feat-label { font-weight: 500; color: var(--ink); font-size: 12px; }
+  .cell-win { color: #111; font-weight: 700; }
+  .cell-miss { color: #B03030; }
+  .cell-weak { color: #A06020; }
+  .cell-ok { color: #2A7A2A; }
+
+  /* ─── ISSUE ROWS ─────────────────────────────────────────── */
+  .issue-rows { margin-bottom: 36px; }
+  .issue-row {
+    display: flex; align-items: flex-start; gap: 18px;
+    padding: 16px 0; border-bottom: 1px solid var(--border);
+  }
+  .issue-row:first-child { border-top: 1px solid var(--border); }
+  .issue-dot {
+    width: 8px; height: 8px; border-radius: 50%; margin-top: 5px; flex-shrink: 0;
+  }
+  .issue-dot--critical { background: #B03030; }
+  .issue-dot--mid { background: #A06020; }
+  .issue-dot--low { background: #2A7A2A; }
+  .issue-row-content { flex: 1; }
+  .issue-row-title { font-size: 13px; font-weight: 600; color: var(--ink); margin-bottom: 3px; letter-spacing: -0.01em; }
+  .issue-row-desc { font-size: 11px; font-weight: 300; color: var(--stone); line-height: 1.55; font-style: italic; }
+  .issue-row-tag { font-family: var(--ff-mono); font-size: 8px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--stone); white-space: nowrap; padding-top: 3px; }
+
+  /* ─── NOTE STRIP ─────────────────────────────────────────── */
+  .note-strip { border-left: 3px solid var(--border); padding: 16px 22px; margin: 24px 0; background: #fff; }
+  .note-strip-label { font-family: var(--ff-mono); font-size: 8px; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: var(--stone); margin-bottom: 10px; display: block; }
+  .note-strip p { font-size: 12px; font-weight: 300; color: var(--charcoal); line-height: 1.65; }
+  .note-strip p strong { font-weight: 600; color: var(--ink); }
+
+  /* ─── SECTION DIVIDER (dark) ─────────────────────────────── */
+  .page--divider {
+    background: var(--cover-bg);
+    color: #F4F4F2;
+    max-width: 100%;
+    padding: 80px 100px 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  /* ─── AWARD BLOCK ────────────────────────────────────────── */
+  .award-list { list-style: none; padding: 0; margin-bottom: 32px; }
+  .award-list li {
+    display: flex; align-items: baseline; gap: 16px;
+    padding: 12px 0; border-bottom: 1px solid var(--border);
+    font-size: 13px; color: var(--charcoal);
+  }
+  .award-list li:first-child { border-top: 1px solid var(--border); }
+  .award-year { font-family: var(--ff-mono); font-size: 10px; font-weight: 700; color: var(--stone); min-width: 36px; flex-shrink: 0; }
+  .award-name { font-weight: 500; color: var(--ink); font-size: 13px; flex: 1; }
+  .award-cat { font-size: 11px; font-weight: 300; color: var(--stone); font-style: italic; }
+
+  /* ─── PRODUCT TABLE ──────────────────────────────────────── */
+  .product-table { width: 100%; border-collapse: collapse; font-size: 11px; margin-bottom: 24px; }
+  .product-table th { font-family: var(--ff-mono); font-size: 8px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--stone); padding: 10px 12px; border-bottom: 2px solid var(--ink); text-align: left; }
+  .product-table td { padding: 10px 12px; border-bottom: 1px solid var(--border); color: var(--charcoal); font-weight: 300; vertical-align: top; }
+  .product-table tr:nth-child(even) td { background: #FAFAF8; }
+  .product-table .p-name { font-weight: 600; color: var(--ink); font-size: 12px; }
+
+  /* ─── PAGE FOOTER ────────────────────────────────────────── */
+  .page-footer {
+    position: absolute; bottom: 36px; left: 72px; right: 72px;
+    display: flex; justify-content: space-between;
+    font-family: var(--ff-mono); font-size: 8px; color: var(--stone);
+    letter-spacing: 0.08em; text-transform: uppercase;
+    border-top: 1px solid var(--border); padding-top: 10px;
+  }
+
+  /* ─── MOBILE ─────────────────────────────────────────────── */
+  @media (max-width: 640px) {
+    .page { padding: 48px 24px 100px; }
+    .page-footer { left: 24px; right: 24px; }
+    .page--cover, .page--dark, .page--divider { padding: 48px 28px 80px; }
+    .cover-title { font-size: clamp(44px, 14vw, 72px); }
+    .cover-meta { flex-direction: column; gap: 20px; }
+    .score-grid { grid-template-columns: 1fr 1fr; }
+    .status-grid { grid-template-columns: 1fr; }
+  }
+
+  @media print {
+    .page { page-break-before: always; }
+    .page:first-child { page-break-before: auto; }
+    .page--cover, .page--dark, .page--divider { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
+</style>
+</head>
+<body>
+
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!-- PAGE 1 · COVER                                            -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div class="page page--cover">
+  <div class="cover-agency">Virtually Ever After · Luxembourg</div>
+
+  <div class="cover-hero">
+    <div class="cover-title">OLIVIO<br>&amp; Co</div>
+    <div class="cover-subtitle">Website Analysis Report · March 2026</div>
+    <div class="cover-rule"></div>
+
+    <div class="cover-scope">
+      <span class="cover-scope-label">Analysis Scope — 12 Areas</span>
+      <div class="cover-scope-row"><span>Brand Overview &amp; Credentials</span><span class="cover-scope-tag">Verified</span></div>
+      <div class="cover-scope-row"><span>Navigation &amp; Architecture</span><span class="cover-scope-tag">olivioandco.com</span></div>
+      <div class="cover-scope-row"><span>Homepage Effectiveness</span><span class="cover-scope-tag">Live analysis</span></div>
+      <div class="cover-scope-row"><span>Product Pages &amp; Catalogue</span><span class="cover-scope-tag">Full range</span></div>
+      <div class="cover-scope-row"><span>Trust &amp; Social Proof</span><span class="cover-scope-tag">Conversion impact</span></div>
+      <div class="cover-scope-row"><span>Content &amp; Blog</span><span class="cover-scope-tag">40+ articles</span></div>
+      <div class="cover-scope-row"><span>SEO — Technical &amp; On-Page</span><span class="cover-scope-tag">Shopify</span></div>
+      <div class="cover-scope-row"><span>Conversion Optimisation</span><span class="cover-scope-tag">Blockers identified</span></div>
+      <div class="cover-scope-row"><span>Customer Experience</span><span class="cover-scope-tag">Support · Returns</span></div>
+      <div class="cover-scope-row"><span>Sustainability Communication</span><span class="cover-scope-tag">Verified claims</span></div>
+      <div class="cover-scope-row"><span>Social Media Integration</span><span class="cover-scope-tag">On-site + channels</span></div>
+      <div class="cover-scope-row"><span>B2B &amp; Wholesale Platform</span><span class="cover-scope-tag">b2b.olivioandco.com</span></div>
+    </div>
+
+    <div class="cover-meta">
+      <div><div class="cover-meta-label">Prepared by</div><div class="cover-meta-value">Virtually Ever After</div></div>
+      <div><div class="cover-meta-label">Prepared for</div><div class="cover-meta-value">Olivio &amp; Co</div></div>
+      <div><div class="cover-meta-label">Domain analysed</div><div class="cover-meta-value">olivioandco.com</div></div>
+      <div><div class="cover-meta-label">Platform</div><div class="cover-meta-value">Shopify · March 2026</div></div>
+    </div>
+  </div>
+
+  <div class="cover-footer">Confidential — prepared exclusively for Olivio &amp; Co</div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!-- PAGE 2 · OVERALL SCORES + EXECUTIVE SUMMARY              -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div class="page">
+  <span class="eyebrow">Executive Summary</span>
+  <h1 class="section-title">Strong product.<br>Weak conversion infrastructure.</h1>
+
+  <div class="context-strip">
+    <p>OLIVIO &amp; Co has the product, the design credentials, the sustainability story, and a market positioning — Mediterranean-inspired family eyewear with nine international design awards — that most competitors cannot replicate. The primary challenge is that none of these strengths are being communicated effectively within the purchase journey.</p>
+    <p>The fixes required are largely <strong>technical and marketing-operational, not product-related</strong>. A parent arriving on the homepage today sees no awards, no reviews, no value proposition, and a broken search bar. They see the same parent arriving on Babiators' homepage sees a guarantee badge, celebrity endorsements, and hundreds of star ratings. This gap is closable.</p>
+  </div>
+
+  <div class="score-grid">
+    <div class="score-card">
+      <div class="score-num score-num--mid">6.5</div>
+      <div class="score-label">Overall Score</div>
+    </div>
+    <div class="score-card">
+      <div class="score-num score-num--high">7.5</div>
+      <div class="score-label">Visual Design</div>
+    </div>
+    <div class="score-card">
+      <div class="score-num score-num--mid">5.5</div>
+      <div class="score-label">UX / Navigation</div>
+    </div>
+    <div class="score-card">
+      <div class="score-num score-num--mid">5.0</div>
+      <div class="score-label">Conversion</div>
+    </div>
+    <div class="score-card">
+      <div class="score-num score-num--mid">6.0</div>
+      <div class="score-label">SEO</div>
+    </div>
+    <div class="score-card">
+      <div class="score-num score-num--high">8.0</div>
+      <div class="score-label">Product Offering</div>
+    </div>
+    <div class="score-card">
+      <div class="score-num score-num--low">4.5</div>
+      <div class="score-label">Social Proof</div>
+    </div>
+    <div class="score-card">
+      <div class="score-num score-num--mid">5.0</div>
+      <div class="score-label">Trust &amp; CRO</div>
+    </div>
+  </div>
+
+  <div class="note-strip">
+    <span class="note-strip-label">Scoring methodology</span>
+    <p>Scores reflect live analysis of <strong>olivioandco.com</strong> in March 2026 against the category benchmark of comparable premium children's DTC brands. 10 = best-in-class for the category. Scores are directional indicators, not absolute rankings.</p>
+  </div>
+
+  <div class="page-footer">
+    <span>Olivio &amp; Co · Website Analysis Report</span>
+    <span>Virtually Ever After · March 2026</span>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!-- PAGE 3 · BRAND OVERVIEW & CREDENTIALS                    -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div class="page">
+  <span class="eyebrow">Brand Overview</span>
+  <h1 class="section-title">The credentials<br>are world-class.</h1>
+  <p class="section-intro">OLIVIO &amp; Co was founded under <strong>Yellowdot Design</strong> and has accumulated nine international design awards across packaging, product, and sustainability categories. These are not participation trophies — Red Dot, iF Design, and ADC are the highest-profile awards in the global design industry.</p>
+
+  <ul class="award-list">
+    <li><span class="award-year">2020</span><span class="award-name">Red Dot Award</span><span class="award-cat">Packaging Design — Eco-Packaging</span></li>
+    <li><span class="award-year">2021</span><span class="award-name">Junior Design Awards</span><span class="award-cat">Best Travel Products — Bronze</span></li>
+    <li><span class="award-year">2021</span><span class="award-name">iF Design Award</span><span class="award-cat">Kids Sunglasses · Junior Sunglasses · Eco-Packaging</span></li>
+    <li><span class="award-year">2021</span><span class="award-name">D&amp;AD Awards</span><span class="award-cat">Shortlist — Packaging Design</span></li>
+    <li><span class="award-year">2022</span><span class="award-name">ADC 101st Annual Awards</span><span class="award-cat">Bronze Cube + two Merit awards</span></li>
+    <li><span class="award-year">2022</span><span class="award-name">iF Design Award</span><span class="award-cat">Screen Sunglasses</span></li>
+    <li><span class="award-year">2022</span><span class="award-name">Green Product Award</span><span class="award-cat">Best of 2022 — Kids category</span></li>
+  </ul>
+
+  <div class="note-strip">
+    <span class="note-strip-label">The problem</span>
+    <p>These awards are displayed as uncontextualised logos in a horizontal scroll strip on the homepage — <strong>no award name, no year, no category</strong>. A parent scrolling past sees nine logos they cannot identify and moves on. The award section on About Us is the only place these credentials are written out. They are never shown on product pages, near the cart, or in the checkout flow — which is where trust signals convert.</p>
+  </div>
+
+  <div class="finding-block">
+    <span class="finding-tag">Brand Pillars — Verified on site</span>
+    <h2 class="finding-title">What the brand stands for — and where it says it</h2>
+    <ul class="finding-list">
+      <li><strong>Mediterranean lifestyle</strong> — referenced in homepage hero, collection descriptions, and brand statement</li>
+      <li><strong>Eco-conscious packaging</strong> — 100% biodegradable sugarcane pulp box, 100% recycled PET microfibre cloth; verified on product pages</li>
+      <li><strong>UV400 protection</strong> — stated on product pages; not prominently featured as a safety credential on homepage</li>
+      <li><strong>Universal Fit nose bridge + flexible TR90/TPEE frames</strong> — mentioned in product descriptions; no visual callout or comparison guide</li>
+      <li><strong>Family-inclusive range</strong> — toddler 0–2y through teen &amp; adult; genuinely the market's most complete age ladder</li>
+      <li><strong>Dual-market structure</strong> — olivioandco.com (USD, free shipping $59+) and olivioandco.eu (EUR, free shipping €69+), plus B2B wholesale at b2b.olivioandco.com</li>
+    </ul>
+  </div>
+
+  <div class="page-footer">
+    <span>Olivio &amp; Co · Website Analysis Report</span>
+    <span>Virtually Ever After · March 2026</span>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!-- PAGE 4 · NAVIGATION & CRITICAL BUGS                      -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div class="page">
+  <span class="eyebrow">Navigation &amp; Architecture</span>
+  <h1 class="section-title">Three problems<br>in the first five seconds.</h1>
+  <p class="section-intro">Before a visitor has seen a single product, they encounter a full-screen country modal, a broken search bar, and a homepage banner with a misspelled collection name. These are correctable in hours — and they are costing every visit.</p>
+
+  <div class="status-grid">
+    <div class="status-card">
+      <span class="status-tag status-tag--critical">Critical · First impression</span>
+      <div class="status-card-title">Country selector modal blocks the entire homepage</div>
+      <div class="status-card-body">Every visitor — regardless of country — is forced to choose between US and Europe before seeing any product. There is no automatic geolocation. This is a full-screen friction point before any brand impression is made. Shopify Markets with IP-based geolocation would eliminate it entirely.</div>
+    </div>
+    <div class="status-card">
+      <span class="status-tag status-tag--bug">Bug · Every page load</span>
+      <div class="status-card-title">"Something went wrong. Please try again!" on search</div>
+      <div class="status-card-body">The search bar displays an error message on page load — before the visitor has typed a single character. This is visible on every page of the site. A visitor who relies on search to navigate the catalogue encounters a broken experience immediately.</div>
+    </div>
+    <div class="status-card">
+      <span class="status-tag status-tag--bug">Typo · Homepage hero banner</span>
+      <div class="status-card-title">"CREATIVE DEDITION" — misspelled in the hero carousel</div>
+      <div class="status-card-body">The Creative Edition D collection is spelled "CREATIVE DEDITION" in the top homepage slider and its image alt text. The same collection is correctly spelled "CREATIVE EDITION D" in the lower Sunglasses Collections section on the same page. Two different spellings, same page.</div>
+    </div>
+    <div class="status-card">
+      <span class="status-tag status-tag--bug">Broken link · Revenue leak</span>
+      <div class="status-card-title">Sport Sunglasses "Discover" CTA links to Amazon</div>
+      <div class="status-card-body">The homepage Sport Sunglasses section has a "Discover" button that routes directly to an Amazon product listing. Every conversion from that click goes to Amazon — outside the brand's checkout, without customer data, without brand equity. One URL change fixes it.</div>
+    </div>
+    <div class="status-card">
+      <span class="status-tag status-tag--weak">SEO · URL slugs</span>
+      <div class="status-card-title">Misspelled URLs: /sungalsses-oval, /sungalsses-round</div>
+      <div class="status-card-body">Both navigation links and internal collection links use "sungalsses" (not "sunglasses") in the URL slug. Any external link to these URLs shares the typo. Redirecting to corrected slugs would recover any link equity already accumulated.</div>
+    </div>
+    <div class="status-card">
+      <span class="status-tag status-tag--weak">Missing · Navigation</span>
+      <div class="status-card-title">Blog is footer-only — absent from main navigation</div>
+      <div class="status-card-body">The blog at /blogs/news contains 40+ published articles and appears in the footer under About Us. It does not appear anywhere in the main navigation. The vast majority of visitors never discover it exists.</div>
+    </div>
+    <div class="status-card">
+      <span class="status-tag status-tag--weak">Inconsistency · Navigation</span>
+      <div class="status-card-title">Breakfast Art "discover" links to /collections/citrus-graden</div>
+      <div class="status-card-body">The Breakfast Art collection's discover button in the lower homepage section links to /collections/citrus-graden — a different collection entirely, and with another URL typo ("graden" instead of "garden"). A visitor clicking Breakfast Art lands on Citrus Garden.</div>
+    </div>
+    <div class="status-card">
+      <span class="status-tag status-tag--ok">Positive</span>
+      <div class="status-card-title">Navigation structure is logically organised</div>
+      <div class="status-card-body">The mega-menu separates Sunglasses / Sport Glasses / Screen Glasses / Accessories clearly. The Shop by Age, Shop by Collection, and Shop by Style sub-groupings within Sunglasses are well-considered for a parental buyer navigating for a child's age group.</div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span>Olivio &amp; Co · Website Analysis Report</span>
+    <span>Virtually Ever After · March 2026</span>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!-- PAGE 5 · HOMEPAGE ANALYSIS                               -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div class="page">
+  <span class="eyebrow">Homepage Analysis</span>
+  <h1 class="section-title">What a parent<br>sees — and doesn't.</h1>
+  <p class="section-intro">After clearing the country modal, a visitor lands on a full-width hero carousel showing collection names. No value proposition. No awards. No reviews. No guarantee. The strongest differentiators the brand has are all below the fold, buried on interior pages, or absent entirely.</p>
+
+  <div class="finding-block">
+    <span class="finding-tag">What exists on the homepage</span>
+    <h2 class="finding-title">Content that is present</h2>
+    <ul class="finding-list">
+      <li>Hero carousel — Art of Breakfast / Classic Collection / Creative Edition D banners with Shop Now CTAs</li>
+      <li>Promotional strip — Silicone Accessories Set free with $89+ sunglasses orders (strong incentive, well positioned)</li>
+      <li>Mediterranean brand statement — "Inspired by the Mediterranean" with lifestyle imagery</li>
+      <li>Sunglasses Collections grid — Breakfast Art, Olivio Classic, Creative Edition D with editorial descriptions</li>
+      <li>Sport Glasses section — with the Amazon-linked Discover button</li>
+      <li>Best Sellers product carousel — 10+ products with prices and add-to-cart</li>
+      <li>Awards section — 9 logo images in a horizontal scroll strip, no names or context</li>
+    </ul>
+  </div>
+
+  <div class="finding-block">
+    <span class="finding-tag">What is missing above the fold</span>
+    <h2 class="finding-title">What a first-time visitor never sees without scrolling</h2>
+    <p class="finding-body">No tagline or value proposition explains what makes OLIVIO &amp; Co different from any other children's eyewear brand. A new visitor has no immediate answer to "why this brand?" — only a collection name and a Shop Now button. Every competitor in the premium segment leads with their differentiation above the fold.</p>
+    <ul class="finding-list">
+      <li><strong>No customer reviews or star ratings</strong> — the most powerful purchase trigger for parents buying children's products online is absent from the most-trafficked page on the site</li>
+      <li><strong>No award badges with context</strong> — Red Dot, iF Design, ADC logos appear far down the page with no names, years, or categories; they function as decoration rather than trust signals</li>
+      <li><strong>No guarantee or warranty statement</strong> — 13-month warranty and 30-day returns exist but are only visible as small icon strips at the bottom of individual product pages</li>
+      <li><strong>No UV certification or safety badge</strong> — parents of young children make safety-first purchase decisions; CE mark and UV400 certification are not featured prominently</li>
+      <li><strong>No email capture</strong> — no popup, no inline sign-up with incentive; the newsletter subscription exists only in the footer</li>
+      <li><strong>No press or media mentions</strong> — if the brand has had coverage, it is not showcased</li>
+    </ul>
+  </div>
+
+  <div class="page-footer">
+    <span>Olivio &amp; Co · Website Analysis Report</span>
+    <span>Virtually Ever After · March 2026</span>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!-- PAGE 6 · PRODUCT RANGE & PAGES                           -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div class="page">
+  <span class="eyebrow">Product Pages &amp; Catalogue</span>
+  <h1 class="section-title">Eight collections.<br>No reviews on any of them.</h1>
+
+  <table class="product-table">
+    <thead>
+      <tr>
+        <th style="width:22%">Category</th>
+        <th style="width:38%">Age Segments</th>
+        <th>Collections / Notes</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="p-name">Sunglasses</td>
+        <td>Toddler 0–2y · Kids 2–4y · Junior 3–7y · Junior+ 7–10y · Teen &amp; Adult</td>
+        <td>8 named collections: Breakfast Art, Olivio Classic, Seaside Stripes, Flower Stall, Coral Reef, Citrus Garden, Creative Edition D, Competition</td>
+      </tr>
+      <tr>
+        <td class="p-name">Sport Sunglasses</td>
+        <td>Junior 3–7y · Junior+ 7–10y · Teen &amp; Adult</td>
+        <td>Half-rim and full-rim sport variants; polarised lenses</td>
+      </tr>
+      <tr>
+        <td class="p-name">Ski Goggles</td>
+        <td>Junior 5–12y · Teen &amp; Adult</td>
+        <td>Anti-fog lenses, full face coverage — uncontested category; no major competitor offers this</td>
+      </tr>
+      <tr>
+        <td class="p-name">Screen Glasses</td>
+        <td>Kids 3–7y · Junior 7–10y · Teen &amp; Adult</td>
+        <td>Blue-light filter; round and oval shapes</td>
+      </tr>
+      <tr>
+        <td class="p-name">Accessories</td>
+        <td>All ages</td>
+        <td>O-ring chains, silicone sets; thin range — cross-sell opportunity</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="status-grid">
+    <div class="status-card">
+      <span class="status-tag status-tag--critical">Critical · Conversion</span>
+      <div class="status-card-title">No customer review system on any product page</div>
+      <div class="status-card-body">No star ratings, no text reviews, no photo reviews. For a brand selling children's products at $39–$59 per unit, the absence of social proof from other parents is the single largest conversion blocker on the site. Some products show review counts in the HTML (e.g., "9 reviews") suggesting a previous review system was installed but is no longer rendering.</div>
+    </div>
+    <div class="status-card">
+      <span class="status-tag status-tag--missing">Missing · Purchase confidence</span>
+      <div class="status-card-title">No size guide linked from product pages</div>
+      <div class="status-card-body">A size guide exists on the B2B wholesale platform. On the consumer site, the 3–4 year overlap between Kids (2–4y) and Junior (3–7y) leaves parents without guidance on which category to buy. Cart abandonment from fit uncertainty is one of the most documented friction points in children's clothing and eyewear.</div>
+    </div>
+    <div class="status-card">
+      <span class="status-tag status-tag--weak">Positive but underused</span>
+      <div class="status-card-title">Product descriptions include sustainability specs — but as bullet points</div>
+      <div class="status-card-body">UV400, polarised lenses, BPA-free, eco-friendly packaging, and TR90 frame material are all present in product descriptions. The gap is structure: specs are listed in brief bullets rather than woven into searchable, conversion-oriented prose that connects the spec to the parent's concern.</div>
+    </div>
+    <div class="status-card">
+      <span class="status-tag status-tag--missing">Missing · Revenue</span>
+      <div class="status-card-title">No cross-sell or bundle builder on product pages</div>
+      <div class="status-card-body">Accessories (O-ring chains, silicone sets) could be cross-sold directly from sunglasses product pages. "Complete the Look" or "You May Also Like" sections are standard in the category and directly increase average order value without requiring additional traffic.</div>
+    </div>
+    <div class="status-card">
+      <span class="status-tag status-tag--missing">Missing · Gifting</span>
+      <div class="status-card-title">No wishlist functionality on the US store</div>
+      <div class="status-card-body">Parents researching for children, and gift-buyers (grandparents, relatives), frequently save items before purchasing. Without a wishlist, this consideration intent is lost. For a product that is heavily gift-purchased, wishlists are a high-value retention tool.</div>
+    </div>
+    <div class="status-card">
+      <span class="status-tag status-tag--ok">Positive</span>
+      <div class="status-card-title">Age-based navigation and consistent product naming</div>
+      <div class="status-card-body">Shop by Age is the right primary navigation for a parental buyer. Product naming is consistent and branded. The five-tier age ladder, though it has overlap in the 3–4y range, is the most granular system in the category — a genuine expertise signal when accompanied by a proper size guide.</div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span>Olivio &amp; Co · Website Analysis Report</span>
+    <span>Virtually Ever After · March 2026</span>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!-- PAGE 7 · TRUST & SOCIAL PROOF                            -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div class="page">
+  <span class="eyebrow">Trust &amp; Social Proof</span>
+  <h1 class="section-title">The trust signals<br>exist. They're just invisible.</h1>
+  <p class="section-intro">The brand's strongest trust assets — nine design awards, eco-certified packaging, a 13-month warranty, 30-day returns — are all present but positioned where they don't convert. Awards are logos. The warranty is an icon strip. Neither is in the purchase flow.</p>
+
+  <div class="finding-block">
+    <span class="finding-tag">What exists — verified</span>
+    <h2 class="finding-title">Trust infrastructure that is present</h2>
+    <ul class="finding-list">
+      <li><strong>Nine design awards</strong> — Red Dot (2020), iF Design (2021, 2022), D&amp;AD Shortlist (2021), ADC Bronze Cube (2022), Junior Design Awards Bronze (2021), Green Product Award Best of 2022 — all verified</li>
+      <li><strong>Eco-sustainability credentials</strong> — biodegradable sugarcane pulp packaging, 100% recycled PET cleaning cloth, FSC-certified materials; present on product pages as spec bullets</li>
+      <li><strong>13-month warranty + 30-day returns</strong> — present as icon strips at the bottom of product pages; not visible on homepage or in the checkout flow</li>
+      <li><strong>B2B wholesale portal</strong> — b2b.olivioandco.com signals trade credibility and distribution scale</li>
+      <li><strong>Secure checkout</strong> — HTTPS confirmed; Shopify Payments with all major cards and PayPal</li>
+      <li><strong>FAQ page</strong> — covers order tracking, modifications, promo codes, guest checkout, account management</li>
+    </ul>
+  </div>
+
+  <div class="finding-block">
+    <span class="finding-tag">What is missing</span>
+    <h2 class="finding-title">Critical gaps in the trust layer</h2>
+    <ul class="finding-list">
+      <li><strong>No customer review system</strong> — no star ratings, text reviews, or photo reviews on any page of the site; Trustpilot profile not confirmed</li>
+      <li><strong>Award logos have no context</strong> — nine logos on the homepage with no award name, no year, no category; they are invisible as trust signals to a parent who does not recognise the logo</li>
+      <li><strong>No UV certification badge displayed</strong> — CE mark, UV400, ANSI Z80.3 certifications are mentioned in text but not shown as verified certification icons; parents of young children specifically look for these</li>
+      <li><strong>No Green Product Award badge on product pages</strong> — the 2022 eco award is not displayed at the point of purchase where it would influence eco-conscious parents</li>
+      <li><strong>No press or media coverage showcased</strong> — if the brand has been featured in press, it is not visible to consumers</li>
+      <li><strong>No UGC or customer photo gallery</strong> — no shoppable Instagram feed, no hashtag campaign gallery, no community content on the site</li>
+    </ul>
+  </div>
+
+  <div class="page-footer">
+    <span>Olivio &amp; Co · Website Analysis Report</span>
+    <span>Virtually Ever After · March 2026</span>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!-- PAGE 8 · CONTENT & BLOG                                  -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div class="page">
+  <span class="eyebrow">Content &amp; Blog</span>
+  <h1 class="section-title">Forty articles.<br>None of them about OLIVIO &amp; Co.</h1>
+  <p class="section-intro">The blog at olivioandco.com/blogs/news contains over 40 published articles across four pages. The volume is there. The brand specificity is not — every article reads as if it could have been published by any eyewear company in the world.</p>
+
+  <div class="finding-block">
+    <span class="finding-tag">What exists</span>
+    <h2 class="finding-title">Blog content — confirmed article titles</h2>
+    <p class="finding-body">Articles cover material science (TPEE vs. TR90 frame materials, lens materials), sunglasses history, UV protection, polarisation science, style guides (skin tone, hair colour), and trend roundups. Several directly address the target audience: "Are Sunglasses a Necessity for Kids?" and "Why Kids Should Wear Sunglasses" are relevant, keyword-aligned topics.</p>
+    <ul class="finding-list">
+      <li><strong>Positive</strong>: Topics like "kids sunglasses UV protection" and "TPEE vs TR90 for kids' frames" address genuine parental search intent</li>
+      <li><strong>Problem 1</strong>: All 40+ articles appear to have been published in bulk in <strong>September 2024</strong> — identical dates indicate a one-time content push. No new content published in 18+ months.</li>
+      <li><strong>Problem 2</strong>: No buying guides ("Best Sunglasses for Toddlers 2025", "How to Choose Kids' Ski Goggles") — the highest-converting content format for this category</li>
+      <li><strong>Problem 3</strong>: No seasonal content — summer eye protection, back-to-school screen glasses, ski season goggle guide; all three are major search windows this brand is uniquely positioned for</li>
+      <li><strong>Problem 4</strong>: No internal linking from articles to product collection pages — blog content does not feed the purchase funnel</li>
+      <li><strong>Problem 5</strong>: No content specific to OLIVIO &amp; Co's collections, story, awards, or Mediterranean identity — the brand's differentiators do not appear in the blog</li>
+    </ul>
+  </div>
+
+  <div class="note-strip">
+    <span class="note-strip-label">The opportunity</span>
+    <p>Olivio &amp; Co sells ski goggles for children. Neither Babiators nor Roshambo does. A single well-structured blog article targeting "kids ski goggles" published before October would compete in a keyword cluster with <strong>no direct competitor content</strong>. The same applies to blue-light / screen glasses for children, where both the category and the brand's product range are growing — with zero educational content currently on the site to capture that intent.</p>
+  </div>
+
+  <div class="page-footer">
+    <span>Olivio &amp; Co · Website Analysis Report</span>
+    <span>Virtually Ever After · March 2026</span>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!-- PAGE 9 · SEO — TECHNICAL                                 -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div class="page">
+  <span class="eyebrow">SEO — Technical</span>
+  <h1 class="section-title">Shopify gives you<br>the foundation. Not the structure.</h1>
+  <p class="section-intro">Shopify handles breadcrumbs and basic canonical URLs automatically. Everything else — schema markup, meta descriptions, internal linking, image alt text — requires deliberate implementation. Most of it is currently absent or incomplete.</p>
+
+  <table class="comp-table">
+    <thead>
+      <tr>
+        <th style="width:28%">Factor</th>
+        <th style="width:18%">Status</th>
+        <th>Detail</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="feat-label">HTTPS / SSL</td>
+        <td class="cell-ok">Present</td>
+        <td>Secure checkout confirmed. Standard Shopify.</td>
+      </tr>
+      <tr>
+        <td class="feat-label">URL slugs</td>
+        <td class="cell-miss">Typos present</td>
+        <td>/sungalsses-oval and /sungalsses-round are misspelled in navigation and collection links. Affects SEO and link credibility.</td>
+      </tr>
+      <tr>
+        <td class="feat-label">Homepage meta title</td>
+        <td class="cell-weak">Basic</td>
+        <td>"Olivio&Co: Eyewear Designed for Kids and Families" — functional but not keyword-optimised for any specific search intent.</td>
+      </tr>
+      <tr>
+        <td class="feat-label">Collection meta descriptions</td>
+        <td class="cell-miss">Duplicate</td>
+        <td>The same UV protection / outdoor adventures description appears across dozens of collection pages. Google treats this as duplicate content and reduces organic reach.</td>
+      </tr>
+      <tr>
+        <td class="feat-label">Product schema</td>
+        <td class="cell-miss">Absent</td>
+        <td>No AggregateRating, Product, or Review schema markup identified. No star ratings appear in Google Search results. Competitors show stars; Olivio &amp; Co does not.</td>
+      </tr>
+      <tr>
+        <td class="feat-label">Organisation schema</td>
+        <td class="cell-miss">Absent</td>
+        <td>No brand logo URL, social profiles, or contact point in structured data. Google cannot reliably identify the brand entity.</td>
+      </tr>
+      <tr>
+        <td class="feat-label">FAQ schema</td>
+        <td class="cell-miss">Absent</td>
+        <td>FAQ page exists at /pages/faqs but carries no FAQPage markup. Rich snippet expansion in SERP is not triggered.</td>
+      </tr>
+      <tr>
+        <td class="feat-label">Image alt text</td>
+        <td class="cell-weak">Partial</td>
+        <td>Some hero images use generic filenames (brask_fast.jpg, classic.jpg). Product images use product names as alt text — acceptable but not enriched.</td>
+      </tr>
+      <tr>
+        <td class="feat-label">BreadcrumbList schema</td>
+        <td class="cell-ok">Present</td>
+        <td>Shopify generates this automatically. No action required.</td>
+      </tr>
+      <tr>
+        <td class="feat-label">Blog content freshness</td>
+        <td class="cell-miss">Stale</td>
+        <td>All 40+ articles dated September 2024. No new content in 18+ months. Google's freshness signal will have decayed significantly.</td>
+      </tr>
+      <tr>
+        <td class="feat-label">Internal linking</td>
+        <td class="cell-miss">Absent</td>
+        <td>No confirmed internal links from blog articles to product collection pages. Content does not feed the product funnel.</td>
+      </tr>
+      <tr>
+        <td class="feat-label">Shopify CDN image serving</td>
+        <td class="cell-ok">Present</td>
+        <td>?width= parameter used for responsive image serving. Positive for mobile load performance.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="page-footer">
+    <span>Olivio &amp; Co · Website Analysis Report</span>
+    <span>Virtually Ever After · March 2026</span>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!-- PAGE 10 · CONVERSION & E-COMMERCE                        -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div class="page">
+  <span class="eyebrow">Conversion Optimisation</span>
+  <h1 class="section-title">Five blockers standing<br>between visit and purchase.</h1>
+
+  <div class="context-strip">
+    <p>Conversion rate in e-commerce is not one thing — it is the cumulative effect of every friction point in the journey. The site has five identifiable conversion blockers that operate in sequence: a visitor who clears all five is an unusually motivated buyer. Most leave before they get there.</p>
+  </div>
+
+  <div class="issue-rows">
+    <div class="issue-row">
+      <div class="issue-dot issue-dot--critical"></div>
+      <div class="issue-row-content">
+        <div class="issue-row-title">1. Country-selector modal — before any product is seen</div>
+        <div class="issue-row-desc">Full-screen friction on every visit, no geolocation, no memory of previous choice. Fix: Shopify Markets with IP detection, auto-routing, dismissible banner.</div>
+      </div>
+      <div class="issue-row-tag">Immediate</div>
+    </div>
+    <div class="issue-row">
+      <div class="issue-dot issue-dot--critical"></div>
+      <div class="issue-row-content">
+        <div class="issue-row-title">2. Broken search — "Something went wrong" on load</div>
+        <div class="issue-row-desc">Visible on every page, every visit. Visitors who use search to navigate the 40+ product range hit a dead end before typing a single character.</div>
+      </div>
+      <div class="issue-row-tag">Immediate</div>
+    </div>
+    <div class="issue-row">
+      <div class="issue-dot issue-dot--critical"></div>
+      <div class="issue-row-content">
+        <div class="issue-row-title">3. No customer reviews — the largest single blocker</div>
+        <div class="issue-row-desc">Parents purchasing children's eyewear at $39–$59 rely on peer validation more than almost any other signal. Zero reviews on any product means zero social proof at the decision point. Some products show a review count in the HTML suggesting a previous system exists but is not rendering.</div>
+      </div>
+      <div class="issue-row-tag">Immediate</div>
+    </div>
+    <div class="issue-row">
+      <div class="issue-dot issue-dot--critical"></div>
+      <div class="issue-row-content">
+        <div class="issue-row-title">4. Trust signals and awards hidden from the purchase flow</div>
+        <div class="issue-row-desc">Nine design awards, a 13-month warranty, eco-certification — none appear on product pages near the Add to Cart button or in the checkout. Trust signals convert when they appear at the decision moment, not on the About Us page.</div>
+      </div>
+      <div class="issue-row-tag">Immediate</div>
+    </div>
+    <div class="issue-row">
+      <div class="issue-dot issue-dot--mid"></div>
+      <div class="issue-row-content">
+        <div class="issue-row-title">5. No size guide — fit uncertainty causes cart abandonment</div>
+        <div class="issue-row-desc">Kids (2–4y) and Junior (3–7y) overlap. No guide exists on the consumer site. A parent buying for a 3-year-old cannot confidently choose a size without leaving the site to research.</div>
+      </div>
+      <div class="issue-row-tag">Early</div>
+    </div>
+  </div>
+
+  <div class="finding-block">
+    <span class="finding-tag">What works — positive conversion elements</span>
+    <h2 class="finding-title">Strengths to retain and build on</h2>
+    <ul class="finding-list">
+      <li><strong>Free shipping threshold</strong> prominently displayed in the header bar ($59 US / €69 EU)</li>
+      <li><strong>Free silicone accessories set</strong> with $89+ sunglasses orders — effective bundle incentive, well placed</li>
+      <li><strong>Guest checkout</strong> — no registration required; reduces friction for first-time buyers</li>
+      <li><strong>Discount code field</strong> present at checkout; single-use promo codes supported</li>
+      <li><strong>Shopify Payments</strong> — all major cards, Apple Pay, Google Pay, PayPal, Shop Pay</li>
+    </ul>
+  </div>
+
+  <div class="page-footer">
+    <span>Olivio &amp; Co · Website Analysis Report</span>
+    <span>Virtually Ever After · March 2026</span>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!-- PAGE 11 · CUSTOMER EXPERIENCE & SUSTAINABILITY           -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div class="page">
+  <span class="eyebrow">Customer Experience &amp; Sustainability</span>
+  <h1 class="section-title">Real credentials.<br>Real eco story. Neither visible.</h1>
+
+  <div class="finding-block">
+    <span class="finding-tag">Customer Experience</span>
+    <h2 class="finding-title">Support infrastructure — what exists and what is missing</h2>
+    <ul class="finding-list">
+      <li><strong>FAQ page</strong> covers order tracking, modifications, returns, promo codes, account management — adequate but the tone is blunt ("orders cannot be modified after submission") which can suppress confidence before checkout</li>
+      <li><strong>EU accounts and US accounts are separate and not interoperable</strong> — explicitly noted in the FAQ; customers who switch regions or register on the wrong store lose their order history</li>
+      <li><strong>No live chat widget</strong> confirmed on the US site</li>
+      <li><strong>No loyalty rewards program</strong> — parents buying for growing children are a natural multi-year repeat customer base (toddler → kids → junior → teen); there is no incentive structure to retain them beyond the product itself</li>
+      <li><strong>No wishlist in customer accounts</strong> — particularly high value for a gifting category</li>
+      <li><strong>No "Find a Retailer" page</strong> — the B2B wholesale portal implies physical retail partners exist; consumers who prefer to buy in-store have no guidance</li>
+    </ul>
+  </div>
+
+  <div class="finding-block">
+    <span class="finding-tag">Sustainability — Verified claims</span>
+    <h2 class="finding-title">The eco story is real — it just needs a platform</h2>
+    <p class="finding-body">OLIVIO &amp; Co's sustainability credentials are externally verified and genuinely differentiated for the category. The Green Product Award 2022 in the Kids category is particularly strong — it is an independent assessment, not a self-claim. The problem is not the story; it is the positioning.</p>
+    <ul class="finding-list">
+      <li><strong>Packaging</strong>: 100% biodegradable sugarcane pulp moulded box — verified on product pages</li>
+      <li><strong>Cleaning cloth</strong>: 100% recycled PET from reclaimed water bottles — verified on product pages</li>
+      <li><strong>Green Product Award 2022</strong> — Best of 2022, Kids category — externally validated</li>
+      <li><strong>Brand commitment</strong> to continuous exploration of alternative sustainable materials — stated but not substantiated with specifics</li>
+      <li><strong>Missing</strong>: No dedicated /pages/sustainability page; eco credentials are mentioned in product descriptions and About Us but have no standalone destination that can be shared, linked, or indexed</li>
+      <li><strong>Missing</strong>: Green Product Award badge is not displayed on product pages or homepage where it would influence eco-conscious parents at the decision point</li>
+      <li><strong>Missing</strong>: No third-party eco certification icons (FSC mark, recycled content symbol) alongside the relevant product specifications</li>
+    </ul>
+  </div>
+
+  <div class="page-footer">
+    <span>Olivio &amp; Co · Website Analysis Report</span>
+    <span>Virtually Ever After · March 2026</span>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!-- PAGE 12 · SOCIAL MEDIA & B2B (dark)                     -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div class="page page--dark">
+  <span class="eyebrow" style="color:#555;">Social Media &amp; B2B</span>
+  <h1 class="section-title" style="color:#F4F4F2; margin-bottom:20px;">920 Instagram posts.<br>None of them on the website.</h1>
+  <p style="font-size:15px; font-weight:300; color:#BBBBBB; max-width:560px; line-height:1.72; margin-bottom:40px;">The brand is active on Instagram and Pinterest. None of that content is connected to the consumer website — no feed widget, no UGC gallery, no shoppable integration. Social proof generated off-site is invisible to visitors on-site.</p>
+
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:36px;">
+    <div style="border:1px solid #2A2A2A; padding:22px; background:#1A1A1A;">
+      <span style="font-family:'Xanh Mono',monospace; font-size:7px; font-weight:700; letter-spacing:0.2em; text-transform:uppercase; color:#555; margin-bottom:10px; display:block;">Present</span>
+      <div style="font-size:13px; font-weight:600; color:#E8E8E8; margin-bottom:8px; line-height:1.3;">Pinterest — active profile</div>
+      <div style="font-size:11px; font-weight:300; color:#AAAAAA; line-height:1.6;">pinterest.com/olivioandco — "eyewear created for kids + parents — inspired by the Mediterranean" — curated boards, lifestyle imagery</div>
+    </div>
+    <div style="border:1px solid #2A2A2A; padding:22px; background:#1A1A1A;">
+      <span style="font-family:'Xanh Mono',monospace; font-size:7px; font-weight:700; letter-spacing:0.2em; text-transform:uppercase; color:#555; margin-bottom:10px; display:block;">Present</span>
+      <div style="font-size:13px; font-weight:600; color:#E8E8E8; margin-bottom:8px; line-height:1.3;">Instagram — active account</div>
+      <div style="font-size:11px; font-weight:300; color:#AAAAAA; line-height:1.6;">@olivioandco — 920+ posts, 5,575 followers; lifestyle and product content; content exists but is not connected to the store in any way</div>
+    </div>
+    <div style="border:1px solid #2A2A2A; padding:22px; background:#1A1A1A;">
+      <span style="font-family:'Xanh Mono',monospace; font-size:7px; font-weight:700; letter-spacing:0.2em; text-transform:uppercase; color:#B03030; margin-bottom:10px; display:block;">Missing</span>
+      <div style="font-size:13px; font-weight:600; color:#E8E8E8; margin-bottom:8px; line-height:1.3;">No Instagram feed on the website</div>
+      <div style="font-size:11px; font-weight:300; color:#AAAAAA; line-height:1.6;">920 posts of lifestyle and product content are invisible to store visitors. A shoppable Instagram gallery (LikeShop, Instafeed, Foursixty) would serve as social proof and UGC simultaneously.</div>
+    </div>
+    <div style="border:1px solid #2A2A2A; padding:22px; background:#1A1A1A;">
+      <span style="font-family:'Xanh Mono',monospace; font-size:7px; font-weight:700; letter-spacing:0.2em; text-transform:uppercase; color:#B03030; margin-bottom:10px; display:block;">Missing</span>
+      <div style="font-size:13px; font-weight:600; color:#E8E8E8; margin-bottom:8px; line-height:1.3;">No TikTok presence confirmed</div>
+      <div style="font-size:11px; font-weight:300; color:#AAAAAA; line-height:1.6;">For a children's brand targeting parents aged 28–42, TikTok via parent and family creators is a significant organic discovery channel. Unboxing, outdoor adventure, and "does my toddler keep them on?" content perform strongly in this category.</div>
+    </div>
+  </div>
+
+  <div style="border-top:1px solid #2A2A2A; padding-top:28px;">
+    <span style="font-family:'Xanh Mono',monospace; font-size:8px; font-weight:700; letter-spacing:0.22em; text-transform:uppercase; color:#555; margin-bottom:16px; display:block;">B2B &amp; Wholesale — b2b.olivioandco.com</span>
+    <p style="font-size:13px; font-weight:300; color:#AAAAAA; line-height:1.7; max-width:560px;">A dedicated wholesale portal exists with full product range, Terms &amp; Conditions, a Size Guide, and an Image Bank for retail partners. This signals genuine distribution scale. On the consumer site, there is no "Find a Retailer" page — consumers who prefer to buy in-store have no route. The size guide on the B2B platform should also be accessible to retail buyers on the consumer site.</p>
+  </div>
+
+  <div class="page-footer" style="border-color:#2A2A2A; color:#555;">
+    <span>Olivio &amp; Co · Website Analysis Report</span>
+    <span>Virtually Ever After · March 2026</span>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!-- PAGE 13 · PRIORITY RECOMMENDATIONS                       -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div class="page">
+  <span class="eyebrow">Priority Recommendations</span>
+  <h1 class="section-title">20 actions.<br>Ordered by impact.</h1>
+  <p class="section-intro">High priority items are correctable in hours and directly suppress revenue today. Medium priority items build the conversion infrastructure. Growth items compound both.</p>
+
+  <div style="font-family:'Xanh Mono',monospace; font-size:8px; font-weight:700; letter-spacing:0.22em; text-transform:uppercase; color:var(--stone); margin-bottom:16px; display:flex; gap:20px; flex-wrap:wrap;">
+    <span style="display:flex; align-items:center; gap:6px;"><span style="width:8px; height:8px; border-radius:50%; background:#B03030; display:inline-block;"></span> Fix immediately</span>
+    <span style="display:flex; align-items:center; gap:6px;"><span style="width:8px; height:8px; border-radius:50%; background:#A06020; display:inline-block;"></span> Within 60 days</span>
+    <span style="display:flex; align-items:center; gap:6px;"><span style="width:8px; height:8px; border-radius:50%; background:#2A7A2A; display:inline-block;"></span> Growth · 90–180 days</span>
+  </div>
+
+  <div class="issue-rows">
+    <div class="issue-row">
+      <div class="issue-dot issue-dot--critical"></div>
+      <div class="issue-row-content">
+        <div class="issue-row-title">Fix the broken search function</div>
+        <div class="issue-row-desc">"Something went wrong" appears on every page load before a character is typed. Debug in the Shopify theme.</div>
+      </div>
+      <div class="issue-row-tag">Quick fix</div>
+    </div>
+    <div class="issue-row">
+      <div class="issue-dot issue-dot--critical"></div>
+      <div class="issue-row-content">
+        <div class="issue-row-title">Correct "CREATIVE DEDITION" → "CREATIVE EDITION" in homepage carousel</div>
+        <div class="issue-row-desc">The brand's most distinctive collection is misspelled in its hero banner and image alt text. One copy correction.</div>
+      </div>
+      <div class="issue-row-tag">Quick fix</div>
+    </div>
+    <div class="issue-row">
+      <div class="issue-dot issue-dot--critical"></div>
+      <div class="issue-row-content">
+        <div class="issue-row-title">Fix Breakfast Art "discover" link — currently routes to Citrus Garden</div>
+        <div class="issue-row-desc">/collections/citrus-graden is a different collection with a URL typo. Visitors clicking Breakfast Art land on the wrong page.</div>
+      </div>
+      <div class="issue-row-tag">Quick fix</div>
+    </div>
+    <div class="issue-row">
+      <div class="issue-dot issue-dot--critical"></div>
+      <div class="issue-row-content">
+        <div class="issue-row-title">Redirect Sport Sunglasses "Discover" CTA from Amazon to /collections/sport-glasses</div>
+        <div class="issue-row-desc">Every conversion from this button currently goes to Amazon. One URL change recovers it entirely.</div>
+      </div>
+      <div class="issue-row-tag">Quick fix</div>
+    </div>
+    <div class="issue-row">
+      <div class="issue-dot issue-dot--critical"></div>
+      <div class="issue-row-content">
+        <div class="issue-row-title">Install a customer review system — Judge.me or Yotpo</div>
+        <div class="issue-row-desc">The single highest-impact conversion improvement available. Activate post-purchase review request emails immediately. Some products already have review counts in the HTML — confirm whether a previous system can be reactivated.</div>
+      </div>
+      <div class="issue-row-tag">Critical</div>
+    </div>
+    <div class="issue-row">
+      <div class="issue-dot issue-dot--critical"></div>
+      <div class="issue-row-content">
+        <div class="issue-row-title">Display award badges with names and years on homepage + product pages</div>
+        <div class="issue-row-desc">Red Dot, iF Design, ADC Bronze Cube, Green Product Award — these are world-class credentials. Each badge should appear with its name and year near the Add to Cart button and below the hero.</div>
+      </div>
+      <div class="issue-row-tag">Critical</div>
+    </div>
+    <div class="issue-row">
+      <div class="issue-dot issue-dot--critical"></div>
+      <div class="issue-row-content">
+        <div class="issue-row-title">Replace or optimise the country-selector modal</div>
+        <div class="issue-row-desc">Use IP-based geolocation (Shopify Markets / MaxMind) to auto-route. Present a dismissible banner instead of a full-screen blocker.</div>
+      </div>
+      <div class="issue-row-tag">Critical</div>
+    </div>
+    <div class="issue-row">
+      <div class="issue-dot issue-dot--critical"></div>
+      <div class="issue-row-content">
+        <div class="issue-row-title">Fix URL typos — /sungalsses-oval and /sungalsses-round</div>
+        <div class="issue-row-desc">Redirect misspelled slugs to corrected versions. Affects SEO and link credibility if shared externally.</div>
+      </div>
+      <div class="issue-row-tag">SEO · Quick</div>
+    </div>
+    <div class="issue-row">
+      <div class="issue-dot issue-dot--mid"></div>
+      <div class="issue-row-content">
+        <div class="issue-row-title">Add a homepage value proposition above the fold</div>
+        <div class="issue-row-desc">e.g. "Award-winning eyewear for kids who don't sit still — UV400 protection, flexible frames, eco-friendly." No new visitor currently understands why to choose OLIVIO &amp; Co without scrolling.</div>
+      </div>
+      <div class="issue-row-tag">60 days</div>
+    </div>
+    <div class="issue-row">
+      <div class="issue-dot issue-dot--mid"></div>
+      <div class="issue-row-content">
+        <div class="issue-row-title">Move warranty + returns to homepage prominence</div>
+        <div class="issue-row-desc">13-month warranty and 30-day returns are buried on product pages. For both main competitors, this is the #1 homepage trust signal. A positioning fix, not a policy creation.</div>
+      </div>
+      <div class="issue-row-tag">60 days</div>
+    </div>
+    <div class="issue-row">
+      <div class="issue-dot issue-dot--mid"></div>
+      <div class="issue-row-content">
+        <div class="issue-row-title">Create a size guide at /pages/size-guide and link from every product page</div>
+        <div class="issue-row-desc">Age ranges, head circumference in cm/inches, clarification of the Kids/Junior overlap. Reduces cart abandonment and ranks for "children's sunglasses size guide" — a search cluster the brand is uniquely positioned to own.</div>
+      </div>
+      <div class="issue-row-tag">60 days</div>
+    </div>
+    <div class="issue-row">
+      <div class="issue-dot issue-dot--mid"></div>
+      <div class="issue-row-content">
+        <div class="issue-row-title">Write unique meta descriptions for every collection page</div>
+        <div class="issue-row-desc">The same UV/outdoor description appears on dozens of pages. Duplicate meta descriptions reduce organic reach. Each collection page needs a unique, keyword-targeted description.</div>
+      </div>
+      <div class="issue-row-tag">60 days · SEO</div>
+    </div>
+    <div class="issue-row">
+      <div class="issue-dot issue-dot--mid"></div>
+      <div class="issue-row-content">
+        <div class="issue-row-title">Add blog to main navigation + publish brand-specific content</div>
+        <div class="issue-row-desc">40+ articles are footer-only. Navigation fix first, then replace generic copy with brand-owned articles: ski goggles guide (before October), blue-light screen glasses guide, children's eye health (the 70% UV fact).</div>
+      </div>
+      <div class="issue-row-tag">60 days</div>
+    </div>
+    <div class="issue-row">
+      <div class="issue-dot issue-dot--mid"></div>
+      <div class="issue-row-content">
+        <div class="issue-row-title">Add UV certification + lens standard badges to product pages</div>
+        <div class="issue-row-desc">CE mark, UV400, ANSI Z80.3. Parents of young children make safety-first decisions. Visual certification icons convert; spec text does not.</div>
+      </div>
+      <div class="issue-row-tag">60 days</div>
+    </div>
+    <div class="issue-row">
+      <div class="issue-dot issue-dot--mid"></div>
+      <div class="issue-row-content">
+        <div class="issue-row-title">Implement a wishlist feature — Wishlist Plus or Swym</div>
+        <div class="issue-row-desc">Parents research and save before purchasing, especially for gifting. Wishlists recover consideration intent that would otherwise be lost between sessions.</div>
+      </div>
+      <div class="issue-row-tag">60 days</div>
+    </div>
+    <div class="issue-row">
+      <div class="issue-dot issue-dot--mid"></div>
+      <div class="issue-row-content">
+        <div class="issue-row-title">Launch a loyalty rewards program — Smile.io or Yotpo Loyalty</div>
+        <div class="issue-row-desc">Parents buying for growing children are a natural multi-year repeat customer base. Points for purchases, reviews, and referrals. The product ladder from toddler to teen is five natural repurchase moments.</div>
+      </div>
+      <div class="issue-row-tag">60 days</div>
+    </div>
+    <div class="issue-row">
+      <div class="issue-dot issue-dot--low"></div>
+      <div class="issue-row-content">
+        <div class="issue-row-title">Add an Instagram shoppable gallery to the homepage</div>
+        <div class="issue-row-desc">920 posts of lifestyle content are currently invisible to store visitors. LikeShop, Instafeed, or Foursixty connects the social proof to the purchase journey.</div>
+      </div>
+      <div class="issue-row-tag">Growth</div>
+    </div>
+    <div class="issue-row">
+      <div class="issue-dot issue-dot--low"></div>
+      <div class="issue-row-content">
+        <div class="issue-row-title">Create a dedicated /pages/sustainability page</div>
+        <div class="issue-row-desc">Sugarcane packaging, recycled PET cloth, Green Product Award — give the eco story a standalone page that can be linked, shared, and indexed separately. Babiators leads with their Eco Collection on the homepage.</div>
+      </div>
+      <div class="issue-row-tag">Growth</div>
+    </div>
+    <div class="issue-row">
+      <div class="issue-dot issue-dot--low"></div>
+      <div class="issue-row-content">
+        <div class="issue-row-title">Launch a TikTok presence targeting parents</div>
+        <div class="issue-row-desc">For parents aged 28–42, TikTok via family and lifestyle creators is a significant organic discovery channel. Unboxing, outdoor adventure, "does my toddler keep them on?" content performs strongly in this segment.</div>
+      </div>
+      <div class="issue-row-tag">Growth</div>
+    </div>
+    <div class="issue-row">
+      <div class="issue-dot issue-dot--low"></div>
+      <div class="issue-row-content">
+        <div class="issue-row-title">Add "Find a Retailer" page and consider Shopify Markets for store unification</div>
+        <div class="issue-row-desc">A retailer locator serves customers who prefer in-store purchase. Longer term, consolidating US and EU into a single Shopify Markets store eliminates the country modal and consolidates SEO domain authority.</div>
+      </div>
+      <div class="issue-row-tag">Growth</div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span>Olivio &amp; Co · Website Analysis Report</span>
+    <span>Virtually Ever After · March 2026</span>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!-- PAGE 14 · SUMMARY SCORECARD                              -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div class="page">
+  <span class="eyebrow">Summary Scorecard</span>
+  <h1 class="section-title">Where the site<br>stands — and what moves.</h1>
+
+  <table class="comp-table" style="margin-bottom:36px;">
+    <thead>
+      <tr>
+        <th style="width:40%">Area</th>
+        <th style="width:12%">Score</th>
+        <th>Primary Issue</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="feat-label">Brand Identity &amp; Positioning</td>
+        <td class="cell-ok">7 / 10</td>
+        <td>Strong credentials not communicated early enough in the journey</td>
+      </tr>
+      <tr>
+        <td class="feat-label">Site Navigation</td>
+        <td class="cell-weak">5.5 / 10</td>
+        <td>Country modal, broken search, URL typos, wrong collection links</td>
+      </tr>
+      <tr>
+        <td class="feat-label">Homepage Effectiveness</td>
+        <td class="cell-miss">5 / 10</td>
+        <td>No USP above fold, no reviews, no trust badges, Amazon CTA</td>
+      </tr>
+      <tr>
+        <td class="feat-label">Product Pages</td>
+        <td class="cell-weak">6 / 10</td>
+        <td>No reviews, no cross-sell, no size guide link, no wishlist</td>
+      </tr>
+      <tr>
+        <td class="feat-label">Trust &amp; Social Proof</td>
+        <td class="cell-miss">4 / 10</td>
+        <td>Awards uncontextualised, no reviews, no certification badges visible</td>
+      </tr>
+      <tr>
+        <td class="feat-label">SEO — Technical</td>
+        <td class="cell-weak">6 / 10</td>
+        <td>No schema, duplicate meta descriptions, URL typos, blog stale</td>
+      </tr>
+      <tr>
+        <td class="feat-label">Conversion Optimisation</td>
+        <td class="cell-miss">5 / 10</td>
+        <td>Five identifiable blockers operating in sequence before purchase</td>
+      </tr>
+      <tr>
+        <td class="feat-label">Blog &amp; Content</td>
+        <td class="cell-weak">5.5 / 10</td>
+        <td>40+ articles, none brand-specific, all published Sept 2024, no updates since</td>
+      </tr>
+      <tr>
+        <td class="feat-label">Customer Retention</td>
+        <td class="cell-miss">4 / 10</td>
+        <td>No loyalty program, no wishlist, no email capture above footer</td>
+      </tr>
+      <tr>
+        <td class="feat-label">Sustainability Communication</td>
+        <td class="cell-weak">6 / 10</td>
+        <td>Verified credentials exist; no dedicated page, no badges at point of purchase</td>
+      </tr>
+      <tr>
+        <td class="feat-label">Social Media Integration</td>
+        <td class="cell-miss">4 / 10</td>
+        <td>920 Instagram posts invisible on-site; no feed widget, no UGC, no TikTok</td>
+      </tr>
+      <tr>
+        <td class="feat-label">B2B / Wholesale</td>
+        <td class="cell-ok">7 / 10</td>
+        <td>Solid portal; missing retailer locator on consumer site</td>
+      </tr>
+      <tr style="border-top:2px solid var(--ink);">
+        <td class="feat-label" style="font-size:14px; padding-top:14px;">OVERALL</td>
+        <td style="font-size:14px; font-weight:700; padding-top:14px; color:var(--ink);">6.5 / 10</td>
+        <td style="font-size:12px; font-style:italic; padding-top:14px; color:var(--charcoal);">Strong product &amp; brand — weak conversion infrastructure</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="context-strip">
+    <p>OLIVIO &amp; Co has the product, the design credentials, the sustainability story, and the market positioning to compete strongly in the premium family eyewear segment. The primary challenge is that none of these strengths are being communicated effectively within the purchase journey.</p>
+    <p><strong>The fixes required are largely technical and marketing-operational — not product-related.</strong> Most of the high-priority items can be corrected in hours. The conversion infrastructure items — reviews, schema, content, loyalty — require weeks, not months. The growth items compound once the foundation is in place.</p>
+  </div>
+
+  <div class="page-footer">
+    <span>Olivio &amp; Co · Website Analysis Report</span>
+    <span>Virtually Ever After · March 2026</span>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!-- PAGE 15 · CLOSE (dark)                                   -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div class="page page--dark" style="display:flex; flex-direction:column; justify-content:space-between; min-height:100vh;">
+
+  <div>
+    <span class="eyebrow" style="color:#555;">Analysis complete</span>
+    <h1 class="section-title" style="color:#F4F4F2; max-width:520px; margin-bottom:32px;">The product<br>deserves better infrastructure.</h1>
+
+    <div style="border-left:3px solid #2A2A2A; padding:22px 28px; background:#1A1A1A; margin-bottom:28px; max-width:580px;">
+      <p style="font-size:15px; font-weight:300; font-style:italic; color:#CCCCCC; line-height:1.85;">
+        Nine design awards. Eco-verified packaging. A ski goggles category that neither Babiators nor Roshambo offers. A Mediterranean identity that no competitor can replicate. A five-tier age system the market's most granular.
+      </p>
+      <p style="font-size:15px; font-weight:300; font-style:italic; color:#CCCCCC; line-height:1.85; margin-top:14px;">
+        A parent arriving on the homepage today sees none of it. They see a country modal, a broken search bar, and a collection called "Creative Dedition." The gap between what this brand is and what the website communicates is the entire opportunity.
+      </p>
+    </div>
+
+    <div style="background:#1E1E1E; border:1px solid #2A2A2A; padding:22px 26px; max-width:460px;">
+      <div style="font-family:'Xanh Mono',monospace; font-size:8px; font-weight:700; letter-spacing:0.22em; text-transform:uppercase; color:#666; margin-bottom:16px;">Analysis coverage — 12 areas, 20 recommendations</div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px 32px;">
+        <div style="font-family:'Xanh Mono',monospace; font-size:10px; color:#888; padding:5px 0; border-bottom:1px solid #222;">Brand overview &amp; awards</div>
+        <div style="font-family:'Xanh Mono',monospace; font-size:10px; color:#888; padding:5px 0; border-bottom:1px solid #222;">Navigation &amp; bugs</div>
+        <div style="font-family:'Xanh Mono',monospace; font-size:10px; color:#888; padding:5px 0; border-bottom:1px solid #222;">Homepage analysis</div>
+        <div style="font-family:'Xanh Mono',monospace; font-size:10px; color:#888; padding:5px 0; border-bottom:1px solid #222;">Product pages</div>
+        <div style="font-family:'Xanh Mono',monospace; font-size:10px; color:#888; padding:5px 0; border-bottom:1px solid #222;">Trust &amp; social proof</div>
+        <div style="font-family:'Xanh Mono',monospace; font-size:10px; color:#888; padding:5px 0; border-bottom:1px solid #222;">Blog &amp; content</div>
+        <div style="font-family:'Xanh Mono',monospace; font-size:10px; color:#888; padding:5px 0; border-bottom:1px solid #222;">SEO technical audit</div>
+        <div style="font-family:'Xanh Mono',monospace; font-size:10px; color:#888; padding:5px 0; border-bottom:1px solid #222;">Conversion blockers</div>
+        <div style="font-family:'Xanh Mono',monospace; font-size:10px; color:#888; padding:5px 0; border-bottom:1px solid #222;">Customer experience</div>
+        <div style="font-family:'Xanh Mono',monospace; font-size:10px; color:#888; padding:5px 0; border-bottom:1px solid #222;">Sustainability</div>
+        <div style="font-family:'Xanh Mono',monospace; font-size:10px; color:#888; padding:5px 0; border-bottom:1px solid #222;">Social &amp; B2B</div>
+        <div style="font-family:'Xanh Mono',monospace; font-size:10px; color:#888; padding:5px 0; border-bottom:1px solid #222;">Summary scorecard</div>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <div style="border-top:1px solid #2A2A2A; padding-top:24px; margin-bottom:20px;">
+      <div style="font-family:'Xanh Mono',monospace; font-size:8px; font-weight:700; letter-spacing:0.2em; text-transform:uppercase; color:#555; margin-bottom:8px;">Questions or next steps</div>
+      <a href="mailto:hello@virtuallyeverafter.lu" style="font-size:17px; font-weight:500; color:#CCCCCC; text-decoration:none; border-bottom:1px solid #2A2A2A; padding-bottom:2px;">hello@virtuallyeverafter.lu</a>
+    </div>
+    <div style="font-family:'Xanh Mono',monospace; font-size:9px; color:#444; letter-spacing:0.06em;">Confidential — prepared exclusively for Olivio &amp; Co · Virtually Ever After · Luxembourg · March 2026</div>
+  </div>
+
+</div>
+
+
+</body>
+</html>

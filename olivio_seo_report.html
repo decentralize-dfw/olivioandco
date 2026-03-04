@@ -1,0 +1,1802 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Olivio &amp; Co — SEO Research Report · Virtually Ever After</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Xanh+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:       #F4F4F2;
+    --ink:      #111111;
+    --charcoal: #3D3D3D;
+    --mid:      #6B6B6B;
+    --stone:    #909090;
+    --border:   #DDDDD8;
+    --light:    #EAEAE6;
+    --cover-bg: #161616;
+    --accent:   #2A2A2A;
+    --ff-mono:  'Xanh Mono', 'Courier New', monospace;
+    --ff-sans:  'Helvetica Neue', Helvetica, Arial, sans-serif;
+  }
+
+  html { font-size: 16px; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body { background: var(--bg); color: var(--ink); font-family: var(--ff-sans); font-weight: 400; line-height: 1.65; }
+
+  /* ─── PAGES ──────────────────────────────────────────────── */
+  .page {
+    min-height: 100vh;
+    padding: 80px 72px 120px;
+    max-width: 860px;
+    margin: 0 auto;
+    position: relative;
+    page-break-before: always;
+  }
+  .page:first-child { page-break-before: auto; }
+
+  /* ─── COVER ──────────────────────────────────────────────── */
+  .page--cover {
+    background: var(--cover-bg);
+    color: #F4F4F2;
+    max-width: 100%;
+    padding: 72px 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 100vh;
+  }
+  .cover-agency { font-family: var(--ff-mono); font-size: 10px; letter-spacing: 0.12em; color: #888; }
+  .cover-hero { flex: 1; display: flex; flex-direction: column; justify-content: center; padding: 48px 0 40px; }
+  .cover-title {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: clamp(52px, 9vw, 96px);
+    font-weight: 700;
+    line-height: 0.92;
+    letter-spacing: -0.04em;
+    color: #F4F4F2;
+  }
+  .cover-subtitle { margin-top: 28px; font-family: var(--ff-mono); font-size: 10px; letter-spacing: 0.18em; color: #888; }
+  .cover-rule { width: 48px; height: 1px; background: #333; margin: 32px 0; }
+  .cover-scope {
+    border: 1px solid #2A2A2A;
+    padding: 20px 24px;
+    margin-bottom: 32px;
+    display: inline-block;
+    max-width: 480px;
+  }
+  .cover-scope-label {
+    font-family: var(--ff-mono);
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    color: #888;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    display: block;
+  }
+  .cover-scope-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 7px 0;
+    border-top: 1px solid #2E2E2E;
+    font-size: 11px;
+    color: #B0B0B0;
+    font-family: var(--ff-mono);
+    gap: 24px;
+  }
+  .cover-scope-row:last-of-type { border-bottom: 1px solid #2E2E2E; }
+  .cover-scope-tag {
+    font-size: 8px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #666;
+    font-family: var(--ff-mono);
+    white-space: nowrap;
+  }
+  .cover-meta { display: flex; gap: 40px; flex-wrap: wrap; }
+  .cover-meta-label { font-family: var(--ff-mono); font-size: 8px; letter-spacing: 0.18em; text-transform: uppercase; color: #777; margin-bottom: 4px; }
+  .cover-meta-value { font-size: 12px; font-weight: 400; color: #C8C8C8; font-family: var(--ff-sans); }
+  .cover-footer { font-family: var(--ff-mono); font-size: 9px; color: #666; letter-spacing: 0.06em; }
+
+  /* ─── DARK PAGES (section dividers) ─────────────────────── */
+  .page--dark {
+    background: var(--cover-bg);
+    color: #F4F4F2;
+    max-width: 100%;
+    padding: 80px 100px 100px;
+  }
+  .page--dark .eyebrow { color: #888; }
+  .page--dark .section-title { color: #F4F4F2; }
+  .page--dark .section-intro { color: #BBBBBB; }
+  .page--dark .page-footer { border-color: #2A2A2A; color: #555; }
+
+  /* ─── TYPOGRAPHY ─────────────────────────────────────────── */
+  .eyebrow {
+    display: block;
+    font-family: var(--ff-mono);
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--mid);
+    margin-bottom: 14px;
+  }
+  .section-title {
+    font-family: var(--ff-sans);
+    font-size: clamp(26px, 4vw, 38px);
+    font-weight: 700;
+    line-height: 1.15;
+    color: var(--ink);
+    margin-bottom: 20px;
+    letter-spacing: -0.03em;
+  }
+  .section-intro {
+    font-size: 15px;
+    font-weight: 300;
+    color: var(--charcoal);
+    max-width: 560px;
+    line-height: 1.72;
+    margin-bottom: 48px;
+  }
+
+  /* ─── CONTEXT STRIP ──────────────────────────────────────── */
+  .context-strip {
+    border-left: 3px solid var(--accent);
+    padding: 18px 24px;
+    background: #fff;
+    margin-bottom: 40px;
+  }
+  .context-strip p { font-size: 14px; font-weight: 400; color: var(--charcoal); line-height: 1.7; }
+  .context-strip p + p { margin-top: 10px; }
+  .context-strip strong { font-weight: 600; color: var(--ink); }
+
+  /* ─── STATUS CARDS (audit findings) ─────────────────────── */
+  .status-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    background: var(--border);
+    margin-bottom: 40px;
+  }
+  .status-card { background: #fff; padding: 24px 26px; }
+  .status-card:nth-child(even) { background: var(--light); }
+  .status-card-tag {
+    font-family: var(--ff-mono);
+    font-size: 7px;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    display: block;
+  }
+  .status-card-tag--missing { color: #B03030; }
+  .status-card-tag--weak { color: #A06020; }
+  .status-card-tag--ok { color: #2A7A2A; }
+  .status-card-title { font-size: 14px; font-weight: 700; color: var(--ink); margin-bottom: 6px; letter-spacing: -0.01em; line-height: 1.3; }
+  .status-card-body { font-size: 11px; font-weight: 300; color: var(--charcoal); line-height: 1.6; }
+
+  /* ─── FINDING BLOCKS (problems/gaps) ─────────────────────── */
+  .finding-block {
+    background: #fff;
+    border-left: 4px solid var(--accent);
+    padding: 28px 32px;
+    margin-bottom: 20px;
+  }
+  .finding-tag {
+    font-family: var(--ff-mono);
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--stone);
+    margin-bottom: 10px;
+    display: block;
+  }
+  .finding-title { font-size: clamp(15px, 2vw, 18px); font-weight: 700; color: var(--ink); margin-bottom: 10px; line-height: 1.25; letter-spacing: -0.02em; }
+  .finding-body { font-size: 13px; font-weight: 300; color: var(--charcoal); line-height: 1.75; margin-bottom: 16px; }
+  .finding-verdict {
+    font-size: 13px;
+    font-weight: 600;
+    font-style: italic;
+    color: var(--charcoal);
+    padding: 10px 14px;
+    border-left: 2px solid var(--border);
+    background: var(--light);
+    margin-bottom: 16px;
+  }
+  .finding-list { list-style: none; padding: 0; }
+  .finding-list li {
+    font-size: 12px;
+    color: var(--charcoal);
+    padding: 7px 0 7px 16px;
+    position: relative;
+    border-top: 1px solid var(--border);
+    line-height: 1.55;
+  }
+  .finding-list li:last-child { border-bottom: 1px solid var(--border); }
+  .finding-list li::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 50%;
+    transform: translateY(-50%);
+    width: 5px; height: 1px;
+    background: var(--stone);
+  }
+
+  /* ─── ADVANTAGE BLOCKS ───────────────────────────────────── */
+  .advantage-block {
+    background: var(--light);
+    padding: 24px 28px;
+    margin-bottom: 16px;
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+  }
+  .advantage-marker {
+    font-family: var(--ff-mono);
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--stone);
+    min-width: 80px;
+    padding-top: 3px;
+    line-height: 1.4;
+  }
+  .advantage-content {}
+  .advantage-title { font-size: 14px; font-weight: 700; color: var(--ink); margin-bottom: 4px; letter-spacing: -0.01em; }
+  .advantage-body { font-size: 12px; font-weight: 300; color: var(--charcoal); line-height: 1.65; }
+
+  /* ─── COMPARISON TABLE ───────────────────────────────────── */
+  .comp-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 11px;
+    margin-bottom: 36px;
+  }
+  .comp-table th {
+    font-family: var(--ff-mono);
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--stone);
+    padding: 10px 12px;
+    border-bottom: 2px solid var(--ink);
+    text-align: left;
+    background: var(--bg);
+  }
+  .comp-table th:not(:first-child) { text-align: center; }
+  .comp-table td {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border);
+    color: var(--charcoal);
+    font-weight: 300;
+    vertical-align: middle;
+  }
+  .comp-table td:not(:first-child) { text-align: center; font-size: 13px; }
+  .comp-table tr:nth-child(even) td { background: #FAFAF8; }
+  .comp-table .feat-label { font-weight: 500; color: var(--ink); font-size: 12px; }
+  .cell-win { color: #111; font-weight: 700; }
+  .cell-miss { color: #B03030; }
+  .cell-weak { color: #A06020; }
+  .cell-ok { color: #2A7A2A; }
+  .comp-table .row-highlight td { background: var(--light) !important; }
+
+  /* ─── KEYWORD TABLE ──────────────────────────────────────── */
+  .kw-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 11px;
+    margin-bottom: 12px;
+  }
+  .kw-table th {
+    font-family: var(--ff-mono);
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--stone);
+    padding: 10px 10px;
+    border-bottom: 2px solid var(--ink);
+    text-align: left;
+    background: var(--bg);
+  }
+  .kw-table td {
+    padding: 9px 10px;
+    border-bottom: 1px solid var(--border);
+    color: var(--charcoal);
+    font-weight: 300;
+    vertical-align: top;
+  }
+  .kw-table tr:nth-child(even) td { background: #FAFAF8; }
+  .kw-table .kw-term { font-weight: 500; color: var(--ink); font-family: var(--ff-mono); font-size: 10px; }
+  .kw-badge {
+    display: inline-block;
+    font-family: var(--ff-mono);
+    font-size: 7px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 2px 6px;
+    border-radius: 0;
+  }
+  .kw-badge--buy { background: #E8F0F8; color: #1A4A7A; }
+  .kw-badge--high { background: #E8F4E8; color: #1A5A1A; }
+  .kw-badge--joker { background: #E8F4F4; color: #1A5A5A; }
+  .kw-badge--long { background: #F4EAF8; color: #5A1A7A; }
+
+  /* ─── ACTION BLOCKS (how we apply it) ───────────────────── */
+  .action-block {
+    background: var(--light);
+    padding: 32px 32px 28px;
+    margin-bottom: 20px;
+    position: relative;
+  }
+  .action-numeral {
+    font-family: var(--ff-mono);
+    font-size: 96px;
+    font-weight: 700;
+    color: var(--stone);
+    opacity: 0.06;
+    line-height: 1;
+    position: absolute;
+    right: 12px; top: -16px;
+    user-select: none;
+    letter-spacing: -0.05em;
+  }
+  .action-tag {
+    font-family: var(--ff-mono);
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--mid);
+    margin-bottom: 10px;
+    display: block;
+  }
+  .action-title { font-size: clamp(15px, 2vw, 18px); font-weight: 700; color: var(--ink); margin-bottom: 10px; letter-spacing: -0.02em; line-height: 1.25; }
+  .action-body { font-size: 13px; font-weight: 300; color: var(--charcoal); line-height: 1.75; margin-bottom: 20px; max-width: 540px; }
+  .action-list { list-style: none; padding: 0; }
+  .action-list li {
+    font-size: 12px;
+    color: var(--charcoal);
+    padding: 8px 0 8px 22px;
+    position: relative;
+    line-height: 1.55;
+    border-top: 1px solid rgba(0,0,0,0.07);
+  }
+  .action-list li:last-child { border-bottom: 1px solid rgba(0,0,0,0.07); }
+  .action-list li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--mid);
+    font-size: 11px;
+    top: 9px;
+    font-family: var(--ff-mono);
+  }
+  .action-list li strong { font-weight: 600; color: var(--ink); }
+
+  /* ─── SCHEMA TABLE ───────────────────────────────────────── */
+  .schema-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 11px;
+    margin-bottom: 32px;
+  }
+  .schema-table th {
+    font-family: var(--ff-mono);
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--stone);
+    padding: 10px 12px;
+    border-bottom: 2px solid var(--ink);
+    text-align: left;
+  }
+  .schema-table td { padding: 10px 12px; border-bottom: 1px solid var(--border); color: var(--charcoal); font-weight: 300; vertical-align: top; }
+  .schema-table tr:nth-child(even) td { background: #FAFAF8; }
+  .schema-table .s-name { font-weight: 600; color: var(--ink); font-size: 12px; }
+  .schema-table .s-verdict { font-family: var(--ff-mono); font-size: 9px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
+  .s-verdict--add { color: #B03030; }
+  .s-verdict--fix { color: #A06020; }
+  .s-verdict--ok { color: #2A7A2A; }
+  .s-verdict--skip { color: var(--stone); }
+
+  /* ─── CONTENT TOPICS (dark page) ────────────────────────── */
+  .topic-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+  .topic-card { border: 1px solid #2A2A2A; padding: 24px 22px; background: #1A1A1A; }
+  .topic-card--featured { border-color: #555; background: #1E1E1E; }
+  .topic-priority {
+    font-family: var(--ff-mono);
+    font-size: 7px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    display: block;
+  }
+  .topic-priority--vh { color: #AAAAAA; }
+  .topic-priority--h { color: #888; }
+  .topic-priority--m { color: #666; }
+  .topic-title { font-size: 13px; font-weight: 700; color: #E8E8E8; margin-bottom: 8px; line-height: 1.35; letter-spacing: -0.01em; }
+  .topic-why { font-size: 11px; font-weight: 300; color: #AAAAAA; line-height: 1.6; margin-bottom: 12px; }
+  .topic-kw-label { font-family: var(--ff-mono); font-size: 7px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: #555; margin-bottom: 6px; display: block; }
+  .topic-kw { font-family: var(--ff-mono); font-size: 9px; color: #888; line-height: 1.7; border-top: 1px solid #222; padding-top: 10px; }
+
+  /* ─── GBP POSTS (dark page) ──────────────────────────────── */
+  .gbp-post {
+    border: 1px solid #2A2A2A;
+    padding: 20px 22px;
+    margin-bottom: 14px;
+    background: #1A1A1A;
+  }
+  .gbp-header { display: flex; align-items: baseline; gap: 12px; margin-bottom: 10px; flex-wrap: wrap; }
+  .gbp-season {
+    font-family: var(--ff-mono);
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #666;
+  }
+  .gbp-type {
+    font-family: var(--ff-mono);
+    font-size: 8px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #888;
+  }
+  .gbp-body { font-size: 12px; font-weight: 400; color: #CCCCCC; line-height: 1.65; margin-bottom: 10px; }
+  .gbp-cta { font-family: var(--ff-mono); font-size: 9px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #888; }
+
+  /* ─── NOTE / CALLOUT ─────────────────────────────────────── */
+  .note-strip {
+    border-left: 3px solid var(--border);
+    padding: 16px 22px;
+    margin: 24px 0;
+    background: #fff;
+  }
+  .note-strip-label {
+    font-family: var(--ff-mono);
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--stone);
+    margin-bottom: 10px;
+    display: block;
+  }
+  .note-strip p { font-size: 12px; font-weight: 300; color: var(--charcoal); line-height: 1.65; }
+  .note-strip p strong { font-weight: 600; color: var(--ink); }
+
+  /* ─── CODE BLOCK ─────────────────────────────────────────── */
+  .code-block {
+    background: #1A1A1A;
+    border: 1px solid #2E2E2E;
+    padding: 20px 24px;
+    margin: 20px 0;
+    overflow-x: auto;
+  }
+  .code-block-label {
+    font-family: var(--ff-mono);
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #666;
+    margin-bottom: 12px;
+    display: block;
+  }
+  .code-block pre {
+    font-family: var(--ff-mono);
+    font-size: 10px;
+    color: #BBBBBB;
+    line-height: 1.7;
+    white-space: pre;
+    overflow-x: auto;
+  }
+
+  /* ─── PRIORITY ROW ───────────────────────────────────────── */
+  .priority-rows { margin-bottom: 36px; }
+  .priority-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .priority-row:first-child { border-top: 1px solid var(--border); }
+  .priority-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-top: 6px;
+    flex-shrink: 0;
+  }
+  .priority-dot--now { background: #B03030; }
+  .priority-dot--soon { background: #A06020; }
+  .priority-dot--later { background: #2A7A2A; }
+  .priority-row-content { flex: 1; }
+  .priority-row-title { font-size: 13px; font-weight: 600; color: var(--ink); margin-bottom: 3px; letter-spacing: -0.01em; }
+  .priority-row-desc { font-size: 11px; font-weight: 300; color: var(--stone); line-height: 1.55; font-style: italic; }
+  .priority-row-tag {
+    font-family: var(--ff-mono);
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--stone);
+    white-space: nowrap;
+    padding-top: 4px;
+  }
+
+  /* ─── PAGE FOOTER ────────────────────────────────────────── */
+  .page-footer {
+    position: absolute;
+    bottom: 36px;
+    left: 72px; right: 72px;
+    display: flex;
+    justify-content: space-between;
+    font-family: var(--ff-mono);
+    font-size: 8px;
+    color: var(--stone);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border-top: 1px solid var(--border);
+    padding-top: 10px;
+  }
+
+  /* ─── MOBILE ─────────────────────────────────────────────── */
+  @media (max-width: 640px) {
+    .page { padding: 48px 24px 100px; }
+    .page-footer { left: 24px; right: 24px; }
+    .page--cover { padding: 48px 28px; }
+    .page--dark { padding: 48px 28px 80px; }
+    .cover-title { font-size: clamp(44px, 14vw, 72px); }
+    .cover-meta { flex-direction: column; gap: 20px; }
+    .status-grid { grid-template-columns: 1fr; }
+    .topic-cards { grid-template-columns: 1fr; }
+    .comp-table, .kw-table, .schema-table { font-size: 10px; }
+  }
+
+  @media print {
+    .page { page-break-before: always; }
+    .page:first-child { page-break-before: auto; }
+    .page--cover, .page--dark { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
+</style>
+</head>
+<body>
+
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!-- PAGE 1 · COVER                                            -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div class="page page--cover">
+
+  <div class="cover-agency">Virtually Ever After · Luxembourg</div>
+
+  <div class="cover-hero">
+    <div class="cover-title">OLIVIO<br>&amp; Co</div>
+    <div class="cover-subtitle">SEO Research Report · March 2026</div>
+    <div class="cover-rule"></div>
+
+    <div class="cover-scope">
+      <span class="cover-scope-label">Report Scope — 7 Research Areas</span>
+      <div class="cover-scope-row">
+        <span>Competitor Analysis</span>
+        <span class="cover-scope-tag">Babiators · Roshambo</span>
+      </div>
+      <div class="cover-scope-row">
+        <span>Schema.org Structured Data Audit</span>
+        <span class="cover-scope-tag">olivioandco.eu</span>
+      </div>
+      <div class="cover-scope-row">
+        <span>20 High-Intent Keywords</span>
+        <span class="cover-scope-tag">Buy · High Value · Joker</span>
+      </div>
+      <div class="cover-scope-row">
+        <span>Site-by-Site Comparison</span>
+        <span class="cover-scope-tag">14 Criteria</span>
+      </div>
+      <div class="cover-scope-row">
+        <span>Google Business Profile Strategy</span>
+        <span class="cover-scope-tag">10 Ready Posts</span>
+      </div>
+      <div class="cover-scope-row">
+        <span>Content Gap Analysis</span>
+        <span class="cover-scope-tag">5 Uncontested Topics</span>
+      </div>
+      <div class="cover-scope-row">
+        <span>Ahrefs Research Workflow</span>
+        <span class="cover-scope-tag">Step-by-Step Guide</span>
+      </div>
+    </div>
+
+    <div class="cover-meta">
+      <div>
+        <div class="cover-meta-label">Prepared by</div>
+        <div class="cover-meta-value">Virtually Ever After</div>
+      </div>
+      <div>
+        <div class="cover-meta-label">Prepared for</div>
+        <div class="cover-meta-value">Olivio &amp; Co</div>
+      </div>
+      <div>
+        <div class="cover-meta-label">Domains analysed</div>
+        <div class="cover-meta-value">olivioandco.eu · olivioandco.com</div>
+      </div>
+      <div>
+        <div class="cover-meta-label">Date</div>
+        <div class="cover-meta-value">March 2026</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cover-footer">Confidential — prepared exclusively for Olivio &amp; Co</div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!-- PAGE 2 · CURRENT STATE — HEADLINE DIAGNOSIS               -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div class="page">
+  <span class="eyebrow">Part One — Current State</span>
+  <h1 class="section-title">Where the site<br>stands today.</h1>
+
+  <div class="context-strip">
+    <p>Olivio &amp; Co has two stores — <strong>olivioandco.eu</strong> and <strong>olivioandco.com</strong> — a 5-year content archive, an Instagram account with over 5,500 followers, and a product range that includes a category (<em>ski goggles</em>) neither of its two main competitors offers. On paper, this is a strong SEO position to build from.</p>
+    <p>In practice, almost none of it is working for search. The schema is broken, analytics is absent, and the site's strongest differentiators are invisible to Google. The blog exists — over 40 articles across four pages — but its content is generic industry copy that could belong to any eyewear brand. None of it earns rankings for Olivio &amp; Co specifically. What follows is a precise account of what is missing, what is broken, and what is sitting unused.</p>
+  </div>
+
+  <div class="status-grid">
+    <div class="status-card">
+      <span class="status-card-tag status-card-tag--missing">Missing</span>
+      <div class="status-card-title">No analytics installed</div>
+      <div class="status-card-body">There is currently no tracking tool on either store. Every visit, every product view, every abandoned cart is invisible. There is no baseline to measure against.</div>
+    </div>
+    <div class="status-card">
+      <span class="status-card-tag status-card-tag--missing">Missing</span>
+      <div class="status-card-title">Star ratings absent from Google Search</div>
+      <div class="status-card-body">AggregateRating schema is not present. Both Babiators and Roshambo show star ratings in their search listings. Olivio &amp; Co does not.</div>
+    </div>
+    <div class="status-card">
+      <span class="status-card-tag status-card-tag--missing">Missing</span>
+      <div class="status-card-title">Organisation + WebSite schema absent</div>
+      <div class="status-card-body">No brand logo, social profiles, or contact info in structured data. No Sitelinks Search Box. These are the foundational schema blocks Google uses to understand what the brand is.</div>
+    </div>
+    <div class="status-card">
+      <span class="status-card-tag status-card-tag--weak">Misdirected</span>
+      <div class="status-card-title">Blog exists — but the content is generic</div>
+      <div class="status-card-body">The site has over 40 published articles across four blog pages — "When Were Sunglasses First Invented?", "Sunglasses Trends 2024", "Selecting the Perfect Sunglass Lens Material." None of it is specific to Olivio &amp; Co, its brand, its collections, or its uncontested categories. A competitor could publish this content word-for-word. The blog link exists in the footer but is absent from the main navigation — most visitors never find it.</div>
+    </div>
+    <div class="status-card">
+      <span class="status-card-tag status-card-tag--weak">Buried</span>
+      <div class="status-card-title">Guarantee policy exists — but invisible above the fold</div>
+      <div class="status-card-body">A 13-month warranty and 30-day return policy are present on product pages as small icon strips at the bottom. For both main competitors, this guarantee is the homepage's primary trust signal — displayed prominently before a visitor even scrolls. On Olivio &amp; Co, a parent browsing the homepage never sees it.</div>
+    </div>
+    <div class="status-card">
+      <span class="status-card-tag status-card-tag--missing">Missing</span>
+      <div class="status-card-title">No size or fit guide</div>
+      <div class="status-card-body">Five age categories — Toddler 0–2y, Kids 2–4y, Junior 3–7y, Junior+ 7–10y, Teen &amp; Adult — with no supporting size guide. There is also an overlap between Kids (2–4y) and Junior (3–7y) that a parent trying to choose will find confusing. Uncertainty about fit is one of the most common reasons parents do not complete a children's eyewear purchase.</div>
+    </div>
+    <div class="status-card">
+      <span class="status-card-tag status-card-tag--weak">Broken</span>
+      <div class="status-card-title">Search bar errors on every page load</div>
+      <div class="status-card-body">The site search function throws an error before the visitor types a single character. A visitor who lands from any page and uses search immediately encounters a broken experience.</div>
+    </div>
+    <div class="status-card">
+      <span class="status-card-tag status-card-tag--weak">Inconsistent</span>
+      <div class="status-card-title">Product descriptions present but not keyword-structured</div>
+      <div class="status-card-body">Product pages include UV400, polarised, eco-packaging and collection story details — better than the original audit suggested. The gap is in keyword structure and length: specs are listed as bullet points rather than woven into searchable prose. No head circumference range, no age guidance in-copy, no link to a size guide.</div>
+    </div>
+    <div class="status-card">
+      <span class="status-card-tag status-card-tag--weak">Inactive</span>
+      <div class="status-card-title">Google Business Profile exists but unused</div>
+      <div class="status-card-body">The profile is live but dormant. No posts, no Q&amp;A, no photo updates. Both competitors maintain active profiles. GBP activity is a confirmed factor in Maps visibility.</div>
+    </div>
+    <div class="status-card">
+      <span class="status-card-tag status-card-tag--ok">Present but buried</span>
+      <div class="status-card-title">Nine awards on the homepage — but not working as trust signals</div>
+      <div class="status-card-body">Nine design award logos are displayed on the homepage in a horizontal scroll strip. They are present, but they carry no context — no award name, no year, no what-it-means. A parent scrolling past sees logos they don't recognise and moves on.</div>
+    </div>
+    <div class="status-card">
+      <span class="status-card-tag status-card-tag--weak">Broken copy</span>
+      <div class="status-card-title">"Creative Dedition" — a typo on the homepage</div>
+      <div class="status-card-body">The Creative Edition D collection is misspelled as "CREATIVE DEDITION" in the homepage banner. This is the brand's most distinctive product line, named prominently. A typo at this level signals careless execution to a discerning buyer.</div>
+    </div>
+    <div class="status-card">
+      <span class="status-card-tag status-card-tag--weak">Channel conflict</span>
+      <div class="status-card-title">Sport sunglasses "Discover" button links to Amazon, not the store</div>
+      <div class="status-card-body">The homepage Sport Sunglasses section has a "Discover" CTA that routes traffic directly to Amazon — outside the brand's own checkout. This leaks revenue, undermines SEO authority, and hands customer data to a third party. Visitors drawn in by the brand end up buying on Amazon.</div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span>Olivio &amp; Co · SEO Research Report</span>
+    <span>Virtually Ever After · March 2026</span>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!-- PAGE 3 · COMPETITOR ANALYSIS                              -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div class="page">
+  <span class="eyebrow">Competitor Analysis</span>
+  <h1 class="section-title">Where the market<br>stands, and where the gaps are.</h1>
+  <p class="section-intro">Two competitors were analysed in depth: Babiators (US) and Roshambo Eyewear (Italy/US). Both are direct category competitors with established SEO presence.</p>
+
+  <div class="finding-block">
+    <span class="finding-tag">Babiators — babiators.com 🇺🇸</span>
+    <h2 class="finding-title">Strengths to be aware of</h2>
+    <p class="finding-body">Babiators built their brand on a free replacement guarantee — lost or broken, replaced, no questions asked. This single policy, displayed prominently on every page, drives conversion more than any other element. They supplement it with celebrity social proof (Kardashian kids, Justin Timberlake's son), an Eco Collection made from ocean-bound plastic, and a Screen Savers range targeting parental screen-time anxiety. They are Forbes Top 100.</p>
+    <ul class="finding-list">
+      <li>Free 1-year replacement guarantee — #1 homepage trust signal</li>
+      <li>Screen Savers (blue light lenses) — addresses the fastest-growing parental concern</li>
+      <li>No Europe-specific store — Olivio &amp; Co's .eu domain has a structural advantage</li>
+      <li>No ski goggles — this entire category is unclaimed by Babiators</li>
+      <li>No artistic or cultural brand identity — purely functional positioning</li>
+      <li>Very limited brand-specific content — Olivio &amp; Co has 40+ blog articles but all are generic industry copy; brand-driven SEO territory remains open</li>
+    </ul>
+  </div>
+
+  <div class="finding-block">
+    <span class="finding-tag">Roshambo Eyewear — roshambo.com 🇮🇹🇺🇸</span>
+    <h2 class="finding-title">The more sophisticated competitor</h2>
+    <p class="finding-body">Roshambo competes on depth: Made in Italy premium perception, prescription kids glasses (a major differentiator with almost no competition), a free home try-on kit, charity partnerships (autism, Down syndrome, childhood cancer), and a genuinely comprehensive blog covering UV guides, age-by-age sizing, and parenting content. Their blog alone generates meaningful organic traffic that Olivio &amp; Co currently does not compete for at all.</p>
+    <ul class="finding-list">
+      <li>Free Home Try-On Kit — removes the primary e-commerce friction point</li>
+      <li>Prescription kids glasses — unique in the market, no competitor matches this</li>
+      <li>60-day returns, broken/lost/scratched replacement — more generous than Babiators</li>
+      <li>No Europe-specific experience — Olivio &amp; Co's most durable structural advantage</li>
+      <li>No ski goggles — same gap as Babiators; winter category entirely uncontested</li>
+      <li>No Mediterranean or artistic brand identity — functional colour palette only</li>
+    </ul>
+  </div>
+
+  <div class="page-footer">
+    <span>Olivio &amp; Co · SEO Research Report</span>
+    <span>Virtually Ever After · March 2026</span>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!-- PAGE 4 · FEATURE COMPARISON TABLE                         -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div class="page">
+  <span class="eyebrow">Site vs Site</span>
+  <h1 class="section-title">Full feature<br>comparison.</h1>
+
+  <table class="comp-table">
+    <thead>
+      <tr>
+        <th style="width:36%">Feature</th>
+        <th>Olivio &amp; Co</th>
+        <th>Babiators</th>
+        <th>Roshambo</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="row-highlight">
+        <td class="feat-label">Ski Goggles Category</td>
+        <td class="cell-win">✓ Exclusive</td>
+        <td class="cell-miss">✗</td>
+        <td class="cell-miss">✗</td>
+      </tr>
+      <tr class="row-highlight">
+        <td class="feat-label">Europe-Specific Store (.eu)</td>
+        <td class="cell-win">✓ Dedicated</td>
+        <td class="cell-miss">✗</td>
+        <td class="cell-miss">✗</td>
+      </tr>
+      <tr class="row-highlight">
+        <td class="feat-label">Mediterranean Brand Identity</td>
+        <td class="cell-win">✓ Unique</td>
+        <td class="cell-miss">✗</td>
+        <td class="cell-miss">✗</td>
+      </tr>
+      <tr class="row-highlight">
+        <td class="feat-label">Named Artistic Collections</td>
+        <td class="cell-win">✓ Present</td>
+        <td class="cell-miss">✗ Colour only</td>
+        <td class="cell-miss">✗ Colour only</td>
+      </tr>
+      <tr class="row-highlight">
+        <td class="feat-label">6-Level Age Segmentation</td>
+        <td class="cell-win">✓ 6 categories</td>
+        <td class="cell-ok">3 categories</td>
+        <td class="cell-ok">5 categories</td>
+      </tr>
+      <tr>
+        <td class="feat-label">Free Replacement Guarantee</td>
+        <td class="cell-miss">✗ Not visible</td>
+        <td class="cell-ok">✓ 1-year</td>
+        <td class="cell-ok">✓ Broken / lost</td>
+      </tr>
+      <tr>
+        <td class="feat-label">Star Ratings in Google Search</td>
+        <td class="cell-miss">✗ Schema missing</td>
+        <td class="cell-ok">✓ Working</td>
+        <td class="cell-ok">✓ Working</td>
+      </tr>
+      <tr>
+        <td class="feat-label">Blog / Educational Content</td>
+        <td class="cell-weak">⚠ Generic, not brand-driven</td>
+        <td class="cell-weak">⚠ Minimal</td>
+        <td class="cell-ok">✓ Comprehensive</td>
+      </tr>
+      <tr>
+        <td class="feat-label">Size / Fit Guide</td>
+        <td class="cell-miss">✗ Missing</td>
+        <td class="cell-ok">✓ Age + head size</td>
+        <td class="cell-ok">✓ Guide + video</td>
+      </tr>
+      <tr>
+        <td class="feat-label">Screen / Blue Light Glasses</td>
+        <td class="cell-ok">✓ Available</td>
+        <td class="cell-ok">✓ Screen Savers</td>
+        <td class="cell-ok">✓ Screen Time Specs</td>
+      </tr>
+      <tr>
+        <td class="feat-label">Eco / Sustainability Story</td>
+        <td class="cell-weak">⚠ Present, not prominent</td>
+        <td class="cell-ok">✓ Ocean plastic</td>
+        <td class="cell-weak">⚠ Charity only</td>
+      </tr>
+      <tr>
+        <td class="feat-label">Google Business Profile</td>
+        <td class="cell-weak">⚠ Inactive</td>
+        <td class="cell-ok">✓ Active</td>
+        <td class="cell-ok">✓ Active</td>
+      </tr>
+      <tr>
+        <td class="feat-label">Schema / Technical SEO</td>
+        <td class="cell-miss">✗ Incomplete</td>
+        <td class="cell-ok">✓ Implemented</td>
+        <td class="cell-ok">✓ Implemented</td>
+      </tr>
+      <tr>
+        <td class="feat-label">Industry Awards</td>
+        <td class="cell-ok">✓ Present</td>
+        <td class="cell-ok">✓ Forbes Top 100</td>
+        <td class="cell-miss">✗ Not prominent</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="note-strip">
+    <span class="note-strip-label">Reading this table</span>
+    <p>Rows highlighted in grey mark areas where Olivio &amp; Co holds an <strong>uncontested advantage</strong> — no competitor ranks here. The remaining rows represent either critical gaps requiring immediate action or neutral territory where both competitors are roughly equal.</p>
+  </div>
+
+  <div class="page-footer">
+    <span>Olivio &amp; Co · SEO Research Report</span>
+    <span>Virtually Ever After · March 2026</span>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!-- PAGE 5 · COMPETITIVE ADVANTAGES                           -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div class="page">
+  <span class="eyebrow">Uncontested Territory</span>
+  <h1 class="section-title">What Olivio &amp; Co<br>owns outright.</h1>
+  <p class="section-intro">Six advantages neither Babiators nor Roshambo can replicate. These are not aspirational — they already exist. The only question is whether search engines and visitors can see them.</p>
+
+  <div class="advantage-block">
+    <div class="advantage-marker">01<br>Ski Goggles</div>
+    <div class="advantage-content">
+      <div class="advantage-title">An entire product category with no competitor</div>
+      <div class="advantage-body">Neither Babiators nor Roshambo sells ski goggles for children. Olivio &amp; Co is the only brand in this space. Keywords like 'kids ski goggles buy' and 'junior ski goggles Europe' are uncontested by any direct competitor. Publishing seasonal content before October captures the entire winter-sport shopping window.</div>
+    </div>
+  </div>
+
+  <div class="advantage-block">
+    <div class="advantage-marker">02<br>EU Store</div>
+    <div class="advantage-content">
+      <div class="advantage-title">A .eu domain when all major competitors are US-only</div>
+      <div class="advantage-body">Both Babiators and Roshambo operate from US stores. European parents encounter currency conversions, shipping complications, and no local language signals. Olivio &amp; Co's olivioandco.eu domain signals local relevance, qualifies for EU-specific search results, and removes every friction point US competitors create for European buyers.</div>
+    </div>
+  </div>
+
+  <div class="advantage-block">
+    <div class="advantage-marker">03<br>Sustainability</div>
+    <div class="advantage-content">
+      <div class="advantage-title">Sustainability materials already in use — just not visible</div>
+      <div class="advantage-body">Eco-friendly packaging, cleaning cloths from recycled plastic bottles, cases from biodegradable sugarcane pulp, FSC-certified packaging — these details are present on product pages. Babiators leads with its Eco Collection as a homepage identity pillar. Olivio &amp; Co has equivalent credentials but treats them as an afterthought in a product bullet point. The story exists; it needs a platform.</div>
+    </div>
+  </div>
+
+  <div class="advantage-block">
+    <div class="advantage-marker">04<br>Identity</div>
+    <div class="advantage-content">
+      <div class="advantage-title">Mediterranean brand identity with no equivalent in the market</div>
+      <div class="advantage-body">Every competitor positions on function: UV protection, materials, replacement guarantees. Olivio &amp; Co is the only brand in children's eyewear with a cultural and geographic identity. This is a genuine content and brand-building advantage — 'Mediterranean eyewear brand' is a search cluster no one else is competing for.</div>
+    </div>
+  </div>
+
+  <div class="advantage-block">
+    <div class="advantage-marker">05<br>Collections</div>
+    <div class="advantage-content">
+      <div class="advantage-title">Named artistic collections as individual stories</div>
+      <div class="advantage-body">Creative D, Breakfast Art, Coral Reef — these are not colourways, they are editorial collections. Competitors sell shapes and colours. Olivio &amp; Co sells stories. Each collection is a content opportunity, a campaign anchor, and a backlink magnet that functional brands cannot replicate.</div>
+    </div>
+  </div>
+
+  <div class="advantage-block">
+    <div class="advantage-marker">06<br>Sizing</div>
+    <div class="advantage-content">
+      <div class="advantage-title">The market's most granular age-segmentation system</div>
+      <div class="advantage-body">Five categories — Toddler 0–2y, Kids 2–4y, Junior 3–7y, Junior+ 7–10y, Teen &amp; Adult — compared to Babiators' three and Roshambo's five. The depth is comparable at the top end, but Olivio &amp; Co's finer split in the 3–10 range is where parents most struggle to choose. There is a 3–4 year overlap between Kids and Junior that a size guide would resolve definitively. Building the definitive guide around this system would own the 'children's sunglasses size' search cluster outright.</div>
+    </div>
+  </div>
+
+  <div class="advantage-block">
+    <div class="advantage-marker">07<br>Awards</div>
+    <div class="advantage-content">
+      <div class="advantage-title">Nine industry awards that competitors cannot display</div>
+      <div class="advantage-body">Red Dot and equivalent design awards are earned, not purchased. Roshambo has none. Babiators has a Forbes mention from 2014. Nine current awards exist on the homepage — but they are displayed as uncontextualised logos in a scroll strip. Each award deserves a name, a year, and a sentence. That context is what converts a logo into a trust signal, and what registers with Google as authority content.</div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span>Olivio &amp; Co · SEO Research Report</span>
+    <span>Virtually Ever After · March 2026</span>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!-- PAGE 6 · SCHEMA AUDIT                                     -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div class="page">
+  <span class="eyebrow">Technical SEO — Schema Audit</span>
+  <h1 class="section-title">What Google sees<br>when it reads the site.</h1>
+  <p class="section-intro">Structured data (Schema.org markup) tells Google what a page is about, what the brand is, and whether products have ratings. Most of Olivio &amp; Co's schema is absent or incomplete.</p>
+
+  <table class="schema-table">
+    <thead>
+      <tr>
+        <th style="width:26%">Schema Type</th>
+        <th style="width:18%">Current Status</th>
+        <th style="width:16%">Verdict</th>
+        <th>What this means</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="s-name">Organization</td>
+        <td>Absent</td>
+        <td><span class="s-verdict s-verdict--add">Add now</span></td>
+        <td>Google does not know the brand's logo, social profiles, or contact point. Required for brand trust and knowledge panel eligibility.</td>
+      </tr>
+      <tr>
+        <td class="s-name">WebSite + SearchAction</td>
+        <td>Absent</td>
+        <td><span class="s-verdict s-verdict--add">Add now</span></td>
+        <td>No Sitelinks Search Box on branded queries. Visitors searching 'Olivio &amp; Co' on Google cannot search the store directly from results.</td>
+      </tr>
+      <tr>
+        <td class="s-name">Product — AggregateRating</td>
+        <td>Missing from all products</td>
+        <td><span class="s-verdict s-verdict--add">Add now</span></td>
+        <td>No star ratings in Google Search results. Babiators and Roshambo both show stars. Stars increase click-through rate by approximately 30%.</td>
+      </tr>
+      <tr>
+        <td class="s-name">FAQPage</td>
+        <td>FAQ page exists, schema absent</td>
+        <td><span class="s-verdict s-verdict--fix">Fix</span></td>
+        <td>The FAQ page does not trigger rich FAQ snippets in Google Search. Competitors with FAQ schema get expanded SERP real estate.</td>
+      </tr>
+      <tr>
+        <td class="s-name">Offer / ShippingDetails</td>
+        <td>Partial</td>
+        <td><span class="s-verdict s-verdict--fix">Improve</span></td>
+        <td>Free shipping over €69 is not in schema. This threshold can appear in Google Shopping results — currently a missed advantage.</td>
+      </tr>
+      <tr>
+        <td class="s-name">ItemList (Collection pages)</td>
+        <td>Absent</td>
+        <td><span class="s-verdict s-verdict--fix">Add</span></td>
+        <td>Collection pages have no ItemList markup. With it, individual products from a collection could appear as list items directly in SERP.</td>
+      </tr>
+      <tr>
+        <td class="s-name">BreadcrumbList</td>
+        <td>Shopify auto-generated</td>
+        <td><span class="s-verdict s-verdict--ok">Sufficient</span></td>
+        <td>Shopify handles this automatically. No action required.</td>
+      </tr>
+      <tr>
+        <td class="s-name">LocalBusiness</td>
+        <td>N/A</td>
+        <td><span class="s-verdict s-verdict--skip">Do not add</span></td>
+        <td>Olivio &amp; Co is a DTC online brand with no physical store. Adding LocalBusiness schema would send incorrect classification signals to Google.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="note-strip">
+    <span class="note-strip-label">On star ratings specifically</span>
+    <p>Shopify does <strong>not</strong> automatically add AggregateRating schema. A review app is required. Recommended: <strong>Judge.me</strong> (free plan available, excellent schema support), <strong>Yotpo</strong> (paid, strong Google Shopping integration), or <strong>Loox</strong> (visual reviews + schema). Stars typically appear in search results 2–4 weeks after the schema is indexed and the first reviews are collected.</p>
+  </div>
+
+  <div class="page-footer">
+    <span>Olivio &amp; Co · SEO Research Report</span>
+    <span>Virtually Ever After · March 2026</span>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!-- PAGE 7 · KEYWORD RESEARCH                                 -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div class="page">
+  <span class="eyebrow">Keyword Research</span>
+  <h1 class="section-title">20 keywords.<br>Mapped to intent.</h1>
+  <p class="section-intro">Four categories: <strong>Core Buy</strong> (closest to purchase), <strong>High Value</strong> (research + purchase mix), <strong>Joker</strong> (Olivio &amp; Co-exclusive — no competitor ranks here), and <strong>Long Tail</strong> (low competition, high conversion in product descriptions). Volumes are estimated monthly averages.</p>
+
+  <table class="kw-table">
+    <thead>
+      <tr>
+        <th style="width:36%">Keyword</th>
+        <th style="width:10%">Vol/Mo</th>
+        <th style="width:8%">KD</th>
+        <th style="width:10%">CPC</th>
+        <th>Category</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="kw-term">kids ski goggles buy</td>
+        <td>3,600</td>
+        <td>Low</td>
+        <td>$1.60</td>
+        <td><span class="kw-badge kw-badge--joker">Joker</span></td>
+      </tr>
+      <tr>
+        <td class="kw-term">blue light glasses children buy</td>
+        <td>1,900</td>
+        <td>Low</td>
+        <td>$1.45</td>
+        <td><span class="kw-badge kw-badge--buy">Core Buy</span></td>
+      </tr>
+      <tr>
+        <td class="kw-term">screen glasses for kids buy</td>
+        <td>2,400</td>
+        <td>Low</td>
+        <td>$1.30</td>
+        <td><span class="kw-badge kw-badge--buy">Core Buy</span></td>
+      </tr>
+      <tr>
+        <td class="kw-term">buy kids sunglasses online</td>
+        <td>3,200</td>
+        <td>Low</td>
+        <td>$1.20</td>
+        <td><span class="kw-badge kw-badge--buy">Core Buy</span></td>
+      </tr>
+      <tr>
+        <td class="kw-term">junior ski goggles Europe</td>
+        <td>1,400</td>
+        <td>Low</td>
+        <td>$1.20</td>
+        <td><span class="kw-badge kw-badge--joker">Joker</span></td>
+      </tr>
+      <tr>
+        <td class="kw-term">kids sunglasses free shipping EU</td>
+        <td>1,300</td>
+        <td>Low</td>
+        <td>$1.10</td>
+        <td><span class="kw-badge kw-badge--joker">Joker</span></td>
+      </tr>
+      <tr>
+        <td class="kw-term">baby sunglasses buy</td>
+        <td>2,600</td>
+        <td>Low</td>
+        <td>$1.10</td>
+        <td><span class="kw-badge kw-badge--buy">Core Buy</span></td>
+      </tr>
+      <tr>
+        <td class="kw-term">teen sunglasses stylish buy</td>
+        <td>2,200</td>
+        <td>Medium</td>
+        <td>$1.00</td>
+        <td><span class="kw-badge kw-badge--high">High Value</span></td>
+      </tr>
+      <tr>
+        <td class="kw-term">toddler sunglasses UV protection</td>
+        <td>2,900</td>
+        <td>Low</td>
+        <td>$0.95</td>
+        <td><span class="kw-badge kw-badge--buy">Core Buy</span></td>
+      </tr>
+      <tr>
+        <td class="kw-term">kids polarized sunglasses</td>
+        <td>3,700</td>
+        <td>Medium</td>
+        <td>$0.90</td>
+        <td><span class="kw-badge kw-badge--high">High Value</span></td>
+      </tr>
+      <tr>
+        <td class="kw-term">sunglasses toddler girl buy</td>
+        <td>2,800</td>
+        <td>Low</td>
+        <td>$0.90</td>
+        <td><span class="kw-badge kw-badge--buy">Core Buy</span></td>
+      </tr>
+      <tr>
+        <td class="kw-term">sunglasses toddler boy buy</td>
+        <td>2,600</td>
+        <td>Low</td>
+        <td>$0.90</td>
+        <td><span class="kw-badge kw-badge--buy">Core Buy</span></td>
+      </tr>
+      <tr>
+        <td class="kw-term">children sunglasses Europe</td>
+        <td>1,800</td>
+        <td>Low</td>
+        <td>$0.80</td>
+        <td><span class="kw-badge kw-badge--joker">Joker</span></td>
+      </tr>
+      <tr>
+        <td class="kw-term">sport sunglasses for children</td>
+        <td>2,100</td>
+        <td>Medium</td>
+        <td>$0.85</td>
+        <td><span class="kw-badge kw-badge--high">High Value</span></td>
+      </tr>
+      <tr>
+        <td class="kw-term">UV400 sunglasses kids</td>
+        <td>1,700</td>
+        <td>Low</td>
+        <td>$0.85</td>
+        <td><span class="kw-badge kw-badge--high">High Value</span></td>
+      </tr>
+      <tr>
+        <td class="kw-term">best sunglasses for kids</td>
+        <td>5,100</td>
+        <td>Medium</td>
+        <td>$0.75</td>
+        <td><span class="kw-badge kw-badge--high">High Value</span></td>
+      </tr>
+      <tr>
+        <td class="kw-term">junior sunglasses buy</td>
+        <td>1,100</td>
+        <td>Low</td>
+        <td>$0.70</td>
+        <td><span class="kw-badge kw-badge--buy">Core Buy</span></td>
+      </tr>
+      <tr>
+        <td class="kw-term">sunglasses for age 4</td>
+        <td>1,100</td>
+        <td>Low</td>
+        <td>$0.75</td>
+        <td><span class="kw-badge kw-badge--long">Long Tail</span></td>
+      </tr>
+      <tr>
+        <td class="kw-term">sunglasses for age 2</td>
+        <td>900</td>
+        <td>Low</td>
+        <td>$0.70</td>
+        <td><span class="kw-badge kw-badge--long">Long Tail</span></td>
+      </tr>
+      <tr>
+        <td class="kw-term">Mediterranean eyewear brand kids</td>
+        <td>480</td>
+        <td>Very Low</td>
+        <td>$0.60</td>
+        <td><span class="kw-badge kw-badge--joker">Joker</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="note-strip">
+    <span class="note-strip-label">Joker keywords — why these matter most</span>
+    <p>Joker keywords are territories where <strong>no direct competitor ranks</strong>. The ski goggles cluster ($1.60 CPC, 5,000+ combined monthly searches) is entirely unclaimed. The Europe cluster is structurally protected by the .eu domain. These are the fastest routes to first-page rankings because there is no established competition to displace.</p>
+  </div>
+
+  <div class="page-footer">
+    <span>Olivio &amp; Co · SEO Research Report</span>
+    <span>Virtually Ever After · March 2026</span>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!-- PAGE 8 · CONTENT GAPS (dark)                             -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div class="page page--dark">
+
+  <span class="eyebrow">Content Gap Analysis</span>
+  <h1 class="section-title">Five topics neither<br>competitor is covering.</h1>
+  <p class="section-intro">These are search clusters where both Babiators and Roshambo produce insufficient content. Publishing first means ranking first — and in most cases, ranking alone.</p>
+
+  <div class="topic-cards">
+    <div class="topic-card topic-card--featured">
+      <span class="topic-priority topic-priority--vh">Priority — Very High · Uncontested</span>
+      <div class="topic-title">Ski Goggles vs Sunglasses for Kids: Winter Sports Eye Protection Guide</div>
+      <div class="topic-why">You sell ski goggles. Neither competitor does. This content category is entirely yours. Publishing in September–October captures the full peak winter-sport shopping window before any competitor could react.</div>
+      <span class="topic-kw-label">Target keywords</span>
+      <div class="topic-kw">kids ski goggles · ski goggles for children · junior ski goggles UV protection · children snow goggles buy</div>
+    </div>
+    <div class="topic-card">
+      <span class="topic-priority topic-priority--vh">Priority — Very High</span>
+      <div class="topic-title">What Is Blue Light? Do Screen Glasses for Kids Really Work?</div>
+      <div class="topic-why">You sell screen glasses and publish zero educational content specifically about them. The 40+ blog articles on the site cover generic sunglasses topics — none address blue light, screen time, or children's digital eye strain. 'Are blue light glasses worth it for kids?' is searched by millions of parents. This article converts directly — it sells by educating.</div>
+      <span class="topic-kw-label">Target keywords</span>
+      <div class="topic-kw">blue light glasses for kids · do children need screen glasses · kids screen time eye protection</div>
+    </div>
+    <div class="topic-card">
+      <span class="topic-priority topic-priority--h">Priority — High</span>
+      <div class="topic-title">Why Do Children Need Sunglasses? A Complete Eye Health Guide</div>
+      <div class="topic-why">Children's eyes transmit 70% more UV than adult eyes. Most parents don't know this. Publishing this positions Olivio &amp; Co as the category's trusted authority and captures the 'children sunglasses why' search cluster.</div>
+      <span class="topic-kw-label">Target keywords</span>
+      <div class="topic-kw">why do kids need sunglasses · baby sunglasses UV protection · are sunglasses necessary for toddlers</div>
+    </div>
+    <div class="topic-card">
+      <span class="topic-priority topic-priority--h">Priority — High</span>
+      <div class="topic-title">How to Choose the Right Size: From Baby to Teen</div>
+      <div class="topic-why">Olivio &amp; Co's 6-category age system is the market's most detailed. This guide is the natural home for that expertise. 'Which size do I buy?' is one of the most common pre-purchase abandonment triggers.</div>
+      <span class="topic-kw-label">Target keywords</span>
+      <div class="topic-kw">kids sunglasses size guide · what size sunglasses for 3 year old · toddler junior sunglasses fit</div>
+    </div>
+    <div class="topic-card">
+      <span class="topic-priority topic-priority--m">Priority — Medium · Brand</span>
+      <div class="topic-title">Family Holiday in the Mediterranean: How to Protect Your Children's Eyes</div>
+      <div class="topic-why">This content exists nowhere in the competitor universe. It fuses the Mediterranean brand identity with practical parenting SEO. Travel and family lifestyle blogs frequently link to this type of content — natural backlink opportunity.</div>
+      <span class="topic-kw-label">Target keywords</span>
+      <div class="topic-kw">family holiday Mediterranean sun protection · kids sunglasses beach Europe · sunglasses toddlers holiday</div>
+    </div>
+  </div>
+
+  <div class="page-footer" style="border-color:#2A2A2A; color:#555;">
+    <span>Olivio &amp; Co · SEO Research Report</span>
+    <span>Virtually Ever After · March 2026</span>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!-- PAGE 9 · PART TWO DIVIDER (dark)                         -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div class="page page--dark" style="display:flex; flex-direction:column; justify-content:center;">
+
+  <span class="eyebrow" style="color:#555;">Part Two</span>
+  <h1 class="section-title" style="font-size: clamp(36px, 6vw, 64px); max-width: 560px; margin-bottom: 28px;">How we apply it.</h1>
+  <p style="font-size: 16px; font-weight: 300; color: #AAAAAA; max-width: 480px; line-height: 1.75;">
+    What follows is a precise account of how each finding from Part One becomes a concrete action — organised by area, with the technical implementation mapped to each deliverable.
+  </p>
+
+  <div style="margin-top: 52px; border-top: 1px solid #2A2A2A; padding-top: 28px; display: flex; gap: 48px; flex-wrap: wrap;">
+    <div>
+      <div style="font-family: 'Xanh Mono', monospace; font-size: 8px; letter-spacing: 0.18em; text-transform: uppercase; color: #555; margin-bottom: 6px;">Areas covered</div>
+      <div style="font-size: 13px; color: #CCCCCC; font-weight: 300;">Technical Foundation · Schema · Product Pages<br>Blog &amp; Content · Keywords · GBP · Ahrefs</div>
+    </div>
+  </div>
+
+  <div class="page-footer" style="border-color:#2A2A2A; color:#555;">
+    <span>Olivio &amp; Co · SEO Research Report</span>
+    <span>Virtually Ever After · March 2026</span>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!-- PAGE 10 · HOW WE APPLY IT — TECHNICAL                    -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div class="page">
+  <span class="eyebrow">Application — Technical Foundation</span>
+  <h1 class="section-title">The infrastructure<br>that makes everything else work.</h1>
+  <p class="section-intro">Before content, before keywords, before any campaign — these are the technical prerequisites. Without them, every other improvement is undermined.</p>
+
+  <div class="action-block">
+    <div class="action-numeral">01</div>
+    <span class="action-tag">Analytics</span>
+    <h2 class="action-title">Install Google Analytics 4 with full conversion tracking.</h2>
+    <p class="action-body">The site currently has no measurement tool installed. From day one of the new site, every visit, traffic source, product view, cart addition, and completed purchase is tracked. This is not optional — it is the baseline that makes every subsequent decision evidence-based rather than guesswork. Conversion events are configured from the first session: add-to-cart, checkout-initiated, purchase-completed.</p>
+    <ul class="action-list">
+      <li><strong>GA4 property</strong> connected to both EU and US stores with cross-domain tracking configured</li>
+      <li><strong>Google Search Console</strong> connected to GA4 — keyword impressions and click data flow into one dashboard</li>
+      <li><strong>Conversion events</strong> set up and verified against real test purchases before launch</li>
+      <li><strong>Baseline report</strong> generated from first 30 days — traffic by source, conversion rate by collection, top exit pages</li>
+    </ul>
+  </div>
+
+  <div class="action-block">
+    <div class="action-numeral">02</div>
+    <span class="action-tag">Technical Fixes</span>
+    <h2 class="action-title">Fix search, correct redirects, repair every broken URL.</h2>
+    <p class="action-body">The search bar error is corrected at the theme level. Every URL that was previously incorrect is identified, corrected in the new site, and redirected — any link that existed to an old URL, whether from Google's index, a blog post, or an external site, lands correctly on the new URL without showing a 404. No existing search equity is lost in the migration.</p>
+    <ul class="action-list">
+      <li><strong>Amazon CTA fix</strong> — Sport sunglasses "Discover" button currently routes to Amazon. Redirected to /collections/sport-glasses to keep traffic, revenue, and customer data within the brand's own store</li>
+      <li><strong>"Creative Dedition" typo</strong> — corrected to "Creative Edition D" across homepage banners and all collection references</li>
+      <li><strong>Search function</strong> repaired and tested across all device and browser combinations</li>
+      <li><strong>301 redirects</strong> mapped for every changed URL — old → new, confirmed working before launch</li>
+      <li><strong>Sitemap</strong> regenerated and submitted to Google Search Console on launch day</li>
+      <li><strong>Core Web Vitals</strong> — image optimisation and script loading reviewed for performance improvements</li>
+    </ul>
+  </div>
+
+  <div class="action-block">
+    <div class="action-numeral">03</div>
+    <span class="action-tag">Schema — Organisation + WebSite</span>
+    <h2 class="action-title">Tell Google what this brand is.</h2>
+    <p class="action-body">Two JSON-LD schema blocks are added to the site's theme header. The Organization block establishes the brand identity in Google's knowledge graph — logo URL, social profiles, customer service contact, available languages. The WebSite + SearchAction block enables the Sitelinks Search Box on branded queries, so visitors searching 'Olivio &amp; Co' on Google can search the store directly from results without a separate click.</p>
+    <ul class="action-list">
+      <li><strong>Organization schema</strong> — name, URL, logo, sameAs (Instagram + Facebook), contactPoint with language support</li>
+      <li><strong>WebSite schema</strong> — name, URL, potentialAction with SearchAction and urlTemplate for Shopify search</li>
+      <li><strong>Validation</strong> — both blocks tested in Google Rich Results Test and schema.org validator before deployment</li>
+    </ul>
+  </div>
+
+  <div class="page-footer">
+    <span>Olivio &amp; Co · SEO Research Report</span>
+    <span>Virtually Ever After · March 2026</span>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!-- PAGE 11 · APPLICATION — SCHEMA + REVIEWS                 -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div class="page">
+  <span class="eyebrow">Application — Schema &amp; Reviews</span>
+  <h1 class="section-title">Star ratings in Google<br>Search — and how to get them.</h1>
+
+  <div class="action-block">
+    <div class="action-numeral">04</div>
+    <span class="action-tag">Schema — AggregateRating (Star Ratings)</span>
+    <h2 class="action-title">Install a review app, collect reviews, activate schema.</h2>
+    <p class="action-body">Shopify does not generate AggregateRating schema automatically. A review app is required — it both collects reviews and injects the correct schema markup on each product page. Once at least one review per product is indexed, star ratings begin appearing in Google Search results within 2–4 weeks. The click-through rate improvement from star ratings in search is consistent across benchmarks at approximately 30%.</p>
+    <ul class="action-list">
+      <li><strong>Judge.me</strong> (recommended — free plan, excellent schema, automated post-purchase review requests)</li>
+      <li><strong>Post-purchase email sequence</strong> configured to request a review 7–10 days after delivery — this is how the review base is built</li>
+      <li><strong>Review widgets</strong> placed on product listings and homepage — visible social proof at every decision point</li>
+      <li><strong>Schema validation</strong> — Rich Results Test run after first reviews are collected to confirm star schema is being read</li>
+    </ul>
+  </div>
+
+  <div class="action-block">
+    <div class="action-numeral">05</div>
+    <span class="action-tag">Schema — FAQPage + Shipping</span>
+    <h2 class="action-title">Expand search result real estate with FAQ and shipping schema.</h2>
+    <p class="action-body">FAQPage schema is added to the /pages/faqs URL. Correctly implemented, this causes the FAQ content to expand directly in Google Search results — the listing occupies 2–5× more SERP space, with each question and answer visible without a click. Additionally, ShippingDetails schema is added to product pages to surface the '€69 free shipping' threshold in Google Shopping results.</p>
+    <ul class="action-list">
+      <li><strong>FAQPage JSON-LD</strong> written for each Q&amp;A pair on the FAQ page, validated before deployment</li>
+      <li><strong>Recommended FAQ additions</strong> — sizing guide, returns policy, UV standard, shipping details — all high-intent pre-purchase questions</li>
+      <li><strong>ShippingDetails schema</strong> — free shipping threshold (€69), shipping zones, and estimated delivery times added to product schema</li>
+      <li><strong>ItemList schema</strong> on collection pages — allows individual products to appear as list items in SERP</li>
+    </ul>
+  </div>
+
+  <div class="note-strip">
+    <span class="note-strip-label">Schema validation tools — use after every change</span>
+    <p>All schema changes must be validated in <strong>Google Rich Results Test</strong> (search.google.com/test/rich-results) and <strong>schema.org Validator</strong> before going live. After deployment, monitor <strong>Google Search Console → Enhancements → Rich Results</strong> for indexing status and any errors. Never deploy schema changes without validating first — malformed markup can suppress existing rich results.</p>
+  </div>
+
+  <div class="page-footer">
+    <span>Olivio &amp; Co · SEO Research Report</span>
+    <span>Virtually Ever After · March 2026</span>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!-- PAGE 12 · APPLICATION — PRODUCT PAGES + KEYWORDS         -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div class="page">
+  <span class="eyebrow">Application — On-Page SEO</span>
+  <h1 class="section-title">Every product page<br>rewritten for search.</h1>
+
+  <div class="action-block">
+    <div class="action-numeral">06</div>
+    <span class="action-tag">Product Page Copy</span>
+    <h2 class="action-title">Rewrite every product description to 150+ words, structured for search.</h2>
+    <p class="action-body">Product pages include UV400, polarised, BPA-free and eco-packaging details — the raw material is there. The gap is in structure: specs are listed as brief bullet points rather than woven into searchable prose that Google can index as meaningful content. No head circumference range, no age guidance in the description body, no link to a size guide, no mention of the collection story beyond a title. Rewriting every product description as structured prose is the single highest-impact SEO action on existing content — it improves rankings without requiring new pages or external links.</p>
+    <ul class="action-list">
+      <li><strong>Minimum 150 words per product</strong> — UV400 spec, polarisation, BPA-free material, age range, head circumference guide reference</li>
+      <li><strong>Collection story woven in</strong> — Creative D, Coral Reef, Breakfast Art — the artistic context that differentiates from generic descriptions</li>
+      <li><strong>Primary keyword in first sentence</strong> — e.g. 'toddler sunglasses UV protection' or 'junior ski goggles' — natural, not forced</li>
+      <li><strong>Returns and guarantee</strong> integrated into each product description — a conversion element as much as an SEO element</li>
+    </ul>
+  </div>
+
+  <div class="action-block">
+    <div class="action-numeral">07</div>
+    <span class="action-tag">Collection Pages + Meta Data</span>
+    <h2 class="action-title">Unique meta titles and descriptions for every collection URL.</h2>
+    <p class="action-body">Collection pages are among the highest-traffic entry points from organic search — they rank for category queries ('toddler sunglasses EU', 'kids ski goggles buy') rather than brand queries. Currently, collection pages have generic or duplicated meta data. Each collection receives a unique, keyword-optimised title tag and meta description written specifically for its search cluster.</p>
+    <ul class="action-list">
+      <li><strong>Title tag structure</strong>: Primary keyword + Brand Name — e.g. 'Toddler Sunglasses UV400 | Olivio &amp; Co'</li>
+      <li><strong>Meta descriptions</strong>: 150–160 characters, written to earn the click — include the unique differentiator (EU shipping, awards, Mediterranean)</li>
+      <li><strong>H1 tags</strong> — each collection page gets a single, descriptive H1 that matches the primary keyword target</li>
+      <li><strong>Keyword integration</strong> — top 20 keywords from this report distributed across collection pages based on intent match</li>
+    </ul>
+  </div>
+
+  <div class="action-block">
+    <div class="action-numeral">08</div>
+    <span class="action-tag">Size Guide Page</span>
+    <h2 class="action-title">Build the definitive children's sunglasses size guide.</h2>
+    <p class="action-body">A dedicated /pages/size-guide page is created. It covers all five age categories with age ranges, head circumference measurements in cm and inches, and a comparison table that clarifies the 3–4 year overlap between Kids and Junior. This page serves two purposes simultaneously: it reduces cart abandonment from parents uncertain about fit, and it ranks for the 'children's sunglasses size' search cluster that Olivio &amp; Co's granular age system is uniquely positioned to own.</p>
+    <ul class="action-list">
+      <li><strong>Age range table</strong> — Toddler (0–2y), Kids (2–4y), Junior (3–7y), Junior+ (7–10y), Teen &amp; Adult — with explicit head circumference ranges in cm and inches</li>
+      <li><strong>Head circumference guide</strong> — in cm and inches, with measuring instructions</li>
+      <li><strong>Linked from every product page</strong> — visible next to the size selector, not buried in navigation</li>
+      <li><strong>SEO target</strong>: 'kids sunglasses size guide', 'what size sunglasses for 3 year old', 'toddler junior sunglasses fit'</li>
+    </ul>
+  </div>
+
+  <div class="page-footer">
+    <span>Olivio &amp; Co · SEO Research Report</span>
+    <span>Virtually Ever After · March 2026</span>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!-- PAGE 13 · APPLICATION — BLOG + NEWSLETTER                -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div class="page">
+  <span class="eyebrow">Application — Content &amp; Blog</span>
+  <h1 class="section-title">The blog activated.<br>The newsletter built.</h1>
+
+  <div class="action-block">
+    <div class="action-numeral">09</div>
+    <span class="action-tag">Blog Restructure + Navigation</span>
+    <h2 class="action-title">Replace the generic blog content. Add the brand-specific content the site is missing.</h2>
+    <p class="action-body">The blog has over 40 articles. The problem is not volume — it's relevance. "When Were Sunglasses First Invented?" and "2024 Sunglasses Trends" could be published by any eyewear brand in the world. They earn no rankings specific to Olivio &amp; Co and build no brand authority. The blog also sits in the footer only — absent from the main navigation. The strategy here is twofold: move the blog into main navigation, and replace generic articles with brand-owned content that only Olivio &amp; Co can write.</p>
+    <ul class="action-list">
+      <li><strong>Blog added to main navigation</strong> — currently footer-only; most visitors never see it</li>
+      <li><strong>Existing articles audited</strong> — generic industry content deprioritised; any article that references Olivio &amp; Co's specific products or identity is optimised and internally linked to relevant collection pages</li>
+      <li><strong>New article priority 1</strong>: ski goggles guide — uncontested search territory, published before October to capture the full winter window</li>
+      <li><strong>New article priority 2</strong>: blue light / screen glasses guide — zero competitors address this well; highest CPC keyword in the research at $1.45</li>
+      <li><strong>New article priority 3</strong>: children's eye health (the 70% UV fact) — positions Olivio &amp; Co as the category authority, Mediterranean angle built in</li>
+    </ul>
+  </div>
+
+  <div class="action-block">
+    <div class="action-numeral">10</div>
+    <span class="action-tag">Newsletter Fork</span>
+    <h2 class="action-title">Every article becomes a direct-channel asset.</h2>
+    <p class="action-body">Each blog article — existing and new — is adapted into a newsletter version. The article targets search engines; the newsletter version targets the subscriber list directly. This dual-channel approach means every piece of content generates both organic traffic (which grows over time as the article ranks higher) and direct engagement (which is immediate and independent of Google). The newsletter list is a channel Olivio &amp; Co owns entirely — no algorithm, no ad spend, no competitor can take it away.</p>
+    <ul class="action-list">
+      <li><strong>Email capture</strong> — exit-intent popup with first-order incentive, targeting visitors who have browsed but not purchased</li>
+      <li><strong>Newsletter cadence</strong> — one send per published article, formatted specifically for email with a single product CTA</li>
+      <li><strong>Subscriber growth target</strong> — 8–12% of exit-intent visitors convert to subscribers at the benchmark discount rate</li>
+      <li><strong>Platform recommendation</strong>: Klaviyo (native Shopify integration, segmentation, abandoned cart sequences)</li>
+    </ul>
+  </div>
+
+  <div class="page-footer">
+    <span>Olivio &amp; Co · SEO Research Report</span>
+    <span>Virtually Ever After · March 2026</span>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!-- PAGE 14 · APPLICATION — GBP (dark)                       -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div class="page page--dark">
+  <span class="eyebrow">Application — Google Business Profile</span>
+  <h1 class="section-title">Free visibility.<br>Currently unused.</h1>
+  <p class="section-intro">Olivio &amp; Co has a Google Business Profile — it exists and is accessible. Both Babiators and Roshambo post to theirs regularly. Olivio &amp; Co's profile has been inactive. GBP posts appear directly in Google Search and Maps, drive traffic to the store without ad spend, and are a confirmed Maps ranking signal.</p>
+
+  <div style="margin-bottom: 28px;">
+    <div class="gbp-post">
+      <div class="gbp-header">
+        <span class="gbp-season">Summer</span>
+        <span class="gbp-type">Product</span>
+      </div>
+      <div class="gbp-body">Your little explorer deserves the best eye protection. Olivio &amp; Co's polarised toddler sunglasses deliver 100% UV400 protection all holiday long — crafted in the colours of the Mediterranean.</div>
+      <div class="gbp-cta">→ Shop Now [link]</div>
+    </div>
+
+    <div class="gbp-post">
+      <div class="gbp-header">
+        <span class="gbp-season">Year-round</span>
+        <span class="gbp-type">Educational</span>
+      </div>
+      <div class="gbp-body">Did you know? Children's eyes let in 70% more UV radiation than adult eyes. Sunglasses for kids aren't a seasonal accessory — they're essential eye protection. Olivio &amp; Co covers every age from Baby to Teen with full UV400 safety.</div>
+      <div class="gbp-cta">→ Read Our Eye Health Guide [link]</div>
+    </div>
+
+    <div class="gbp-post">
+      <div class="gbp-header">
+        <span class="gbp-season">October–February</span>
+        <span class="gbp-type">Ski Goggles</span>
+      </div>
+      <div class="gbp-body">Ready for the slopes? Olivio &amp; Co junior ski goggles — anti-fog lenses, full face coverage, built for real mountain adventures. Give your little skier professional-level protection.</div>
+      <div class="gbp-cta">→ Shop the Ski Range [link]</div>
+    </div>
+
+    <div class="gbp-post">
+      <div class="gbp-header">
+        <span class="gbp-season">August–September</span>
+        <span class="gbp-type">Screen Glasses</span>
+      </div>
+      <div class="gbp-body">Screen time is up — eye strain is real. As kids head back to school, Olivio &amp; Co's blue light filter screen glasses protect little eyes from digital fatigue. Lightweight frames, all-day comfort.</div>
+      <div class="gbp-cta">→ Try Them Now [link]</div>
+    </div>
+
+    <div class="gbp-post">
+      <div class="gbp-header">
+        <span class="gbp-season">Year-round</span>
+        <span class="gbp-type">Collection Story</span>
+      </div>
+      <div class="gbp-body">Inspired by Matisse. Our Creative Edition D collection — bold colour blocks, soft-touch frames, wearable art for kids and adults alike. More than sunglasses. An expression.</div>
+      <div class="gbp-cta">→ Discover the Collection [link]</div>
+    </div>
+  </div>
+
+  <div style="border-top: 1px solid #2A2A2A; padding-top: 20px;">
+    <div style="font-family: 'Xanh Mono', monospace; font-size: 8px; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: #666; margin-bottom: 14px;">GBP implementation notes</div>
+    <div style="font-size: 12px; font-weight: 300; color: #AAAAAA; line-height: 1.7;">
+      Post frequency: minimum 1 per week, 2 per week is optimal for Maps visibility. Each post requires one CTA button. Content mix: 40% product, 30% educational, 20% social proof, 10% brand story. Images: 720×540px minimum. Respond to all reviews within 48 hours — Google measures review response rate as an engagement signal. Add 5–10 self-authored Q&amp;As to the profile (sizing, UV protection, returns, shipping) — these appear directly in Search and Maps. Use Zapier to sync Instagram posts to GBP automatically.
+    </div>
+  </div>
+
+  <div class="page-footer" style="border-color:#2A2A2A; color:#555;">
+    <span>Olivio &amp; Co · SEO Research Report</span>
+    <span>Virtually Ever After · March 2026</span>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!-- PAGE 15 · APPLICATION — AHREFS WORKFLOW                  -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div class="page">
+  <span class="eyebrow">Application — Ongoing Keyword Research</span>
+  <h1 class="section-title">The Ahrefs workflow<br>for continuous discovery.</h1>
+  <p class="section-intro">The 20 keywords in this report are the starting point — not the ceiling. Ahrefs allows ongoing discovery of competitor traffic, new keyword opportunities, and content gaps as the site builds authority. The following workflow is designed to be repeatable.</p>
+
+  <div class="action-block">
+    <div class="action-numeral">11</div>
+    <span class="action-tag">Competitor Analysis in Ahrefs</span>
+    <h2 class="action-title">Find every keyword Babiators and Roshambo rank for that you do not.</h2>
+    <p class="action-body">Ahrefs' Content Gap tool compares olivioandco.eu against both competitors simultaneously and outputs every keyword they rank for that the site does not. This is the most direct route to identifying untapped traffic — ranked by opportunity, not guesswork. Run this analysis quarterly as domain authority builds and rankings shift.</p>
+    <ul class="action-list">
+      <li><strong>Site Explorer → babiators.com + roshambo.com</strong> → Top Pages → export CSV — shows the exact pages driving their traffic and which keywords each page targets</li>
+      <li><strong>Competitive Analysis → Content Gap</strong> → Target: olivioandco.eu, Competitors: babiators.com + roshambo.com → filter by KD ≤ 30, Volume ≥ 300</li>
+      <li><strong>Prioritisation matrix</strong>: Tier 1 (KD ≤ 25, Vol ≥ 500) = product/collection page integration. Tier 2 (KD ≤ 40, informational intent) = blog article brief. Skip KD ≥ 60 until domain authority grows.</li>
+      <li><strong>Site Explorer → olivioandco.eu</strong> → Organic Keywords → monitor current rankings and track movement after each on-page change</li>
+    </ul>
+  </div>
+
+  <div class="action-block">
+    <div class="action-numeral">12</div>
+    <span class="action-tag">Seed Keyword Expansion</span>
+    <h2 class="action-title">Expand the keyword map as the content strategy grows.</h2>
+    <p class="action-body">Seven seed keywords are the entry points for systematic expansion in Ahrefs Keyword Explorer. Each seed generates a cluster of related terms — matching terms, questions, related queries — which populate new content briefs and identify long-tail variants to embed in product descriptions and FAQs.</p>
+    <ul class="action-list">
+      <li><strong>kids sunglasses</strong> → Matching Terms, KD ≤ 30, Vol ≥ 500 — product and collection page targets</li>
+      <li><strong>kids ski goggles</strong> → Matching Terms, KD ≤ 25 — uncontested category expansion</li>
+      <li><strong>blue light glasses kids</strong> → Matching Terms, CPC ≥ $1.00 — highest-value commercial segment</li>
+      <li><strong>toddler sunglasses buy</strong> → Related, CPC ≥ $0.80 — purchase-intent cluster</li>
+      <li><strong>baby sunglasses UV</strong> → Questions, Vol ≥ 200 — blog article trigger questions</li>
+      <li><strong>sunglasses toddler Europe</strong> → Related, KD ≤ 20 — EU-domain structural advantage terms</li>
+      <li><strong>Mediterranean eyewear</strong> → All, Vol ≥ 100 — brand identity cluster, entirely uncontested</li>
+    </ul>
+  </div>
+
+  <div class="page-footer">
+    <span>Olivio &amp; Co · SEO Research Report</span>
+    <span>Virtually Ever After · March 2026</span>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!-- PAGE 16 · CONSOLIDATED ACTION PLAN                       -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div class="page">
+  <span class="eyebrow">Consolidated Action Plan</span>
+  <h1 class="section-title">Everything in<br>one place.</h1>
+  <p class="section-intro">All findings from Part One, all applications from Part Two — ordered by impact. The first group removes the most critical blockers. The second builds the organic traffic engine. The third compounds both.</p>
+
+  <div style="font-family: 'Xanh Mono', monospace; font-size: 8px; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: var(--stone); margin-bottom: 16px; margin-top: 8px; display: flex; gap: 20px;">
+    <span style="display:flex; align-items:center; gap:6px;"><span style="width:8px;height:8px;border-radius:50%;background:#B03030;display:inline-block;"></span> Immediate</span>
+    <span style="display:flex; align-items:center; gap:6px;"><span style="width:8px;height:8px;border-radius:50%;background:#A06020;display:inline-block;"></span> Early</span>
+    <span style="display:flex; align-items:center; gap:6px;"><span style="width:8px;height:8px;border-radius:50%;background:#2A7A2A;display:inline-block;"></span> Ongoing</span>
+  </div>
+
+  <div class="priority-rows">
+    <div class="priority-row">
+      <div class="priority-dot priority-dot--now"></div>
+      <div class="priority-row-content">
+        <div class="priority-row-title">Fix Sport Sunglasses CTA — currently routes to Amazon</div>
+        <div class="priority-row-desc">The homepage "Discover" button for Sport Sunglasses sends visitors directly to Amazon. Every conversion from that click is lost to the brand. One URL change, zero cost.</div>
+      </div>
+      <div class="priority-row-tag">Quick Fix</div>
+    </div>
+    <div class="priority-row">
+      <div class="priority-dot priority-dot--now"></div>
+      <div class="priority-row-content">
+        <div class="priority-row-title">Correct "CREATIVE DEDITION" typo on homepage banner</div>
+        <div class="priority-row-desc">The brand's most distinctive collection is misspelled in its own hero banner. High-visibility, single copy correction.</div>
+      </div>
+      <div class="priority-row-tag">Quick Fix</div>
+    </div>
+    <div class="priority-row">
+      <div class="priority-dot priority-dot--now"></div>
+      <div class="priority-row-content">
+        <div class="priority-row-title">Add Organization + WebSite schema to theme header</div>
+        <div class="priority-row-desc">Brand identity in Google's knowledge graph. Sitelinks Search Box on branded queries. Two JSON-LD blocks, one hour to deploy.</div>
+      </div>
+      <div class="priority-row-tag">Schema</div>
+    </div>
+    <div class="priority-row">
+      <div class="priority-dot priority-dot--now"></div>
+      <div class="priority-row-content">
+        <div class="priority-row-title">Install Judge.me, activate post-purchase review requests</div>
+        <div class="priority-row-desc">Star ratings in Google Search — the single highest-visibility SEO change available. Every day without reviews is a day competitors maintain the star rating gap.</div>
+      </div>
+      <div class="priority-row-tag">Reviews</div>
+    </div>
+    <div class="priority-row">
+      <div class="priority-dot priority-dot--now"></div>
+      <div class="priority-row-content">
+        <div class="priority-row-title">Install GA4 with conversion tracking on both stores</div>
+        <div class="priority-row-desc">No baseline = no measurement = no decisions. This is the prerequisite for everything that follows.</div>
+      </div>
+      <div class="priority-row-tag">Analytics</div>
+    </div>
+    <div class="priority-row">
+      <div class="priority-dot priority-dot--now"></div>
+      <div class="priority-row-content">
+        <div class="priority-row-title">Move guarantee to homepage prominence — it already exists, it just isn't visible</div>
+        <div class="priority-row-desc">A 13-month warranty and 30-day return policy are present — buried as small icon strips at the bottom of product pages. For both main competitors this is the #1 homepage element. A positioning fix, not a policy creation.</div>
+      </div>
+      <div class="priority-row-tag">Conversion</div>
+    </div>
+    <div class="priority-row">
+      <div class="priority-dot priority-dot--soon"></div>
+      <div class="priority-row-content">
+        <div class="priority-row-title">Rewrite all product page descriptions — 150+ words each</div>
+        <div class="priority-row-desc">UV400, polarised, BPA-free, age range, collection story, returns. The single highest-impact SEO action on existing content.</div>
+      </div>
+      <div class="priority-row-tag">On-Page SEO</div>
+    </div>
+    <div class="priority-row">
+      <div class="priority-dot priority-dot--soon"></div>
+      <div class="priority-row-content">
+        <div class="priority-row-title">Create /pages/size-guide with age + head circumference table</div>
+        <div class="priority-row-desc">Reduces cart abandonment from fit uncertainty. Ranks for 'children's sunglasses size' cluster. Link from every product page.</div>
+      </div>
+      <div class="priority-row-tag">Content</div>
+    </div>
+    <div class="priority-row">
+      <div class="priority-dot priority-dot--soon"></div>
+      <div class="priority-row-content">
+        <div class="priority-row-title">Replace generic blog content with brand-specific articles + add to main navigation</div>
+        <div class="priority-row-desc">40+ articles exist — none specific to Olivio &amp; Co. Blog is footer-only. Priority: navigation fix first, then replace generic copy with ski goggles, screen glasses, and children's eye health articles that only this brand can own.</div>
+      </div>
+      <div class="priority-row-tag">Blog</div>
+    </div>
+    <div class="priority-row">
+      <div class="priority-dot priority-dot--soon"></div>
+      <div class="priority-row-content">
+        <div class="priority-row-title">Add FAQPage schema + ShippingDetails schema</div>
+        <div class="priority-row-desc">Expanded SERP real estate via FAQ snippets. Free shipping threshold visible in Google Shopping.</div>
+      </div>
+      <div class="priority-row-tag">Schema</div>
+    </div>
+    <div class="priority-row">
+      <div class="priority-dot priority-dot--soon"></div>
+      <div class="priority-row-content">
+        <div class="priority-row-title">Write ski goggles blog post — publish before October</div>
+        <div class="priority-row-desc">Uncontested category. No competitor ranks here. One well-structured article owns the entire winter search window.</div>
+      </div>
+      <div class="priority-row-tag">Content</div>
+    </div>
+    <div class="priority-row">
+      <div class="priority-dot priority-dot--soon"></div>
+      <div class="priority-row-content">
+        <div class="priority-row-title">Activate Google Business Profile — begin weekly posting</div>
+        <div class="priority-row-desc">920 Instagram posts already exist. Recycling to GBP is a one-tool setup. Free visibility both competitors are already using.</div>
+      </div>
+      <div class="priority-row-tag">GBP</div>
+    </div>
+    <div class="priority-row">
+      <div class="priority-dot priority-dot--ongoing"></div>
+      <div class="priority-row-content">
+        <div class="priority-row-title">Write blue light + screen glasses educational article</div>
+        <div class="priority-row-desc">Highest CPC in the keyword list ($1.45). Converts by educating — article sells the product by explaining the problem.</div>
+      </div>
+      <div class="priority-row-tag">Content</div>
+    </div>
+    <div class="priority-row">
+      <div class="priority-dot priority-dot--ongoing"></div>
+      <div class="priority-row-content">
+        <div class="priority-row-title">Run Ahrefs Content Gap analysis vs Babiators + Roshambo</div>
+        <div class="priority-row-desc">Every keyword both competitors rank for that Olivio &amp; Co does not — sorted by opportunity. Repeat quarterly.</div>
+      </div>
+      <div class="priority-row-tag">Research</div>
+    </div>
+    <div class="priority-row">
+      <div class="priority-dot priority-dot--ongoing"></div>
+      <div class="priority-row-content">
+        <div class="priority-row-title">Write children's eye health guide (the 70% UV fact)</div>
+        <div class="priority-row-desc">Authoritative content that positions the brand as the category expert. Backlink magnet. Mediterranean angle built in.</div>
+      </div>
+      <div class="priority-row-tag">Content</div>
+    </div>
+    <div class="priority-row">
+      <div class="priority-dot priority-dot--ongoing"></div>
+      <div class="priority-row-content">
+        <div class="priority-row-title">Deepen About Us — founders, mission, values, brand origin</div>
+        <div class="priority-row-desc">Both competitors convert with founder stories. Olivio &amp; Co's Mediterranean origin is a stronger story than either — it needs telling.</div>
+      </div>
+      <div class="priority-row-tag">Brand SEO</div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span>Olivio &amp; Co · SEO Research Report</span>
+    <span>Virtually Ever After · March 2026</span>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!-- PAGE 17 · CLOSE (dark)                                   -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div class="page page--dark" style="display:flex; flex-direction:column; justify-content:space-between;">
+
+  <div>
+    <span class="eyebrow" style="color:#555;">Summary</span>
+    <h1 class="section-title" style="max-width: 520px; margin-bottom: 32px;">The product is ready.<br>Search is not — yet.</h1>
+
+    <div style="border-left: 3px solid #2A2A2A; padding: 22px 28px; background: #1A1A1A; margin-bottom: 28px; max-width: 580px;">
+      <p style="font-size: 15px; font-weight: 300; font-style: italic; color: #CCCCCC; line-height: 1.85;">
+        Olivio &amp; Co has an uncontested ski goggles category, a .eu domain advantage over every major competitor, nine design awards, a Mediterranean identity no competitor can copy, and the market's most granular age-segmentation system. None of it is working for search.
+      </p>
+      <p style="font-size: 15px; font-weight: 300; font-style: italic; color: #CCCCCC; line-height: 1.85; margin-top: 14px;">
+        This report is the map. The work ahead is straightforward: fix what is broken, surface what exists, and publish what only this brand can publish.
+      </p>
+    </div>
+
+    <div style="background: #1E1E1E; border: 1px solid #2A2A2A; padding: 22px 26px; max-width: 460px;">
+      <div style="font-family: 'Xanh Mono', monospace; font-size: 8px; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: #666; margin-bottom: 16px;">Report coverage</div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px 32px;">
+        <div style="font-family: 'Xanh Mono', monospace; font-size: 10px; color: #888; padding: 5px 0; border-bottom: 1px solid #222;">Competitor analysis</div>
+        <div style="font-family: 'Xanh Mono', monospace; font-size: 10px; color: #888; padding: 5px 0; border-bottom: 1px solid #222;">Schema audit</div>
+        <div style="font-family: 'Xanh Mono', monospace; font-size: 10px; color: #888; padding: 5px 0; border-bottom: 1px solid #222;">20 mapped keywords</div>
+        <div style="font-family: 'Xanh Mono', monospace; font-size: 10px; color: #888; padding: 5px 0; border-bottom: 1px solid #222;">Site comparison</div>
+        <div style="font-family: 'Xanh Mono', monospace; font-size: 10px; color: #888; padding: 5px 0; border-bottom: 1px solid #222;">5 content topics</div>
+        <div style="font-family: 'Xanh Mono', monospace; font-size: 10px; color: #888; padding: 5px 0; border-bottom: 1px solid #222;">GBP strategy + posts</div>
+        <div style="font-family: 'Xanh Mono', monospace; font-size: 10px; color: #888; padding: 5px 0; border-bottom: 1px solid #222;">Ahrefs workflow</div>
+        <div style="font-family: 'Xanh Mono', monospace; font-size: 10px; color: #888; padding: 5px 0; border-bottom: 1px solid #222;">16-action plan</div>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <div style="border-top: 1px solid #2A2A2A; padding-top: 24px; margin-bottom: 20px;">
+      <div style="font-family: 'Xanh Mono', monospace; font-size: 8px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: #555; margin-bottom: 8px;">Questions or next steps</div>
+      <a href="mailto:hello@virtuallyeverafter.lu" style="font-size: 17px; font-weight: 500; color: #CCCCCC; text-decoration: none; border-bottom: 1px solid #2A2A2A; padding-bottom: 2px;">hello@virtuallyeverafter.lu</a>
+    </div>
+    <div style="font-family: 'Xanh Mono', monospace; font-size: 9px; color: #444; letter-spacing: 0.06em;">Confidential — prepared exclusively for Olivio &amp; Co · Virtually Ever After · Luxembourg · March 2026</div>
+  </div>
+
+</div>
+
+</body>
+</html>
