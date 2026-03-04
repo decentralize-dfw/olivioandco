@@ -1,0 +1,1347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Olivio &amp; Co — Website Proposal · Virtually Ever After</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Xanh+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  /* ─── RESET ─────────────────────────────────────────────── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  /* ─── TOKENS ─────────────────────────────────────────────── */
+  :root {
+    --bg:       #F4F4F2;
+    --ink:      #111111;
+    --charcoal: #3D3D3D;
+    --mid:      #6B6B6B;
+    --stone:    #909090;
+    --border:   #DDDDD8;
+    --light:    #EAEAE6;
+    --cover-bg: #161616;
+    --accent:   #2A2A2A;
+    --ff-mono:  'Xanh Mono', 'Courier New', monospace;
+    --ff-sans:  'Helvetica Neue', Helvetica, Arial, sans-serif;
+  }
+
+  /* ─── BASE ───────────────────────────────────────────────── */
+  html { font-size: 16px; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body { background: var(--bg); color: var(--ink); font-family: var(--ff-sans); font-weight: 400; line-height: 1.65; }
+
+  /* ─── PAGES ──────────────────────────────────────────────── */
+  .page {
+    min-height: 100vh;
+    padding: 80px 72px 120px;
+    max-width: 860px;
+    margin: 0 auto;
+    position: relative;
+    page-break-before: always;
+  }
+  .page:first-child { page-break-before: auto; }
+
+  /* ─── COVER PAGE ─────────────────────────────────────────── */
+  .page--cover {
+    background: var(--cover-bg);
+    color: #F4F4F2;
+    max-width: 100%;
+    padding: 72px 100px 72px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 100vh;
+  }
+
+  .cover-agency {
+    font-family: var(--ff-mono);
+    font-size: 10px;
+    font-weight: 400;
+    letter-spacing: 0.12em;
+    color: #555;
+  }
+
+  .cover-hero {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 48px 0 40px;
+  }
+
+  .cover-title {
+    font-family: var(--ff-mono);
+    font-size: clamp(52px, 9vw, 96px);
+    font-weight: 700;
+    line-height: 0.92;
+    letter-spacing: -0.03em;
+    color: #F4F4F2;
+  }
+
+  .cover-subtitle {
+    margin-top: 28px;
+    font-family: var(--ff-mono);
+    font-size: 10px;
+    font-weight: 400;
+    letter-spacing: 0.18em;
+    color: #555;
+  }
+
+  .cover-rule {
+    width: 48px;
+    height: 1px;
+    background: #444;
+    margin: 32px 0;
+  }
+
+  /* Complimentary box */
+  .cover-complimentary {
+    border: 1px solid #2A2A2A;
+    padding: 16px 20px;
+    margin-bottom: 32px;
+    display: inline-block;
+    max-width: 400px;
+  }
+  .cover-comp-label {
+    font-family: var(--ff-mono);
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    color: #555;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    display: block;
+  }
+  .cover-comp-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 0;
+    border-top: 1px solid #252525;
+    font-size: 11px;
+    color: #888;
+    font-family: var(--ff-mono);
+    font-weight: 400;
+  }
+  .cover-comp-row:last-child { border-bottom: 1px solid #252525; }
+  .cover-comp-link {
+    font-size: 10px;
+    color: #555;
+    letter-spacing: 0.05em;
+  }
+  .cover-comp-note {
+    font-size: 9px;
+    color: #3A3A3A;
+    margin-top: 10px;
+    font-family: var(--ff-mono);
+    display: block;
+  }
+
+  .cover-meta {
+    display: flex;
+    gap: 40px;
+    flex-wrap: wrap;
+  }
+
+  .cover-meta-item {}
+  .cover-meta-label {
+    font-family: var(--ff-mono);
+    font-size: 8px;
+    font-weight: 400;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #444;
+    margin-bottom: 4px;
+  }
+  .cover-meta-value {
+    font-size: 12px;
+    font-weight: 400;
+    color: #999;
+    font-family: var(--ff-sans);
+    font-weight: 300;
+  }
+
+  .cover-footer {
+    font-family: var(--ff-mono);
+    font-size: 9px;
+    color: #333;
+    letter-spacing: 0.06em;
+  }
+
+  /* ─── SECTION HEADER ──────────────────────────────────────── */
+  .eyebrow {
+    display: block;
+    font-family: var(--ff-mono);
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--mid);
+    margin-bottom: 14px;
+  }
+
+  .section-title {
+    font-family: var(--ff-sans);
+    font-size: clamp(26px, 4vw, 38px);
+    font-weight: 600;
+    line-height: 1.18;
+    color: var(--ink);
+    margin-bottom: 18px;
+    letter-spacing: -0.02em;
+  }
+
+  .section-intro {
+    font-size: 15px;
+    font-weight: 300;
+    color: var(--charcoal);
+    max-width: 560px;
+    line-height: 1.72;
+    margin-bottom: 52px;
+  }
+
+  /* ─── PROBLEM CARDS ─────────────────────────────────────── */
+  .problem-block {
+    background: #fff;
+    border-left: 3px solid var(--accent);
+    padding: 28px 32px;
+    margin-bottom: 20px;
+  }
+
+  .problem-block--primary {
+    padding: 36px 32px;
+    border-left-width: 4px;
+  }
+
+  .problem-tag {
+    font-family: var(--ff-mono);
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--stone);
+    margin-bottom: 10px;
+    display: block;
+  }
+
+  .problem-title {
+    font-size: clamp(16px, 2.2vw, 19px);
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 10px;
+    line-height: 1.28;
+    letter-spacing: -0.01em;
+  }
+
+  .problem-body {
+    font-size: 13px;
+    font-weight: 300;
+    color: var(--charcoal);
+    line-height: 1.72;
+    margin-bottom: 18px;
+  }
+
+  .problem-list {
+    list-style: none;
+    padding: 0;
+  }
+  .problem-list li {
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--charcoal);
+    padding: 7px 0 7px 16px;
+    position: relative;
+    border-top: 1px solid var(--border);
+    line-height: 1.55;
+  }
+  .problem-list li:last-child { border-bottom: 1px solid var(--border); }
+  .problem-list li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 5px;
+    height: 1px;
+    background: var(--stone);
+  }
+
+  /* ─── SOLUTION CARDS ─────────────────────────────────────── */
+  .solution-block {
+    background: var(--light);
+    padding: 32px 32px 28px;
+    margin-bottom: 20px;
+  }
+
+  .solution-tag {
+    font-family: var(--ff-mono);
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--mid);
+    margin-bottom: 10px;
+    display: block;
+  }
+
+  .solution-title {
+    font-size: clamp(15px, 2vw, 18px);
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 10px;
+    letter-spacing: -0.01em;
+  }
+
+  .solution-body {
+    font-size: 13px;
+    font-weight: 300;
+    color: var(--charcoal);
+    line-height: 1.72;
+    margin-bottom: 18px;
+  }
+
+  .solution-list {
+    list-style: none;
+    padding: 0;
+  }
+  .solution-list li {
+    font-size: 12px;
+    color: var(--charcoal);
+    padding: 7px 0 7px 22px;
+    position: relative;
+    line-height: 1.5;
+    border-top: 1px solid rgba(0,0,0,0.08);
+  }
+  .solution-list li:last-child { border-bottom: 1px solid rgba(0,0,0,0.08); }
+  .solution-list li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--mid);
+    font-size: 11px;
+    top: 8px;
+    font-family: var(--ff-mono);
+  }
+
+  /* ─── INVESTMENT TABLE ───────────────────────────────────── */
+  .investment-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 52px;
+    font-size: 13px;
+  }
+  .investment-table td {
+    padding: 13px 0;
+    border-bottom: 1px solid var(--border);
+    color: var(--charcoal);
+  }
+  .investment-table td:last-child {
+    text-align: right;
+    font-weight: 500;
+    color: var(--ink);
+    font-family: var(--ff-mono);
+    font-size: 12px;
+  }
+  .investment-table tr.total td {
+    border-top: 2px solid var(--ink);
+    border-bottom: none;
+    font-weight: 600;
+    color: var(--ink);
+    padding-top: 16px;
+    font-size: 13px;
+  }
+  .investment-table .phase-label {
+    font-weight: 500;
+    color: var(--ink);
+  }
+  .investment-table .phase-weeks {
+    color: var(--stone);
+    font-size: 10px;
+    font-family: var(--ff-mono);
+    display: block;
+    margin-top: 2px;
+    letter-spacing: 0.06em;
+  }
+
+  /* ─── PHASE BLOCK ──────────────────────────────────────── */
+  .phase-block {
+    margin-bottom: 64px;
+    position: relative;
+  }
+
+  .phase-numeral {
+    font-family: var(--ff-mono);
+    font-size: 128px;
+    font-weight: 700;
+    color: var(--stone);
+    opacity: 0.06;
+    line-height: 1;
+    position: absolute;
+    right: -16px;
+    top: -28px;
+    user-select: none;
+    letter-spacing: -0.05em;
+  }
+
+  .phase-header {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    margin-bottom: 6px;
+    flex-wrap: wrap;
+  }
+
+  .phase-name {
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--ink);
+    letter-spacing: -0.02em;
+  }
+
+  .phase-timeline {
+    font-family: var(--ff-mono);
+    font-size: 10px;
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    color: var(--stone);
+    text-transform: uppercase;
+  }
+
+  .phase-price-tag {
+    margin-left: auto;
+    font-family: var(--ff-mono);
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--ink);
+    letter-spacing: -0.02em;
+  }
+
+  .phase-rule { height: 1px; background: var(--border); margin-bottom: 24px; }
+
+  .phase-intro {
+    font-size: 13px;
+    font-weight: 300;
+    color: var(--charcoal);
+    line-height: 1.72;
+    margin-bottom: 24px;
+    max-width: 520px;
+  }
+
+  .deliverable-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border);
+    gap: 16px;
+  }
+  .deliverable-row:first-of-type { border-top: 1px solid var(--border); }
+
+  .deliverable-info { flex: 1; }
+  .deliverable-name {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--ink);
+    margin-bottom: 3px;
+  }
+  .deliverable-desc {
+    font-size: 11px;
+    color: var(--stone);
+    line-height: 1.55;
+    font-weight: 300;
+  }
+  .deliverable-price {
+    font-family: var(--ff-mono);
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--charcoal);
+    white-space: nowrap;
+    padding-top: 2px;
+    letter-spacing: 0.02em;
+  }
+
+  /* ─── PAYMENT TABLE ─────────────────────────────────────── */
+  .payment-block {
+    background: #fff;
+    border: 1px solid var(--border);
+    padding: 28px 32px;
+    margin: 36px 0;
+  }
+
+  .payment-block-title {
+    font-family: var(--ff-mono);
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--stone);
+    margin-bottom: 18px;
+  }
+
+  .payment-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 11px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 12px;
+  }
+  .payment-row:last-child { border-bottom: none; }
+  .payment-row .pay-label { color: var(--charcoal); font-weight: 300; }
+  .payment-row .pay-amount { font-family: var(--ff-mono); font-weight: 700; color: var(--ink); font-size: 13px; }
+
+  /* ─── NOTE BLOCKS ────────────────────────────────────────── */
+  .note-block {
+    border-left: 3px solid var(--border);
+    padding: 18px 22px;
+    margin: 28px 0;
+    background: #fff;
+  }
+
+  .note-label {
+    font-family: var(--ff-mono);
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--stone);
+    margin-bottom: 12px;
+    display: block;
+  }
+
+  .note-block ul {
+    list-style: none;
+    padding: 0;
+  }
+  .note-block ul li {
+    font-size: 11px;
+    font-weight: 300;
+    color: var(--charcoal);
+    padding: 6px 0 6px 14px;
+    position: relative;
+    border-bottom: 1px solid var(--border);
+    line-height: 1.55;
+  }
+  .note-block ul li:last-child { border-bottom: none; }
+  .note-block ul li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: var(--stone);
+  }
+
+  .terms-cols {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0 36px;
+    margin-top: 4px;
+  }
+  .terms-cols li {
+    border: none !important;
+    padding: 4px 0 4px 14px !important;
+  }
+
+  /* ─── SOCIAL MEDIA PAGE ────────────────────────────────── */
+  .page--social {
+    background: var(--cover-bg);
+    color: #F4F4F2;
+    max-width: 100%;
+    padding: 80px 100px 100px;
+  }
+
+  .page--social .eyebrow { color: #555; }
+  .page--social .section-title { color: #F4F4F2; }
+  .page--social .section-intro { color: #888; }
+
+  .social-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-top: 36px;
+  }
+
+  .social-card {
+    border: 1px solid #2A2A2A;
+    padding: 28px 22px;
+    position: relative;
+  }
+
+  .social-card--featured {
+    border-color: #555;
+    background: #1E1E1E;
+  }
+
+  .social-card-badge {
+    position: absolute;
+    top: -1px;
+    right: -1px;
+    background: #3A3A3A;
+    color: #aaa;
+    font-family: var(--ff-mono);
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+  }
+
+  .social-card-qty {
+    font-family: var(--ff-mono);
+    font-size: 44px;
+    font-weight: 700;
+    color: #F4F4F2;
+    line-height: 1;
+    margin-bottom: 4px;
+    letter-spacing: -0.04em;
+  }
+
+  .social-card-unit {
+    font-family: var(--ff-mono);
+    font-size: 9px;
+    font-weight: 400;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #555;
+    margin-bottom: 20px;
+    display: block;
+  }
+
+  .social-card-price {
+    font-family: var(--ff-mono);
+    font-size: 20px;
+    font-weight: 700;
+    color: #F4F4F2;
+    margin-bottom: 5px;
+  }
+
+  .social-card-saving {
+    font-family: var(--ff-mono);
+    font-size: 10px;
+    color: #666;
+    font-weight: 400;
+  }
+
+  .social-card-desc {
+    margin-top: 16px;
+    font-size: 11px;
+    font-weight: 300;
+    color: #666;
+    line-height: 1.6;
+    border-top: 1px solid #222;
+    padding-top: 14px;
+  }
+
+  /* ─── WHAT TO EXPECT PAGE ───────────────────────────────── */
+  .impact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    background: var(--border);
+    margin-bottom: 40px;
+  }
+
+  .impact-card {
+    background: #fff;
+    padding: 28px 28px 24px;
+  }
+
+  .impact-card:nth-child(even) {
+    background: var(--light);
+  }
+
+  .impact-num {
+    font-family: var(--ff-mono);
+    font-size: clamp(28px, 4vw, 40px);
+    font-weight: 700;
+    color: var(--ink);
+    line-height: 1;
+    margin-bottom: 10px;
+    letter-spacing: -0.03em;
+  }
+
+  .impact-label {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--ink);
+    margin-bottom: 6px;
+    line-height: 1.4;
+  }
+
+  .impact-note {
+    font-size: 11px;
+    font-weight: 300;
+    color: var(--stone);
+    line-height: 1.55;
+  }
+
+  .expect-close {
+    font-size: 13px;
+    font-weight: 300;
+    color: var(--charcoal);
+    line-height: 1.75;
+    max-width: 580px;
+    border-left: 3px solid var(--border);
+    padding: 20px 24px;
+    background: #fff;
+  }
+
+  /* ─── VISION PAGE ───────────────────────────────────────── */
+  .vision-narrative {
+    font-size: clamp(14px, 1.8vw, 17px);
+    font-weight: 300;
+    font-style: italic;
+    color: var(--charcoal);
+    line-height: 1.85;
+    border-left: 3px solid var(--accent);
+    padding: 24px 32px;
+    background: #fff;
+    margin-bottom: 48px;
+  }
+
+  .vision-narrative p + p { margin-top: 16px; }
+
+  .vision-close {
+    font-size: clamp(16px, 2.2vw, 20px);
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1.38;
+    max-width: 520px;
+    margin-bottom: 48px;
+    letter-spacing: -0.01em;
+  }
+
+  .vision-cta { margin-bottom: 56px; }
+
+  .vision-cta-label {
+    font-family: var(--ff-mono);
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--stone);
+    margin-bottom: 8px;
+    display: block;
+  }
+
+  .vision-cta-email {
+    font-size: 17px;
+    font-weight: 500;
+    color: var(--ink);
+    text-decoration: none;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 2px;
+    letter-spacing: -0.01em;
+  }
+
+  .signature-block {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    border-top: 1px solid var(--border);
+    padding-top: 28px;
+  }
+
+  .sig-label {
+    font-family: var(--ff-mono);
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--stone);
+    margin-bottom: 6px;
+    display: block;
+  }
+
+  .sig-name {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--ink);
+    margin-bottom: 3px;
+    letter-spacing: -0.01em;
+  }
+
+  .sig-role { font-size: 11px; font-weight: 300; color: var(--stone); }
+
+  .sig-line {
+    margin-top: 26px;
+    border-top: 1px solid var(--border);
+    padding-top: 5px;
+    font-family: var(--ff-mono);
+    font-size: 9px;
+    color: var(--stone);
+    display: flex;
+    justify-content: space-between;
+  }
+
+  /* ─── PAGE FOOTER ─────────────────────────────────────── */
+  .page-footer {
+    position: absolute;
+    bottom: 36px;
+    left: 72px;
+    right: 72px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: var(--ff-mono);
+    font-size: 8px;
+    color: var(--stone);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border-top: 1px solid var(--border);
+    padding-top: 10px;
+  }
+
+  /* ─── PRINT ────────────────────────────────────────────── */
+  @media print {
+    .page { page-break-before: always; }
+    .page:first-child { page-break-before: auto; }
+    .page--cover, .page--social { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!-- PAGE 1 · COVER                                            -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div class="page page--cover">
+
+  <div class="cover-agency">Virtually Ever After · Luxembourg</div>
+
+  <div class="cover-hero">
+    <div class="cover-title">OLIVIO<br>&amp; Co</div>
+    <div class="cover-subtitle">Website Proposal · March 2026</div>
+    <div class="cover-rule"></div>
+
+    <div class="cover-complimentary">
+      <span class="cover-comp-label">Complimentary · Included with this proposal</span>
+      <div class="cover-comp-row">
+        <span>Website Analysis Report</span>
+        <span class="cover-comp-link">↗ link to be added</span>
+      </div>
+      <div class="cover-comp-row">
+        <span>SEO Audit Report</span>
+        <span class="cover-comp-link">↗ link to be added</span>
+      </div>
+      <span class="cover-comp-note">Both documents are prepared and available upon request.</span>
+    </div>
+
+    <div class="cover-meta">
+      <div class="cover-meta-item">
+        <div class="cover-meta-label">Prepared by</div>
+        <div class="cover-meta-value">Virtually Ever After</div>
+      </div>
+      <div class="cover-meta-item">
+        <div class="cover-meta-label">Prepared for</div>
+        <div class="cover-meta-value">Olivio &amp; Co</div>
+      </div>
+      <div class="cover-meta-item">
+        <div class="cover-meta-label">Duration</div>
+        <div class="cover-meta-value">10–12 Weeks</div>
+      </div>
+      <div class="cover-meta-item">
+        <div class="cover-meta-label">Investment</div>
+        <div class="cover-meta-value">€18,000</div>
+      </div>
+      <div class="cover-meta-item">
+        <div class="cover-meta-label">Valid until</div>
+        <div class="cover-meta-value">30 April 2026</div>
+      </div>
+      <div class="cover-meta-item">
+        <div class="cover-meta-label">Social Media</div>
+        <div class="cover-meta-value">Available as add-on</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cover-footer">Confidential — prepared exclusively for Olivio &amp; Co</div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!-- PAGE 2 · PROBLEM DIAGNOSIS                                -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div class="page">
+
+  <span class="eyebrow">What we found</span>
+  <h1 class="section-title">The site does not<br>reflect the brand.</h1>
+  <p class="section-intro">
+    Olivio &amp; Co has seven international design awards. None of them are visible when a customer lands on the store. That is the clearest sign of a deeper problem: a website that does not communicate what the brand actually is.
+  </p>
+
+  <div class="problem-block problem-block--primary">
+    <span class="problem-tag">Design — The biggest problem</span>
+    <h2 class="problem-title">"It looks like every other Shopify store."</h2>
+    <p class="problem-body">
+      The site runs on a standard off-the-shelf theme used by thousands of other brands. The homepage shows a rotating banner and a product grid — the same layout a visitor has already seen on dozens of other stores today. There is no brand story, no sense of Mediterranean identity, and nothing above the fold that explains why Olivio &amp; Co is different. A brand that has won the Red Dot Award, two iF Design Awards, and an ADC Bronze Cube deserves to look like it.
+    </p>
+    <ul class="problem-list">
+      <li>No brand story or value proposition visible without scrolling</li>
+      <li>Product catalogue is a plain grid — no way to browse by feel or collection personality</li>
+      <li>Award credentials buried on the About page; most visitors never reach it</li>
+    </ul>
+  </div>
+
+  <div class="problem-block">
+    <span class="problem-tag">Visibility &amp; Search</span>
+    <h2 class="problem-title">"Customers looking for you cannot find you."</h2>
+    <p class="problem-body">
+      The search bar shows an error on every single page load. The blog — which contains genuinely useful articles — is completely hidden from navigation. Several live product links contain spelling mistakes in the URL. And there is no analytics tool installed, so there is currently no way to know how many people visit, where they come from, or where they leave.
+    </p>
+    <ul class="problem-list">
+      <li>Search broken on every page load — visitors see an error before they type a single letter</li>
+      <li>Blog hidden from navigation — invisible to almost every visitor on the site</li>
+      <li>No analytics installed — nothing about the site's performance is currently measurable</li>
+    </ul>
+  </div>
+
+  <div class="problem-block">
+    <span class="problem-tag">Trust &amp; Conversion</span>
+    <h2 class="problem-title">"Visitors leave without buying — and there is nothing to stop them."</h2>
+    <p class="problem-body">
+      A parent about to spend €40–€60 on sunglasses for their child wants reassurance. They look for reviews from other parents, a clear returns policy, and proof that the brand has been trusted by others. None of these are present. No reviews on any page, no visible returns or guarantee information on product pages, no way to capture the email of a visitor who is about to leave.
+    </p>
+    <ul class="problem-list">
+      <li>No customer reviews on any listing or on the homepage</li>
+      <li>Returns and guarantee policy not visible on product pages</li>
+      <li>No way to re-engage a visitor who leaves without purchasing</li>
+    </ul>
+  </div>
+
+  <div class="page-footer">
+    <span>Olivio &amp; Co · Website Proposal</span>
+    <span>Virtually Ever After · March 2026</span>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!-- PAGE 3 · SOLUTIONS                                        -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div class="page">
+
+  <span class="eyebrow">How we fix it</span>
+  <h1 class="section-title">Here is what<br>we will build.</h1>
+  <p class="section-intro">
+    Each problem has a direct answer. This is not a general improvement — it is a response to exactly what we found.
+  </p>
+
+  <div class="solution-block">
+    <span class="solution-tag">Design</span>
+    <h2 class="solution-title">A site built from the ground up for this brand.</h2>
+    <p class="solution-body">
+      The theme is replaced entirely. Not updated — replaced. Every page is designed specifically for Olivio &amp; Co, with the Mediterranean identity, the award story, and the age-based product range as the starting point. The product catalogue becomes an immersive, filterable experience rather than a static grid. Shopping by age, by collection, or by activity will feel natural and considered.
+    </p>
+    <ul class="solution-list">
+      <li>Homepage opens with brand story, award credentials, and age navigation — all above the fold</li>
+      <li>Product catalogue rebuilt as an immersive browser with real-time filters and personality</li>
+      <li>All seven awards displayed individually, with their context — not hidden, not as small logos</li>
+      <li>Returns and guarantee policy visible on every product page, next to the buy button</li>
+    </ul>
+  </div>
+
+  <div class="solution-block">
+    <span class="solution-tag">Visibility &amp; Search</span>
+    <h2 class="solution-title">Fixed, structured, and findable.</h2>
+    <p class="solution-body">
+      Every technical issue is corrected. Analytics goes live from the first day. The blog is added to the main navigation. Your existing articles — already indexed and earning their place — are restructured and properly linked to relevant product pages. Each piece is then forked into a newsletter version: a direct-channel adaptation that builds an audience you own, completely independent of search.
+    </p>
+    <ul class="solution-list">
+      <li>Search fixed; all URL typos corrected and redirected so existing links do not break</li>
+      <li>Full analytics with conversion tracking — live from launch day</li>
+      <li>Blog added to main navigation, properly linked from relevant product pages</li>
+      <li>Existing articles optimised; each one forked into a newsletter version for direct reach</li>
+    </ul>
+  </div>
+
+  <div class="solution-block">
+    <span class="solution-tag">Trust &amp; Conversion</span>
+    <h2 class="solution-title">The tools that turn visitors into buyers.</h2>
+    <p class="solution-body">
+      A review system is installed and configured to automatically request reviews after purchase. Those reviews appear where they matter — on product listings and on the homepage. An email capture is added with a first-order incentive for visitors who are about to leave.
+    </p>
+    <ul class="solution-list">
+      <li>Review ratings visible on every product listing and on the homepage</li>
+      <li>Exit-intent email capture with a first-order offer to recover abandoning visitors</li>
+      <li>Returns and guarantee policy displayed clearly on every product page</li>
+      <li>Country routing fixed — blocking modal replaced with automatic geolocation</li>
+    </ul>
+  </div>
+
+  <div class="page-footer">
+    <span>Olivio &amp; Co · Website Proposal</span>
+    <span>Virtually Ever After · March 2026</span>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!-- PAGE 4 · INVESTMENT OVERVIEW + PHASE 1                    -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div class="page">
+
+  <span class="eyebrow">Process &amp; Investment</span>
+  <h1 class="section-title">Three phases.<br>Twelve weeks.</h1>
+
+  <table class="investment-table">
+    <tbody>
+      <tr>
+        <td>
+          <span class="phase-label">Phase 1 · Design</span>
+          <span class="phase-weeks">Weeks 1–4</span>
+        </td>
+        <td>€9,000</td>
+      </tr>
+      <tr>
+        <td>
+          <span class="phase-label">Phase 2 · Visibility &amp; SEO</span>
+          <span class="phase-weeks">Weeks 4–8</span>
+        </td>
+        <td>€6,000</td>
+      </tr>
+      <tr>
+        <td>
+          <span class="phase-label">Phase 3 · Integration &amp; Launch</span>
+          <span class="phase-weeks">Weeks 8–12</span>
+        </td>
+        <td>€3,000</td>
+      </tr>
+      <tr class="total">
+        <td>Total fixed fee</td>
+        <td>€18,000</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Phase 1 -->
+  <div class="phase-block">
+    <div class="phase-numeral">01</div>
+    <div class="phase-header">
+      <div class="phase-name">Design</div>
+      <div class="phase-timeline">Weeks 1–4</div>
+      <div class="phase-price-tag">€9,000</div>
+    </div>
+    <div class="phase-rule"></div>
+    <p class="phase-intro">
+      The site is built from scratch. Not a theme update, not a visual refresh — a custom HTML/CSS/JS build, designed entirely around this brand's identity, product range, and award credentials.
+    </p>
+
+    <div class="deliverable-row">
+      <div class="deliverable-info">
+        <div class="deliverable-name">Homepage</div>
+        <div class="deliverable-desc">Immersive opening — brand story, award section, and age-based navigation all above the fold. A homepage that communicates who Olivio &amp; Co is before a visitor scrolls.</div>
+      </div>
+      <div class="deliverable-price">€3,000</div>
+    </div>
+
+    <div class="deliverable-row">
+      <div class="deliverable-info">
+        <div class="deliverable-name">Immersive Product Catalogue</div>
+        <div class="deliverable-desc">A complete rebuild of the product browsing experience. Real-time filters by age, collection, and activity. Designed to feel like the brand — not like a Shopify template.</div>
+      </div>
+      <div class="deliverable-price">€4,500</div>
+    </div>
+
+    <div class="deliverable-row">
+      <div class="deliverable-info">
+        <div class="deliverable-name">About Page + Size &amp; Fit Guide</div>
+        <div class="deliverable-desc">Brand origin, Mediterranean inspiration, design awards, and eco-packaging story — built to earn trust. Includes an integrated size and fit guide, accessible from every product page.</div>
+      </div>
+      <div class="deliverable-price">€1,500</div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span>Olivio &amp; Co · Website Proposal</span>
+    <span>Virtually Ever After · March 2026</span>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!-- PAGE 5 · PHASES 2 + 3 + PAYMENT                          -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div class="page">
+
+  <!-- Phase 2 -->
+  <div class="phase-block">
+    <div class="phase-numeral">02</div>
+    <div class="phase-header">
+      <div class="phase-name">Visibility &amp; SEO</div>
+      <div class="phase-timeline">Weeks 4–8</div>
+      <div class="phase-price-tag">€6,000</div>
+    </div>
+    <div class="phase-rule"></div>
+    <p class="phase-intro">
+      Every technical issue is fixed. Analytics goes live. The blog is structured to drive real organic traffic — and the content that already exists is put to work properly.
+    </p>
+
+    <div class="deliverable-row">
+      <div class="deliverable-info">
+        <div class="deliverable-name">Technical SEO &amp; Analytics</div>
+        <div class="deliverable-desc">Broken search fixed. URL typos corrected and redirected. Unique meta descriptions for every collection page. Google Analytics 4 with full conversion tracking — from first visit to purchase. Sitemap and structured data submitted.</div>
+      </div>
+      <div class="deliverable-price">€4,500</div>
+    </div>
+
+    <div class="deliverable-row">
+      <div class="deliverable-info">
+        <div class="deliverable-name">Blog: Restructure + Newsletter Fork</div>
+        <div class="deliverable-desc">Your existing articles are restructured and linked properly to relevant product pages. Each piece is then forked into a newsletter version — building a direct channel you own, independent of search. Targeted new buying guides added where gaps exist.</div>
+      </div>
+      <div class="deliverable-price">€1,500</div>
+    </div>
+  </div>
+
+  <!-- Phase 3 -->
+  <div class="phase-block">
+    <div class="phase-numeral">03</div>
+    <div class="phase-header">
+      <div class="phase-name">Integration &amp; Launch</div>
+      <div class="phase-timeline">Weeks 8–12</div>
+      <div class="phase-price-tag">€3,000</div>
+    </div>
+    <div class="phase-rule"></div>
+    <p class="phase-intro">
+      The custom design goes into Shopify. Performance is tested against real metrics. Everything is verified before going live.
+    </p>
+
+    <div class="deliverable-row">
+      <div class="deliverable-info">
+        <div class="deliverable-name">Shopify Integration &amp; Optimisation</div>
+        <div class="deliverable-desc">The custom HTML/CSS/JS build is integrated into Shopify's theme architecture. Performance optimised — load times, image handling, checkout flow. All custom interactions verified against real device and browser conditions.</div>
+      </div>
+      <div class="deliverable-price">€1,200</div>
+    </div>
+
+    <div class="deliverable-row">
+      <div class="deliverable-info">
+        <div class="deliverable-name">Review System &amp; Conversion Tools</div>
+        <div class="deliverable-desc">Review platform installed and configured (Judge.me or equivalent) with automated post-purchase emails. Exit-intent email capture live. Country routing fixed — blocking modal replaced with automatic geolocation.</div>
+      </div>
+      <div class="deliverable-price">€700</div>
+    </div>
+
+    <div class="deliverable-row">
+      <div class="deliverable-info">
+        <div class="deliverable-name">Google Business Profile</div>
+        <div class="deliverable-desc">Full setup and optimisation for the EU market, including products, imagery, and a posting schedule aligned with the content calendar.</div>
+      </div>
+      <div class="deliverable-price">€400</div>
+    </div>
+
+    <div class="deliverable-row">
+      <div class="deliverable-info">
+        <div class="deliverable-name">Testing, QA &amp; Launch</div>
+        <div class="deliverable-desc">Full cross-browser and mobile testing. Checkout flow verified end to end. Redirects confirmed. Staged launch with rollback capability. Post-launch monitoring for 48 hours.</div>
+      </div>
+      <div class="deliverable-price">€700</div>
+    </div>
+  </div>
+
+  <!-- Payment schedule -->
+  <div class="payment-block">
+    <div class="payment-block-title">Payment Schedule</div>
+    <div class="payment-row">
+      <span class="pay-label">On signing</span>
+      <span class="pay-amount">€4,500</span>
+    </div>
+    <div class="payment-row">
+      <span class="pay-label">Phase 1 delivery (design approved)</span>
+      <span class="pay-amount">€5,500</span>
+    </div>
+    <div class="payment-row">
+      <span class="pay-label">Phase 2 delivery (SEO live)</span>
+      <span class="pay-amount">€5,500</span>
+    </div>
+    <div class="payment-row">
+      <span class="pay-label">Launch day</span>
+      <span class="pay-amount">€2,500</span>
+    </div>
+  </div>
+
+  <div class="note-block">
+    <span class="note-label">What we need from you</span>
+    <ul>
+      <li>Shopify admin access (US store and EU store)</li>
+      <li>Brand assets: logo files, approved colour palette, any existing photography</li>
+      <li>Written returns and guarantee policy (we will design it — you supply the content)</li>
+      <li>Confirmation of first-order incentive for email capture (percentage or fixed amount)</li>
+      <li>One primary point of contact for feedback and approvals</li>
+    </ul>
+  </div>
+
+  <div class="note-block">
+    <span class="note-label">Terms</span>
+    <ul class="terms-cols">
+      <li>Proposal valid for 30 days from the date above</li>
+      <li>Two revision rounds per phase included</li>
+      <li>All deliverables transfer to Olivio &amp; Co on final payment</li>
+      <li>Timeline begins on receipt of deposit and assets</li>
+      <li>Social media content is a separate engagement</li>
+      <li>Photography and product imagery not included</li>
+    </ul>
+  </div>
+
+  <div class="page-footer">
+    <span>Olivio &amp; Co · Website Proposal</span>
+    <span>Virtually Ever After · March 2026</span>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!-- PAGE 6 · SOCIAL MEDIA ADD-ON                              -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div class="page page--social">
+
+  <span class="eyebrow">Optional add-on</span>
+  <h1 class="section-title" style="font-size: clamp(26px, 4vw, 36px);">Short-form video<br>for the feed.</h1>
+  <p class="section-intro">
+    Instagram Reels and TikTok are where parents discover new brands for their children. We produce 30–60 second videos — filmed, edited, and delivered — ready to publish. Content that earns attention rather than demanding it.
+  </p>
+
+  <div class="social-cards">
+    <div class="social-card">
+      <div class="social-card-qty">1</div>
+      <span class="social-card-unit">Reel</span>
+      <div class="social-card-price">€500</div>
+      <div class="social-card-saving">&nbsp;</div>
+      <div class="social-card-desc">One 30–60 second video, fully edited and captioned, ready to post on Instagram or TikTok.</div>
+    </div>
+
+    <div class="social-card social-card--featured">
+      <div class="social-card-badge">Best value</div>
+      <div class="social-card-qty">5</div>
+      <span class="social-card-unit">Reel pack</span>
+      <div class="social-card-price">€2,250</div>
+      <div class="social-card-saving">Save €250</div>
+      <div class="social-card-desc">Five videos over a defined campaign window. Consistent presence without a recurring production overhead.</div>
+    </div>
+
+    <div class="social-card">
+      <div class="social-card-qty">10</div>
+      <span class="social-card-unit">Reel pack</span>
+      <div class="social-card-price">€3,800</div>
+      <div class="social-card-saving">Save €1,200</div>
+      <div class="social-card-desc">Ten videos across a season. Sustained campaign with consistent creative direction.</div>
+    </div>
+  </div>
+
+  <p style="font-size: 11px; color: #444; margin-top: 24px; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;">
+    Social media content can be contracted separately from the website project, or added at any point. Pricing does not include paid media spend.
+  </p>
+
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!-- PAGE 7 · WHAT TO EXPECT                                   -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div class="page">
+
+  <span class="eyebrow">What to expect</span>
+  <h1 class="section-title">Observed outcomes from<br>closing gaps like these.</h1>
+  <p class="section-intro" style="margin-bottom: 36px;">
+    Directional benchmarks from comparable projects. Not guarantees — but the direction is consistent.
+  </p>
+
+  <div class="impact-grid">
+    <div class="impact-card">
+      <div class="impact-num">+30%</div>
+      <div class="impact-label">Click-through rate from Google search results</div>
+      <div class="impact-note">Activated by review schema — star ratings appear next to search listings once ratings accumulate.</div>
+    </div>
+    <div class="impact-card">
+      <div class="impact-num">+150%</div>
+      <div class="impact-label">Organic traffic within six months of launch</div>
+      <div class="impact-note">Driven by articles targeting search topics with no competition from Babiators or Roshambo.</div>
+    </div>
+    <div class="impact-card">
+      <div class="impact-num">1% → 3%</div>
+      <div class="impact-label">Conversion rate improvement</div>
+      <div class="impact-note">Reviews, size guide, and visible guarantee remove the three most common reasons parents leave without buying.</div>
+    </div>
+    <div class="impact-card">
+      <div class="impact-num">8–12%</div>
+      <div class="impact-label">Exit popup conversion to subscriber</div>
+      <div class="impact-note">Industry benchmark for a well-timed first-order discount — builds a direct channel for future launches.</div>
+    </div>
+    <div class="impact-card">
+      <div class="impact-num">Top 10</div>
+      <div class="impact-label">Google ranking for target keywords within 4–6 months</div>
+      <div class="impact-note">"Kids ski goggles," "screen glasses for children," "polarized toddler sunglasses" — currently unranked.</div>
+    </div>
+    <div class="impact-card">
+      <div class="impact-num">~40 orders</div>
+      <div class="impact-label">Break-even point on total project investment</div>
+      <div class="impact-note">Conservative estimate at current average order value with no AOV uplift factored in.</div>
+    </div>
+  </div>
+
+  <div class="expect-close">
+    Each phase builds on the one before it. The new site brings people in. The SEO and blog bring people who would never have found the site otherwise. The reviews and guarantee turn browsers into buyers. Together, these changes close the gap between the quality of the product and the quality of the experience around it.
+  </div>
+
+  <div class="page-footer">
+    <span>Olivio &amp; Co · Website Proposal</span>
+    <span>Virtually Ever After · March 2026</span>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!-- PAGE 8 · VISION                                           -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div class="page">
+
+  <span class="eyebrow">Where this leads</span>
+  <h1 class="section-title">What Olivio &amp; Co<br>looks like in six months.</h1>
+
+  <div class="vision-narrative">
+    <p>A parent finds an article — not a product page, but a genuine guide to protecting a child's eyes in summer. She reads it, trusts it, and clicks through to the store. The homepage tells her what the brand is, what seven international juries said about it, and lets her filter by her child's age in one click. She buys.</p>
+    <p>That is not a redesign. It is the difference between a shop and a brand.</p>
+  </div>
+
+  <p class="vision-close">
+    "Olivio &amp; Co has the product, the awards, and the story.<br>The website should say so."
+  </p>
+
+  <div class="vision-cta">
+    <span class="vision-cta-label">To move forward</span>
+    <a href="mailto:deniz@virtuallyeverafter.xyz" class="vision-cta-email">deniz@virtuallyeverafter.xyz</a>
+  </div>
+
+  <div class="signature-block">
+    <div>
+      <span class="sig-label">Prepared by</span>
+      <div class="sig-name">Virtually Ever After</div>
+      <div class="sig-role">Luxembourg · March 2026</div>
+      <div class="sig-line">
+        <span>Signature</span>
+        <span>Date</span>
+      </div>
+    </div>
+    <div>
+      <span class="sig-label">Accepted by</span>
+      <div class="sig-name">Olivio &amp; Co</div>
+      <div class="sig-role">&nbsp;</div>
+      <div class="sig-line">
+        <span>Signature</span>
+        <span>Date</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span>Olivio &amp; Co · Website Proposal</span>
+    <span>Virtually Ever After · March 2026</span>
+  </div>
+</div>
+
+</body>
+</html>
