@@ -1,0 +1,1489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Olivio & Co — Landing Page Uygulama Raporu</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Xanh+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:       #F4F4F2;
+    --ink:      #111111;
+    --charcoal: #3D3D3D;
+    --mid:      #6B6B6B;
+    --stone:    #909090;
+    --border:   #DDDDD8;
+    --light:    #EAEAE6;
+    --cover-bg: #161616;
+    --accent:   #2A2A2A;
+    --ff-mono:  'Xanh Mono', 'Courier New', monospace;
+    --ff-sans:  'Helvetica Neue', Helvetica, Arial, sans-serif;
+  }
+
+  html { font-size: 16px; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body { background: var(--bg); color: var(--ink); font-family: var(--ff-sans); font-weight: 400; line-height: 1.65; }
+
+  /* ─── PAGES ──────────────────────────────────────────────── */
+  .page {
+    min-height: 100vh;
+    padding: 80px 72px 120px;
+    max-width: 860px;
+    margin: 0 auto;
+    position: relative;
+    page-break-before: always;
+  }
+  .page:first-child { page-break-before: auto; }
+
+  /* ─── COVER ──────────────────────────────────────────────── */
+  .page--cover {
+    background: var(--cover-bg);
+    color: #F4F4F2;
+    max-width: 100%;
+    padding: 72px 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 100vh;
+  }
+  .cover-agency { font-family: var(--ff-mono); font-size: 10px; letter-spacing: 0.12em; color: #888; }
+  .cover-hero { flex: 1; display: flex; flex-direction: column; justify-content: center; padding: 48px 0 40px; }
+  .cover-title {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: clamp(52px, 9vw, 96px);
+    font-weight: 700;
+    line-height: 0.92;
+    letter-spacing: -0.04em;
+    color: #F4F4F2;
+  }
+  .cover-subtitle { margin-top: 28px; font-family: var(--ff-mono); font-size: 10px; letter-spacing: 0.18em; color: #888; }
+  .cover-rule { width: 48px; height: 1px; background: #333; margin: 32px 0; }
+  .cover-scope {
+    border: 1px solid #2A2A2A;
+    padding: 20px 24px;
+    margin-bottom: 32px;
+    display: inline-block;
+    max-width: 520px;
+  }
+  .cover-scope-label {
+    font-family: var(--ff-mono);
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    color: #888;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    display: block;
+  }
+  .cover-scope-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 7px 0;
+    border-top: 1px solid #2E2E2E;
+    font-size: 11px;
+    color: #B0B0B0;
+    font-family: var(--ff-mono);
+    gap: 24px;
+  }
+  .cover-scope-row:last-of-type { border-bottom: 1px solid #2E2E2E; }
+  .cover-scope-tag {
+    font-size: 8px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #666;
+    font-family: var(--ff-mono);
+    white-space: nowrap;
+  }
+  .cover-meta { display: flex; gap: 40px; flex-wrap: wrap; }
+  .cover-meta-label { font-family: var(--ff-mono); font-size: 8px; letter-spacing: 0.18em; text-transform: uppercase; color: #777; margin-bottom: 4px; }
+  .cover-meta-value { font-size: 12px; font-weight: 400; color: #C8C8C8; font-family: var(--ff-sans); }
+  .cover-footer { font-family: var(--ff-mono); font-size: 9px; color: #666; letter-spacing: 0.06em; }
+
+  /* ─── DARK PAGES ─────────────────────────────────────────── */
+  .page--dark {
+    background: var(--cover-bg);
+    color: #F4F4F2;
+    max-width: 100%;
+    padding: 80px 100px 100px;
+  }
+  .page--dark .eyebrow { color: #888; }
+  .page--dark .section-title { color: #F4F4F2; }
+  .page--dark .section-intro { color: #BBBBBB; }
+  .page--dark .page-footer { border-color: #2A2A2A; color: #555; }
+
+  /* ─── TYPOGRAPHY ─────────────────────────────────────────── */
+  .eyebrow {
+    display: block;
+    font-family: var(--ff-mono);
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--mid);
+    margin-bottom: 14px;
+  }
+  .section-title {
+    font-family: var(--ff-sans);
+    font-size: clamp(26px, 4vw, 38px);
+    font-weight: 700;
+    line-height: 1.15;
+    color: var(--ink);
+    margin-bottom: 20px;
+    letter-spacing: -0.03em;
+  }
+  .section-intro {
+    font-size: 15px;
+    font-weight: 300;
+    color: var(--charcoal);
+    max-width: 560px;
+    line-height: 1.72;
+    margin-bottom: 48px;
+  }
+
+  /* ─── CONTEXT STRIP ──────────────────────────────────────── */
+  .context-strip {
+    border-left: 3px solid var(--accent);
+    padding: 18px 24px;
+    background: #fff;
+    margin-bottom: 40px;
+  }
+  .context-strip p { font-size: 14px; font-weight: 400; color: var(--charcoal); line-height: 1.7; }
+  .context-strip p + p { margin-top: 10px; }
+  .context-strip strong { font-weight: 600; color: var(--ink); }
+
+  /* ─── SCORE CARD ─────────────────────────────────────────── */
+  .score-banner {
+    background: #111;
+    color: #F4F4F2;
+    padding: 28px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 32px;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+  .score-label { font-family: var(--ff-mono); font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: #666; margin-bottom: 6px; }
+  .score-number { font-size: 56px; font-weight: 700; line-height: 1; letter-spacing: -0.04em; color: #F4F4F2; }
+  .score-desc { font-size: 13px; font-weight: 300; color: #AAAAAA; max-width: 320px; line-height: 1.65; }
+  .score-verdict { font-family: var(--ff-mono); font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; padding: 8px 14px; border: 1px solid #333; color: #888; }
+
+  /* ─── SECTION SCORE GRID ─────────────────────────────────── */
+  .score-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 2px;
+    background: var(--border);
+    margin-bottom: 40px;
+  }
+  .score-cell { background: #fff; padding: 18px 20px; }
+  .score-cell:nth-child(even) { background: var(--light); }
+  .score-cell-area { font-family: var(--ff-mono); font-size: 7px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--stone); margin-bottom: 6px; display: block; }
+  .score-cell-num { font-size: 28px; font-weight: 700; line-height: 1; letter-spacing: -0.03em; margin-bottom: 4px; }
+  .score-cell-label { font-size: 11px; font-weight: 300; color: var(--mid); }
+  .score--bad { color: #B03030; }
+  .score--mid { color: #A06020; }
+  .score--ok { color: #2A6A2A; }
+
+  /* ─── STATUS CARDS ───────────────────────────────────────── */
+  .status-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    background: var(--border);
+    margin-bottom: 40px;
+  }
+  .status-card { background: #fff; padding: 24px 26px; }
+  .status-card:nth-child(even) { background: var(--light); }
+  .status-card-tag {
+    font-family: var(--ff-mono);
+    font-size: 7px;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    display: block;
+  }
+  .status-card-tag--missing { color: #B03030; }
+  .status-card-tag--weak { color: #A06020; }
+  .status-card-tag--ok { color: #2A7A2A; }
+  .status-card-title { font-size: 14px; font-weight: 700; color: var(--ink); margin-bottom: 6px; letter-spacing: -0.01em; line-height: 1.3; }
+  .status-card-body { font-size: 11px; font-weight: 300; color: var(--charcoal); line-height: 1.6; }
+
+  /* ─── SECTION BLOCK (hero,  above fold vs below fold) ───── */
+  .section-block {
+    background: #fff;
+    border-left: 4px solid var(--accent);
+    padding: 28px 32px;
+    margin-bottom: 20px;
+  }
+  .section-block--weak { border-left-color: #A06020; }
+  .section-block--bad { border-left-color: #B03030; }
+  .section-block--ok { border-left-color: #2A7A2A; }
+
+  .section-tag {
+    font-family: var(--ff-mono);
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--stone);
+    margin-bottom: 10px;
+    display: block;
+  }
+  .section-name { font-size: clamp(15px, 2vw, 18px); font-weight: 700; color: var(--ink); margin-bottom: 6px; line-height: 1.25; letter-spacing: -0.02em; }
+  .section-score-badge {
+    display: inline-block;
+    font-family: var(--ff-mono);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    padding: 3px 10px;
+    margin-bottom: 12px;
+  }
+  .badge--bad { background: #F8E8E8; color: #B03030; }
+  .badge--mid { background: #F8F0E8; color: #A06020; }
+  .badge--ok { background: #E8F4E8; color: #2A7A2A; }
+  .section-body { font-size: 13px; font-weight: 300; color: var(--charcoal); line-height: 1.75; margin-bottom: 16px; }
+  .section-verdict {
+    font-size: 13px;
+    font-weight: 600;
+    font-style: italic;
+    color: var(--charcoal);
+    padding: 10px 14px;
+    border-left: 2px solid var(--border);
+    background: var(--light);
+    margin-bottom: 14px;
+  }
+  .issue-list { list-style: none; padding: 0; }
+  .issue-list li {
+    font-size: 12px;
+    color: var(--charcoal);
+    padding: 7px 0 7px 16px;
+    position: relative;
+    border-top: 1px solid var(--border);
+    line-height: 1.55;
+  }
+  .issue-list li:last-child { border-bottom: 1px solid var(--border); }
+  .issue-list li::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 50%;
+    transform: translateY(-50%);
+    width: 5px; height: 1px;
+    background: var(--stone);
+  }
+
+  /* ─── REFERENCE CARDS (dark page) ───────────────────────── */
+  .ref-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+  .ref-card { border: 1px solid #2A2A2A; padding: 24px 22px; background: #1A1A1A; }
+  .ref-priority {
+    font-family: var(--ff-mono);
+    font-size: 7px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    display: block;
+    color: #888;
+  }
+  .ref-brand { font-size: 15px; font-weight: 700; color: #E8E8E8; margin-bottom: 4px; letter-spacing: -0.01em; }
+  .ref-category { font-family: var(--ff-mono); font-size: 9px; color: #666; margin-bottom: 14px; letter-spacing: 0.1em; text-transform: uppercase; }
+  .ref-what { font-size: 12px; font-weight: 700; color: #CCCCCC; margin-bottom: 6px; }
+  .ref-body { font-size: 11px; font-weight: 300; color: #AAAAAA; line-height: 1.65; margin-bottom: 14px; }
+  .ref-apply-label { font-family: var(--ff-mono); font-size: 7px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: #555; margin-bottom: 6px; display: block; }
+  .ref-apply { font-family: var(--ff-mono); font-size: 9px; color: #888; line-height: 1.7; border-top: 1px solid #222; padding-top: 10px; }
+
+  /* ─── APPLICATION BLOCKS ─────────────────────────────────── */
+  .action-block {
+    background: var(--light);
+    padding: 32px 32px 28px;
+    margin-bottom: 20px;
+    position: relative;
+  }
+  .action-numeral {
+    font-family: var(--ff-mono);
+    font-size: 96px;
+    font-weight: 700;
+    color: var(--stone);
+    opacity: 0.06;
+    line-height: 1;
+    position: absolute;
+    right: 12px; top: -16px;
+    user-select: none;
+    letter-spacing: -0.05em;
+  }
+  .action-tag {
+    font-family: var(--ff-mono);
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--mid);
+    margin-bottom: 10px;
+    display: block;
+  }
+  .action-title { font-size: clamp(15px, 2vw, 18px); font-weight: 700; color: var(--ink); margin-bottom: 10px; letter-spacing: -0.02em; line-height: 1.25; }
+  .action-body { font-size: 13px; font-weight: 300; color: var(--charcoal); line-height: 1.75; margin-bottom: 20px; max-width: 540px; }
+  .action-list { list-style: none; padding: 0; }
+  .action-list li {
+    font-size: 12px;
+    color: var(--charcoal);
+    padding: 8px 0 8px 22px;
+    position: relative;
+    line-height: 1.55;
+    border-top: 1px solid rgba(0,0,0,0.07);
+  }
+  .action-list li:last-child { border-bottom: 1px solid rgba(0,0,0,0.07); }
+  .action-list li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--mid);
+    font-size: 11px;
+    top: 9px;
+    font-family: var(--ff-mono);
+  }
+  .action-list li strong { font-weight: 600; color: var(--ink); }
+
+  /* ─── WIREFRAME SECTION ──────────────────────────────────── */
+  .wireframe-wrap {
+    background: #fff;
+    border: 1px solid var(--border);
+    padding: 28px;
+    margin-bottom: 28px;
+  }
+  .wireframe-title {
+    font-family: var(--ff-mono);
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--stone);
+    margin-bottom: 20px;
+    display: block;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 12px;
+  }
+  .wf-section {
+    border: 1px dashed var(--border);
+    padding: 14px 16px;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+  }
+  .wf-section--bad { border-color: #D08080; background: #FDF5F5; }
+  .wf-section--mid { border-color: #C0A060; background: #FDF8F0; }
+  .wf-section--ok { border-color: #70A870; background: #F2FBF2; }
+  .wf-pos {
+    font-family: var(--ff-mono);
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: var(--stone);
+    min-width: 52px;
+    padding-top: 1px;
+  }
+  .wf-label { font-size: 12px; font-weight: 700; color: var(--ink); margin-bottom: 3px; }
+  .wf-note { font-size: 11px; font-weight: 300; color: var(--mid); line-height: 1.5; }
+  .wf-tag {
+    margin-left: auto;
+    font-family: var(--ff-mono);
+    font-size: 7px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    white-space: nowrap;
+    align-self: flex-start;
+  }
+  .wf-tag--bad { background: #F8E8E8; color: #B03030; }
+  .wf-tag--mid { background: #F8F0E8; color: #A06020; }
+  .wf-tag--ok { background: #E8F4E8; color: #2A7A2A; }
+
+  /* ─── COMP TABLE ─────────────────────────────────────────── */
+  .comp-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 11px;
+    margin-bottom: 36px;
+  }
+  .comp-table th {
+    font-family: var(--ff-mono);
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--stone);
+    padding: 10px 12px;
+    border-bottom: 2px solid var(--ink);
+    text-align: left;
+    background: var(--bg);
+  }
+  .comp-table td {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border);
+    color: var(--charcoal);
+    font-weight: 300;
+    vertical-align: top;
+  }
+  .comp-table tr:nth-child(even) td { background: #FAFAF8; }
+  .comp-table .feat-label { font-weight: 500; color: var(--ink); font-size: 12px; }
+  .cell-now { color: #B03030; font-weight: 600; }
+  .cell-soon { color: #A06020; font-weight: 600; }
+  .cell-later { color: #2A7A2A; font-weight: 600; }
+
+  /* ─── PRIORITY ROWS ──────────────────────────────────────── */
+  .priority-rows { margin-bottom: 36px; }
+  .priority-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .priority-row:first-child { border-top: 1px solid var(--border); }
+  .priority-dot { width: 8px; height: 8px; border-radius: 50%; margin-top: 6px; flex-shrink: 0; }
+  .priority-dot--now { background: #B03030; }
+  .priority-dot--soon { background: #A06020; }
+  .priority-dot--later { background: #2A7A2A; }
+  .priority-row-content { flex: 1; }
+  .priority-row-title { font-size: 13px; font-weight: 600; color: var(--ink); margin-bottom: 3px; letter-spacing: -0.01em; }
+  .priority-row-desc { font-size: 11px; font-weight: 300; color: var(--stone); line-height: 1.55; font-style: italic; }
+  .priority-row-tag { font-family: var(--ff-mono); font-size: 8px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--stone); white-space: nowrap; padding-top: 4px; }
+
+  /* ─── NOTE STRIP ─────────────────────────────────────────── */
+  .note-strip {
+    border-left: 3px solid var(--border);
+    padding: 16px 22px;
+    margin: 24px 0;
+    background: #fff;
+  }
+  .note-strip-label { font-family: var(--ff-mono); font-size: 8px; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: var(--stone); margin-bottom: 10px; display: block; }
+  .note-strip p { font-size: 12px; font-weight: 300; color: var(--charcoal); line-height: 1.65; }
+  .note-strip p strong { font-weight: 600; color: var(--ink); }
+
+  /* ─── PAGE FOOTER ────────────────────────────────────────── */
+  .page-footer {
+    position: absolute;
+    bottom: 36px;
+    left: 72px; right: 72px;
+    display: flex;
+    justify-content: space-between;
+    font-family: var(--ff-mono);
+    font-size: 8px;
+    color: var(--stone);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border-top: 1px solid var(--border);
+    padding-top: 10px;
+  }
+
+  /* ─── BEFORE / AFTER ─────────────────────────────────────── */
+  .ba-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    background: var(--border);
+    margin-bottom: 28px;
+  }
+  .ba-cell { padding: 22px 24px; }
+  .ba-cell--before { background: #FDF5F5; }
+  .ba-cell--after { background: #F2FBF2; }
+  .ba-header { font-family: var(--ff-mono); font-size: 8px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 12px; display: block; }
+  .ba-header--before { color: #B03030; }
+  .ba-header--after { color: #2A7A2A; }
+  .ba-text { font-size: 12px; font-weight: 300; color: var(--charcoal); line-height: 1.65; }
+  .ba-text strong { font-weight: 600; color: var(--ink); }
+
+  /* ─── MOBILE ─────────────────────────────────────────────── */
+  @media (max-width: 640px) {
+    .page { padding: 48px 24px 100px; }
+    .page-footer { left: 24px; right: 24px; }
+    .page--cover { padding: 48px 28px; }
+    .page--dark { padding: 48px 28px 80px; }
+    .status-grid, .score-grid, .ba-grid, .ref-grid { grid-template-columns: 1fr; }
+    .cover-meta { flex-direction: column; gap: 20px; }
+    .score-banner { flex-direction: column; }
+  }
+
+  @media print {
+    .page { page-break-before: always; }
+    .page:first-child { page-break-before: auto; }
+  }
+</style>
+</head>
+<body>
+
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!-- KAPAK                                                      -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div class="page page--cover">
+
+  <div class="cover-agency">Landing Page Implementation Report · Olivio &amp; Co</div>
+
+  <div class="cover-hero">
+    <div class="cover-title">LANDING<br>PAGE</div>
+    <div class="cover-subtitle">Current State Analysis · Reference Applications · Priority Plan · March 2026</div>
+    <div class="cover-rule"></div>
+
+    <div class="cover-scope">
+      <span class="cover-scope-label">Report Scope — 7 Sections</span>
+      <div class="cover-scope-row">
+        <span>Current Homepage Summary &amp; Score</span>
+        <span class="cover-scope-tag">5 Areas · Scoring</span>
+      </div>
+      <div class="cover-scope-row">
+        <span>Page Structure Analysis</span>
+        <span class="cover-scope-tag">Hero → Footer</span>
+      </div>
+      <div class="cover-scope-row">
+        <span>Reference Brand Applications</span>
+        <span class="cover-scope-tag">6 Brands · Selective Application</span>
+      </div>
+      <div class="cover-scope-row">
+        <span>Section-by-Section Recommendations</span>
+        <span class="cover-scope-tag">Detailed · Actionable</span>
+      </div>
+      <div class="cover-scope-row">
+        <span>Before / After Comparisons</span>
+        <span class="cover-scope-tag">Per Section</span>
+      </div>
+      <div class="cover-scope-row">
+        <span>Conversion Opportunities</span>
+        <span class="cover-scope-tag">Trust · Flow · Purchase</span>
+      </div>
+      <div class="cover-scope-row">
+        <span>Priority Action Plan</span>
+        <span class="cover-scope-tag">Quick · Mid-term · Long-term</span>
+      </div>
+    </div>
+
+    <div class="cover-meta">
+      <div>
+        <div class="cover-meta-label">URL Analysed</div>
+        <div class="cover-meta-value">olivioandco.com</div>
+      </div>
+      <div>
+        <div class="cover-meta-label">Reference Brands</div>
+        <div class="cover-meta-value">Ace &amp; Tate · Tinycottons · Bobo Choses · Wildling · Cuyana · Allbirds</div>
+      </div>
+      <div>
+        <div class="cover-meta-label">Date</div>
+        <div class="cover-meta-value">March 2026</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cover-footer">Olivio &amp; Co — Landing Page Implementation Report · March 2026</div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!-- PAGE 2 · CURRENT HOMEPAGE: QUICK SUMMARY AND SCORE          -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div class="page">
+  <span class="eyebrow">Part One — Current State</span>
+  <h1 class="section-title">Where does the homepage<br>stand today?</h1>
+
+  <div class="context-strip">
+    <p>The Olivio &amp; Co homepage functions as a storefront that obscures the brand's real identity rather than letting it speak. The hero is a collection slider — no message, no trust signal, no directional call to action. Scrolling down reveals collection banners, best sellers, and a Mediterranean illustration. A CTA that links to Amazon, a typo in the hero, and an invisible guarantee policy complete the picture.</p>
+    <p>The design foundation is clean. Product imagery is strong. Collection names are editorial. The brand identity has genuine potential. The problem is that none of this potential is communicated on the page — visitors leave without understanding why Olivio &amp; Co is worth buying from.</p>
+  </div>
+
+  <!-- Genel Not -->
+  <div class="score-banner">
+    <div>
+      <div class="score-label">Overall Landing Page Score</div>
+      <div class="score-number">38<span style="font-size:28px;color:#666;">/100</span></div>
+    </div>
+    <div class="score-desc">The design foundation exists, but the page lists products rather than carrying the brand. No trust signals, no narrative, no directional flow. None of the elements critical to conversion appear above the fold.</div>
+    <div class="score-verdict">Significant Improvement Required</div>
+  </div>
+
+  <!-- Section-by-Section Scoring -->
+  <div class="score-grid">
+    <div class="score-cell">
+      <span class="score-cell-area">First Impression (Hero)</span>
+      <div class="score-cell-num score--bad">22</div>
+      <div class="score-cell-label">/100 · No message, no direction</div>
+    </div>
+    <div class="score-cell">
+      <span class="score-cell-area">Trust Signals</span>
+      <div class="score-cell-num score--bad">18</div>
+      <div class="score-cell-label">/100 · Guarantee invisible, awards contextless</div>
+    </div>
+    <div class="score-cell">
+      <span class="score-cell-area">Navigation Ease</span>
+      <div class="score-cell-num score--mid">52</div>
+      <div class="score-cell-label">/100 · Age filtering exists but confusing</div>
+    </div>
+    <div class="score-cell">
+      <span class="score-cell-area">Brand Narrative</span>
+      <div class="score-cell-num score--bad">24</div>
+      <div class="score-cell-label">/100 · Mediterranean identity invisible, surface-level</div>
+    </div>
+    <div class="score-cell">
+      <span class="score-cell-area">Product Discovery</span>
+      <div class="score-cell-num score--mid">55</div>
+      <div class="score-cell-label">/100 · Collections present, context missing</div>
+    </div>
+    <div class="score-cell">
+      <span class="score-cell-area">Technical / UX</span>
+      <div class="score-cell-num score--bad">30</div>
+      <div class="score-cell-label">/100 · Search error, typo, Amazon link</div>
+    </div>
+  </div>
+
+  <div class="note-strip">
+    <span class="note-strip-label">Scoring methodology</span>
+    <p>Each area was evaluated across four criteria: <strong>first five-second impact</strong>, <strong>conversion contribution</strong>, <strong>brand identity alignment</strong>, and <strong>technical accuracy</strong>. Baseline assumption: the target audience is aesthetically aware, high-expectation parents.</p>
+  </div>
+
+  <div class="page-footer">
+    <span>Olivio &amp; Co · Landing Page Report</span>
+    <span>March 2026</span>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!-- PAGE 3 · PAGE STRUCTURE ANALYSIS                            -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div class="page">
+  <span class="eyebrow">Current Page Structure</span>
+  <h1 class="section-title">The anatomy of the page:<br>section by section.</h1>
+  <p class="section-intro">The homepage currently flows hero → collections → best sellers → sport → awards → footer. The value and gaps of each section are assessed below.</p>
+
+  <div class="wireframe-wrap">
+    <span class="wireframe-title">Current Page Structure — Top to Bottom</span>
+
+    <div class="wf-section wf-section--bad">
+      <div class="wf-pos">01 · HERO</div>
+      <div style="flex:1;">
+        <div class="wf-label">Collection Slider (full screen)</div>
+        <div class="wf-note">3 collection images rotate automatically. No headline, no USP, no description. A "Shop Now" CTA exists but the question of why anyone should buy remains unanswered.</div>
+      </div>
+      <span class="wf-tag wf-tag--bad">Critical Issue</span>
+    </div>
+
+    <div class="wf-section wf-section--bad">
+      <div class="wf-pos">02 · SECTION 2</div>
+      <div style="flex:1;">
+        <div class="wf-label">Silicone Accessory Banner — Free gift offer</div>
+        <div class="wf-note">$8Free accessory on orders over 9. A good offer but visually as dominant as the hero — it competes with the brand message rather than supporting it.</div>
+      </div>
+      <span class="wf-tag wf-tag--mid">Wrong Position</span>
+    </div>
+
+    <div class="wf-section wf-section--mid">
+      <div class="wf-pos">03 · SECTION 3</div>
+      <div style="flex:1;">
+        <div class="wf-label">"Inspired by the Mediterranean" Full Screen Visual</div>
+        <div class="wf-note">The only visual touchpoint for brand identity. A strong image exists but the text is minimal — "Eyewear created for kids &amp; family" repeats and says nothing new.</div>
+      </div>
+      <span class="wf-tag wf-tag--mid">Opportunity Missed</span>
+    </div>
+
+    <div class="wf-section wf-section--mid">
+      <div class="wf-pos">04 · SECTION 4</div>
+      <div style="flex:1;">
+        <div class="wf-label">Best Sellers Carousel</div>
+        <div class="wf-note">12 products side by side. A useful section but no context — why are these products being recommended? No social proof, no reviews, no sales data.</div>
+      </div>
+      <span class="wf-tag wf-tag--mid">Missing Context</span>
+    </div>
+
+    <div class="wf-section wf-section--mid">
+      <div class="wf-pos">05 · SECTION 5</div>
+      <div style="flex:1;">
+        <div class="wf-label">Collections Section — 3 collections</div>
+        <div class="wf-note">Breakfast Art, Olivio Classic, Creative Edition D. Editorial text exists but the "Creative Dedition" typo undermines the entire section.</div>
+      </div>
+      <span class="wf-tag wf-tag--mid">Typo Present</span>
+    </div>
+
+    <div class="wf-section wf-section--bad">
+      <div class="wf-pos">06 · SECTION 6</div>
+      <div style="flex:1;">
+        <div class="wf-label">Sport Glasses Banner</div>
+        <div class="wf-note">The "Discover" button links directly to Amazon. Traffic generated by the brand's own page is being sent to a competing platform.</div>
+      </div>
+      <span class="wf-tag wf-tag--bad">Revenue Leak</span>
+    </div>
+
+    <div class="wf-section wf-section--mid">
+      <div class="wf-pos">07 · SECTION 7</div>
+      <div style="flex:1;">
+        <div class="wf-label">Awards — 9 Logo Carousel</div>
+        <div class="wf-note">9 design awards exist but with no context — what award, which year, what does it mean? A parent scrolling past does not recognise the logos and moves on.</div>
+      </div>
+      <span class="wf-tag wf-tag--mid">No Context</span>
+    </div>
+
+    <div class="wf-section wf-section--bad">
+      <div class="wf-pos">08 · FOOTER</div>
+      <div style="flex:1;">
+        <div class="wf-label">Footer — Blog hidden here</div>
+        <div class="wf-note">The blog link only appears in the footer. 40+ articles exist but no visitor navigates to the footer looking for a blog. The warranty and returns policy is also buried here.</div>
+      </div>
+      <span class="wf-tag wf-tag--bad">Invisible Content</span>
+    </div>
+  </div>
+
+  <div class="note-strip">
+    <span class="note-strip-label">Fold analysis — first 5 seconds</span>
+    <p>When a visitor lands on the page, <strong>they see only the hero image</strong>. In that space: why is this brand special, why is it trustworthy, why buy now? — none of these questions are answered. No guarantee, no award, no social proof. Competitors (Babiators, Roshambo) place all of these signals above the fold.</p>
+  </div>
+
+  <div class="page-footer">
+    <span>Olivio &amp; Co · Landing Page Report</span>
+    <span>March 2026</span>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!-- PAGE 4 · CRITICAL ISSUES IN DETAIL                          -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div class="page">
+  <span class="eyebrow">Critical Findings</span>
+  <h1 class="section-title">Six things<br>not working right now.</h1>
+
+  <div class="section-block section-block--bad">
+    <span class="section-tag">Issue 01 · Hero Section</span>
+    <div class="section-name">The hero shows products instead of the brand</div>
+    <span class="section-score-badge badge--bad">Critical · Fix Immediately</span>
+    <p class="section-body">The first thing a visitor sees is one of three collection slider images. The visuals are high quality but carry no message. "ART OF BREAKFAST", "OLIVIO CLASSIC", "CREATIVE DEDITION" are product category names — not brand value propositions. Why should I buy from Olivio &amp; Co? Is it safe, high quality, right for my child? — none of these are answered.</p>
+    <div class="section-verdict">The hero has one job: answer the question "Why is this brand the right choice for me?" Right now it does not answer that question.</div>
+    <ul class="issue-list">
+      <li>Brand value proposition (UV400, guarantee, Mediterranean identity) is entirely absent from the hero</li>
+      <li>Slider format fragments attention — each slide delivers a different message, none of them land</li>
+      <li>CTA "Shop Now" is abstract — it does not say what, why, or which child it is for</li>
+      <li>On mobile the slider is even less effective — most users never see slides two and three</li>
+    </ul>
+  </div>
+
+  <div class="section-block section-block--bad">
+    <span class="section-tag">Sorun 02 · Trust Signals</span>
+    <div class="section-name">13-month guarantee buried at the bottom of product pages</div>
+    <span class="section-score-badge badge--bad">Critical · Fix Immediately</span>
+    <p class="section-body">Olivio &amp; Co has a 13-month guarantee and 30-day returns. Babiators's strongest conversion driver is its free replacement guarantee. Roshambo's 60-day returns are the primary trust signal on their homepage. At Olivio &amp; Co this policy appears as small icon strips at the very bottom of product pages. A parent browsing the homepage never sees it.</p>
+    <div class="section-verdict">A strong existing policy has been made invisible. This is a design placement problem — not a policy creation problem.</div>
+    <ul class="issue-list">
+      <li>13-month guarantee — absent from the homepage entirely</li>
+      <li>9 design awards exist but reduced to a contextless logo strip</li>
+      <li>5,500+ Instagram followers, zero social proof visible on the homepage</li>
+      <li>Customer reviews and photo testimonials are absent from the homepage</li>
+    </ul>
+  </div>
+
+  <div class="section-block section-block--bad">
+    <span class="section-tag">Issue 03 · Technical Errors</span>
+    <div class="section-name">Amazon link + typo + search error</div>
+    <span class="section-score-badge badge--bad">Kritik · Fix Today</span>
+    <p class="section-body">Three concrete technical errors are currently active on the homepage. In the Sport Sunglasses section, the "Discover" button links to an Amazon product page — traffic, customer data, and revenue generated by the brand's own site are being handed to Amazon. The "CREATIVE DEDITION" typo appears in the name of the brand's most distinctive collection. The search bar throws an error the moment it opens on any page.</p>
+    <div class="section-verdict">Together, these three errors send the message "this brand is careless" to every potential buyer. The typo is particularly unacceptable for a design-conscious audience.</div>
+  </div>
+
+  <div class="section-block section-block--weak">
+    <span class="section-tag">Issue 04 · No Size Guide</span>
+    <div class="section-name">5 age categories — zero size guidance</div>
+    <span class="section-score-badge badge--mid">Important · Near-term</span>
+    <p class="section-body">Toddler 0–2, Kids 2–4, Junior 3–7, Junior+ 7–10, and Teen &amp; Adult. There is a 3–4 year overlap between Kids and Junior. A parent buying for a 3.5-year-old does not know which category to choose. No size guide, no head circumference table, no explanation of why the age groups are divided this way. This uncertainty is one of the leading causes of pre-checkout abandonment.</p>
+  </div>
+
+  <div class="section-block section-block--weak">
+    <span class="section-tag">Issue 05 · Blog Hidden</span>
+    <div class="section-name">40+ articles — a single link buried in the footer</div>
+    <span class="section-score-badge badge--mid">Important · Near-term</span>
+    <p class="section-body">The blog genuinely exists — more than 40 published articles. But it is absent from the main navigation. A parent who arrives looking for information cannot find it and leaves. The content is never used as a trust or authority signal. Additionally, every article is generic — none of it is specific to Olivio &amp; Co.</p>
+  </div>
+
+  <div class="section-block section-block--weak">
+    <span class="section-tag">Issue 06 · Brand Identity Too Shallow</span>
+    <div class="section-name">Mediterranean narrative is visually present but lacks depth</div>
+    <span class="section-score-badge badge--mid">Important · Strategic</span>
+    <p class="section-body">"Inspired by the Mediterranean" exists as a section headline. But why this story matters, how the Mediterranean aesthetic translates into these eyewear designs, who is behind the brand — none of it is told. Competitors are entirely functional. Olivio &amp; Co's greatest opportunity lies in this cultural identity — but right now it remains at slogan level.</p>
+  </div>
+
+  <div class="page-footer">
+    <span>Olivio &amp; Co · Landing Page Report</span>
+    <span>March 2026</span>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!-- SAYFA 5 · REFERANS MARKALAR (KARANLIK)                    -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div class="page page--dark">
+  <span class="eyebrow">Reference Brands</span>
+  <h1 class="section-title">What can be taken<br>from six brands?</h1>
+  <p class="section-intro">Each brand is a reference for a different element. The goal is not to copy any of them — it is to adapt a specific application to Olivio &amp; Co. Category differences do not matter; the target audience overlaps.</p>
+
+  <div class="ref-grid">
+
+    <div class="ref-card">
+      <span class="ref-priority">Referans 01 · Hero &amp; Product Discovery</span>
+      <div class="ref-brand">Ace &amp; Tate</div>
+      <div class="ref-category">aceandtate.com · Eyewear · Amsterdam</div>
+      <div class="ref-what">What does it do?</div>
+      <div class="ref-body">A single, clear message in the hero. After scrolling, clicking a colour variant instantly updates the product image. The "Try at home" button is above the fold. Material details are visible on every product card.</div>
+      <span class="ref-apply-label">Applied to Olivio &amp; Co</span>
+      <div class="ref-apply">Single message hero + age selector. Instant image update on colour click in product cards. Guarantee or free shipping banner above the fold.</div>
+    </div>
+
+    <div class="ref-card">
+      <span class="ref-priority">Reference 02 · Editorial Language &amp; Collections</span>
+      <div class="ref-brand">Tinycottons</div>
+      <div class="ref-category">tinycottons.com · Children's Clothing · Barcelona</div>
+      <div class="ref-what">What does it do?</div>
+      <div class="ref-body">Collection pages open like a story. The question "why does this collection have this name, what does it say?" is answered through text and image together. Products appear — embedded within the narrative.</div>
+      <span class="ref-apply-label">Applied to Olivio &amp; Co</span>
+      <div class="ref-apply">Each of the Breakfast Art, Coral Reef, and Creative Edition D collections should open with a short atmospheric paragraph. The question "where did this collection find its inspiration?" must be answered.</div>
+    </div>
+
+    <div class="ref-card">
+      <span class="ref-priority">Reference 03 · Artistic Identity &amp; Target Audience</span>
+      <div class="ref-brand">Bobo Choses</div>
+      <div class="ref-category">bobochoses.com · Children's Clothing · Barcelona</div>
+      <div class="ref-what">What does it do?</div>
+      <div class="ref-body">Headline typography, colour use, and collection narratives resonate perfectly with the target audience. It speaks from the perspective of "art for families" rather than "aesthetics for parents". Every collection is presented with an emotional frame.</div>
+      <span class="ref-apply-label">Applied to Olivio &amp; Co</span>
+      <div class="ref-apply">Position the brand voice as "a brand that brings Mediterranean aesthetics into family life" rather than "a company that sells sunglasses". Rewrite homepage copy within this frame.</div>
+    </div>
+
+    <div class="ref-card">
+      <span class="ref-priority">Reference 04 · Experience Depth</span>
+      <div class="ref-brand">Wildling Shoes</div>
+      <div class="ref-category">wildling.de · Parent-Child Footwear · Germany</div>
+      <div class="ref-what">What does it do?</div>
+      <div class="ref-body">A small brand whose page experience outperforms much larger ones. Micro-animations, scroll behaviour, and a simple but deep content architecture stand out. The value proposition is stated with crystal clarity in the hero.</div>
+      <span class="ref-apply-label">Applied to Olivio &amp; Co</span>
+      <div class="ref-apply">Hero scroll behaviour: headline remains fixed while images change beneath it. Short information tooltips on product hover. Smooth transitions between pages.</div>
+    </div>
+
+    <div class="ref-card">
+      <span class="ref-priority">Reference 05 · Value Narrative &amp; Trust</span>
+      <div class="ref-brand">Cuyana</div>
+      <div class="ref-category">cuyana.com · Women's Accessories · San Francisco</div>
+      <div class="ref-what">What does it do?</div>
+      <div class="ref-body">The "Fewer, better things" manifesto is at the core of the homepage. Navigation is crystal clear. On every product page, material story + place of production + customer review are stacked together. Trust signals appear at every scroll point.</div>
+      <span class="ref-apply-label">Applied to Olivio &amp; Co</span>
+      <div class="ref-apply">Single-line manifesto below the hero: "Inspired by the Mediterranean, designed for children — every age, 100% UV400." Move the guarantee to above the fold. Consolidate material + guarantee + returns into a single block on product pages.</div>
+    </div>
+
+    <div class="ref-card">
+      <span class="ref-priority">Reference 06 · Age / Size Segmentation</span>
+      <div class="ref-brand">Allbirds</div>
+      <div class="ref-category">allbirds.com · Footwear · San Francisco</div>
+      <div class="ref-what">What does it do?</div>
+      <div class="ref-body">Navigating between multiple segments (men/women/kids) is seamless. The size selector and material background sit in the same view on product pages. The question "which size should I choose?" is answered by a size guide link directly below the hero.</div>
+      <span class="ref-apply-label">Applied to Olivio &amp; Co</span>
+      <div class="ref-apply">Move the age category selector below the hero: "Child's age? → Go to the right collection" flow. Add a size guide link to every product card. Resolve the Kids/Junior overlap through the guide.</div>
+    </div>
+
+  </div>
+
+  <div class="page-footer" style="border-color:#2A2A2A; color:#555;">
+    <span>Olivio &amp; Co · Landing Page Report</span>
+    <span>March 2026</span>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!-- SAYFA 6 · HERO UYGULAMASI                                 -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div class="page">
+  <span class="eyebrow">Section Application — 01</span>
+  <h1 class="section-title">The hero section:<br>bringing the message to the surface.</h1>
+  <p class="section-intro">The hero currently behaves like a collection showcase window. A single change — replacing the slider with a fixed, message-led hero — can transform the first impression entirely.</p>
+
+  <div class="ba-grid">
+    <div class="ba-cell ba-cell--before">
+      <span class="ba-header ba-header--before">Right Now — Problem</span>
+      <div class="ba-text">Slider format rotates three collections. Each slide has a different image, a different headline (collection name), and a "Shop Now" CTA. Why is this brand trustworthy, why buy from it — neither is addressed. The visitor is not guided, no message lands.</div>
+    </div>
+    <div class="ba-cell ba-cell--after">
+      <span class="ba-header ba-header--after">What It Should Be — Solution</span>
+      <div class="ba-text"><strong>Fixed hero, layered message:</strong> A large lifestyle image (family, sunlight, Mediterranean atmosphere). Short headline over it: "Inspired by the Mediterranean. Designed for every age." Subline: "UV400 · 13-Month Guarantee · 30-Day Returns" Two CTAs side by side: "Explore Collections" + "Shop by Age"</div>
+    </div>
+  </div>
+
+  <div class="action-block">
+    <div class="action-numeral">01</div>
+    <span class="action-tag">Hero — Reference: Cuyana + Wildling</span>
+    <h2 class="action-title">Remove the slider. Move to a manifesto hero.</h2>
+    <p class="action-body">The slider format is the weakest hero option for conversion — research consistently shows that 80% of visitors never see slides two and three. A single strong image with a clear message does far more work than three slides. Adapt Cuyana's "Fewer, better things" hero and Wildling's scroll-sticky headline effect to this section.</p>
+    <ul class="action-list">
+      <li><strong>Headline</strong> — "Inspired by the Mediterranean, designed for children." One sentence carrying brand identity and value proposition together</li>
+      <li><strong>Trust strip</strong> — immediately below the hero headline: "UV400 Protection · 13-Month Guarantee · Free Shipping €69+" — single line, light font</li>
+      <li><strong>Dual CTA</strong> — "Explore Collections" (primary) + "Shop by Age" (secondary) — second button anchors to the age selector</li>
+      <li><strong>Image selection</strong> — experience, not product: a sunlit beach, a family wearing the glasses, colour and light in the foreground</li>
+      <li><strong>Mobile</strong> — the message must be fully readable even in portrait format; CTAs sized for thumb reach</li>
+    </ul>
+  </div>
+
+  <div class="action-block">
+    <div class="action-numeral">02</div>
+    <span class="action-tag">Below Hero — Reference: Allbirds + Ace &amp; Tate</span>
+    <h2 class="action-title">Place an age selector directly below the hero.</h2>
+    <p class="action-body">Combine Allbirds' gender selector with Ace &amp; Tate's categorisation logic. The moment a visitor exits the hero they see: "Who are you buying for?" — and five age categories are displayed with clear icons. Clicking takes them directly to the relevant collection. This resolves the most common pre-purchase question (which category is right for me) immediately below the hero.</p>
+    <ul class="action-list">
+      <li><strong>Format</strong> — horizontal icon tab: "0–2y · 2–4y · 3–7y · 7–10y · Teen+" each one clickable</li>
+      <li><strong>Hover behaviour</strong> — on hover, show age range + small thumbnail of an example product</li>
+      <li><strong>Linking</strong> — each tab goes directly to the relevant collection page; add a tooltip for the Kids/Junior overlap: "Between 3–4? Check our size guide"</li>
+    </ul>
+  </div>
+
+  <div class="page-footer">
+    <span>Olivio &amp; Co · Landing Page Report</span>
+    <span>March 2026</span>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!-- PAGE 7 · TRUST SIGNALS APPLICATION                          -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div class="page">
+  <span class="eyebrow">Section Application — 02</span>
+  <h1 class="section-title">Trust signals:<br>making the visible is enough.</h1>
+  <p class="section-intro">The guarantee exists. The awards exist. Moving them above the fold requires no new creation — only a design decision.</p>
+
+  <div class="ba-grid">
+    <div class="ba-cell ba-cell--before">
+      <span class="ba-header ba-header--before">Right Now — Problem</span>
+      <div class="ba-text">The guarantee is small icons at the bottom of product pages. 9 awards are a contextless logo strip mid-page. Customer reviews are nowhere. A parent browsing the homepage sees not a single trust signal.</div>
+    </div>
+    <div class="ba-cell ba-cell--after">
+      <span class="ba-header ba-header--after">What It Should Be — Solution</span>
+      <div class="ba-text"><strong>Three-layer trust architecture:</strong> (1) Thin strip below hero — guarantee + shipping + returns. (2) Customer review section before "Best Sellers". (3) Awards section with contextual text — "Red Dot Design Award 2024, Germany."</div>
+    </div>
+  </div>
+
+  <div class="action-block">
+    <div class="action-numeral">03</div>
+    <span class="action-tag">Trust Strip — Reference: Cuyana + Babiators</span>
+    <h2 class="action-title">Write the guarantee below the hero in a single line.</h2>
+    <p class="action-body">Babiators' most effective conversion tool: "Lost or broken, we'll replace it — no questions asked." This sits at the very top of their page. Olivio &amp; Co has a 13-month guarantee but nobody knows about it. Take Cuyana's information strip approach: a single line below the hero with small icons and three pieces of information side by side.</p>
+    <ul class="action-list">
+      <li><strong>Format</strong> — thin horizontal strip, full page width: "✓ UV400 Protection &nbsp;|&nbsp; ✓ 13-Month Guarantee &nbsp;|&nbsp; ✓ Free Returns within 30 Days &nbsp;|&nbsp; ✓ Free Shipping €69+"</li>
+      <li><strong>Style</strong> — dark background (in brand colour), white text, small icons — distinctive but restrained</li>
+      <li><strong>Link</strong> — "13-Month Guarantee" is clickable, linking to the warranty policy page</li>
+      <li><strong>Mobile</strong> — switch to 2×2 grid format so all information remains visible</li>
+    </ul>
+  </div>
+
+  <div class="action-block">
+    <div class="action-numeral">04</div>
+    <span class="action-tag">Awards Section — Reference: Wildling</span>
+    <h2 class="action-title">Present 9 awards with context — remove the logo strip.</h2>
+    <p class="action-body">Wildling places its awards on the page with contextual text. Olivio &amp; Co has 9 awards but only the logo. A parent does not recognise the Red Dot logo. "Red Dot Design Award — Germany's most prestigious design honour. Won in 2023 with the Creative Edition D collection." — that sentence transforms a logo into a trust signal.</p>
+    <ul class="action-list">
+      <li><strong>Format change</strong> — remove the horizontal scroll strip; create a 3-column grid with logo + name + year + one sentence for each award</li>
+      <li><strong>Lead with 3 awards</strong> — surface the most recognisable or most recent three, hide the rest behind a "View All Awards" link</li>
+      <li><strong>Position</strong> — between Best Sellers and Collections — credibility peaks, then the product appears</li>
+    </ul>
+  </div>
+
+  <div class="action-block">
+    <div class="action-numeral">05</div>
+    <span class="action-tag">Social Proof — Reference: Tinycottons</span>
+    <h2 class="action-title">Move real family photos and reviews onto the homepage.</h2>
+    <p class="action-body">Tinycottons integrates family photos drawn from Instagram into the page under "As Seen On Real Families". For Olivio &amp; Co, which has 5,500 Instagram followers, this content already exists. After the Judge.me installation, customer reviews can appear in a "What Families Are Saying" section on the homepage.</p>
+    <ul class="action-list">
+      <li><strong>UGC carousel</strong> — curated real family photos from Instagram, in a clean grid format</li>
+      <li><strong>Review section</strong> — 3–4 curated reviews, each with name + child's age + photo</li>
+      <li><strong>Position</strong> — immediately below Best Sellers — after seeing the product, others' experience provides the confirmation</li>
+    </ul>
+  </div>
+
+  <div class="page-footer">
+    <span>Olivio &amp; Co · Landing Page Report</span>
+    <span>March 2026</span>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!-- PAGE 8 · COLLECTIONS & PRODUCTS APPLICATION                 -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div class="page">
+  <span class="eyebrow">Section Application — 03</span>
+  <h1 class="section-title">Collections and products:<br>they do not sell without a story.</h1>
+
+  <div class="action-block">
+    <div class="action-numeral">06</div>
+    <span class="action-tag">Collections Section — Reference: Tinycottons + Bobo Choses</span>
+    <h2 class="action-title">Add atmospheric text to each collection — visual first, story after.</h2>
+    <p class="action-body">Tinycottons opens each collection with an atmospheric story. Bobo Choses builds an emotional frame for every collection. Olivio &amp; Co currently reads: "BREAKFAST ART — Eyewear created for kids &amp; family". This text describes nothing about the collection. "A Mediterranean table in the stillness of morning — soft light, coloured vessels, the quiet excitement of a day beginning. The Breakfast Art collection carries that moment." — that sentence sells.</p>
+    <ul class="action-list">
+      <li><strong>Breakfast Art</strong> — colours of a Mediterranean morning: "Inspired by morning light, the echo of a moment through a child's eyes."</li>
+      <li><strong>Creative Edition D</strong> — lead with the Matisse reference: "Born from Matisse's colour blocks — wearable art pieces for every age."</li>
+      <li><strong>Coral Reef</strong> — underwater colour palette: "Coral hues, oceanic transparency — from the depths of the Mediterranean to eyewear."</li>
+      <li><strong>Text length</strong> — 1–2 sentences is sufficient; positioned over or directly below the collection image</li>
+      <li><strong>"Creative Dedition" typo</strong> — correct to "Creative Edition D" across all pages</li>
+    </ul>
+  </div>
+
+  <div class="action-block">
+    <div class="action-numeral">07</div>
+    <span class="action-tag">Best Sellers Carousel — Reference: Ace &amp; Tate</span>
+    <h2 class="action-title">Add colour clicking, context, and micro-information to product cards.</h2>
+    <p class="action-body">Ace &amp; Tate product cards update their image instantly when a colour is clicked or changed. Hovering reveals material information. At Olivio &amp; Co, product cards are static — colour dots exist but clicking them only opens a different product page. A simple interaction on the card itself significantly increases conversion rate.</p>
+    <ul class="action-list">
+      <li><strong>Colour clicking</strong> — clicking a colour dot updates the card image without leaving the page</li>
+      <li><strong>Hover information</strong> — "UV400 · Polarised · BPA-Free" as a small badge over the card</li>
+      <li><strong>Age label</strong> — a small age tag on each card: "Junior 3–7y" — the buyer sees at a glance which group this is for</li>
+      <li><strong>"Why popular?"</strong> — small social proof on the top 3 products: "240 orders this month"</li>
+    </ul>
+  </div>
+
+  <div class="action-block">
+    <div class="action-numeral">08</div>
+    <span class="action-tag">Sport &amp; Ski — Reference: Allbirds</span>
+    <h2 class="action-title">Reclaim the sport section for the brand. Remove the Amazon link.</h2>
+    <p class="action-body">Allbirds' outdoor product page presents environmental context (which activity, which weather conditions) alongside the product. At Olivio &amp; Co, the Sport Sunglasses section routes entirely outside the brand (Amazon). The CTA for this section should go to /collections/sport-glasses; the content should connect "running, hiking, beach, skiing" activities to specific products.</p>
+    <ul class="action-list">
+      <li><strong>Remove Amazon CTA</strong> — redirect "Discover" button to /collections/sport-glasses</li>
+      <li><strong>Activity context</strong> — match "Running · Hiking · Beach · Skiing" labels to corresponding products</li>
+      <li><strong>Ski Goggles as a separate block</strong> — marked with season (October–February), with the message "Ski goggles for children — uncontested territory"</li>
+    </ul>
+  </div>
+
+  <div class="page-footer">
+    <span>Olivio &amp; Co · Landing Page Report</span>
+    <span>March 2026</span>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!-- PAGE 9 · BRAND IDENTITY & BLOG APPLICATION                  -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div class="page">
+  <span class="eyebrow">Section Application — 04</span>
+  <h1 class="section-title">Brand identity:<br>from slogan to narrative.</h1>
+
+  <div class="action-block">
+    <div class="action-numeral">09</div>
+    <span class="action-tag">Mediterranean Section — Reference: Bobo Choses + Tinycottons</span>
+    <h2 class="action-title">Deepen the "Inspired by the Mediterranean" section.</h2>
+    <p class="action-body">The page currently shows a full-screen Mediterranean image with "Eyewear created for kids &amp; family" beneath it. Bobo Choses and Tinycottons transform these sections into brand manifestos — the image stays strong, the text adds meaning. "Where the sun rises earliest, where colours appear most vivid, where children run most freely — these glasses come from there." One paragraph can carry the entire character of a brand.</p>
+    <ul class="action-list">
+      <li><strong>Manifesto paragraph</strong> — 2–3 sentences that make the Mediterranean identity concrete; not abstract, but sensory and visual</li>
+      <li><strong>Founder story link</strong> — "Meet the Brand" button links to About Us; the About Us page is deepened at the same time</li>
+      <li><strong>Image update</strong> — a lifestyle photo (family + product + Mediterranean setting) converts better than landscape alone; if available, use it</li>
+    </ul>
+  </div>
+
+  <div class="action-block">
+    <div class="action-numeral">10</div>
+    <span class="action-tag">Blog Activation — Reference: Roshambo + Cuyana</span>
+    <h2 class="action-title">Make the blog visible. Surface content examples on the homepage.</h2>
+    <p class="action-body">Roshambo's blog generates organic traffic because it is linked from navigation, the homepage, and product pages. Cuyana integrates content blocks into the homepage to reinforce brand authority. At Olivio &amp; Co the blog is hidden in the footer and its content is not brand-specific. Two changes are needed: add the blog to navigation, and surface 2–3 featured articles on the homepage.</p>
+    <ul class="action-list">
+      <li><strong>Navigation</strong> — Add a "Guides" or "Blog" tab to the main menu</li>
+      <li><strong>Homepage block</strong> — before the footer, a "Need to Know" section with 3 article cards: "Why Children Need Sunglasses · Do Screen Glasses Really Work · How to Choose Ski Goggles"</li>
+      <li><strong>Content prioritisation</strong> — Deprioritise generic articles; surface new brand-specific content first</li>
+      <li><strong>Blog → Product linking</strong> — Each article links to the relevant collection or product</li>
+    </ul>
+  </div>
+
+  <div class="action-block">
+    <div class="action-numeral">11</div>
+    <span class="action-tag">Navigation Improvement — Reference: Ace &amp; Tate</span>
+    <h2 class="action-title">Simplify navigation. Strengthen directional signposting.</h2>
+    <p class="action-body">Ace &amp; Tate's navigation is crystal clear: product type + collection + lifestyle segments. Olivio &amp; Co's navigation depth is good but trust-building content like the blog, guides, and about us pages are hidden. The top-level menu currently has 5 categories + 2 links. "Guides" or "About Us" should gain first-level visibility.</p>
+    <ul class="action-list">
+      <li><strong>Add to first level</strong> — "Guides" or "Blog" and "About Us" — these two links build trust</li>
+      <li><strong>Mega menu improvement</strong> — display age groups with visual icons in the "Shop by Age" dropdown</li>
+      <li><strong>Search bar</strong> — fix the error; and make the search bar more accessible on every page</li>
+      <li><strong>Top information strip</strong> — the "Free Shipping $59+" strip is present and effective; add guarantee information to it as well</li>
+    </ul>
+  </div>
+
+  <div class="page-footer">
+    <span>Olivio &amp; Co · Landing Page Report</span>
+    <span>March 2026</span>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!-- PAGE 10 · SIZE GUIDE & CONVERSION                           -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div class="page">
+  <span class="eyebrow">Section Application — 05</span>
+  <h1 class="section-title">Conversion opportunities:<br>preventing abandonment.</h1>
+
+  <div class="action-block">
+    <div class="action-numeral">12</div>
+    <span class="action-tag">Size Guide — Reference: Allbirds + Roshambo</span>
+    <h2 class="action-title">Publish the market's most comprehensive children's eyewear size guide.</h2>
+    <p class="action-body">Allbirds integrates the size selector into the product and a "Can't find your size?" link is visible on every product page. Roshambo's size guide includes visual content and video. Olivio &amp; Co's 6 categories are the perfect framework for this guide — no one else in the market has a system this granular. This guide serves simultaneously as a conversion tool and as the owner of the "children's sunglasses size guide" SEO cluster.</p>
+    <ul class="action-list">
+      <li><strong>Page</strong> — publish as /pages/size-guide</li>
+      <li><strong>Table contents</strong> — Toddler 0–2 · Kids 2–4 · Junior 3–7 · Junior+ 7–10 · Teen &amp; Adult; each row: age range + head circumference cm + head circumference inches + example product image</li>
+      <li><strong>Kids/Junior overlap</strong> — give a clear answer to "which one for 3–4 year olds?": head circumference 48–50cm → Kids; 50cm+ → Junior</li>
+      <li><strong>Access points</strong> — "Size Guide" link next to the size selector on every product page · Direct link from the homepage age selector · Listed under Guides in navigation</li>
+      <li><strong>SEO value</strong> — long-tail keywords like "sunglasses for age 3", "what size sunglasses 4 year old" are captured by this page</li>
+    </ul>
+  </div>
+
+  <div class="action-block">
+    <div class="action-numeral">13</div>
+    <span class="action-tag">Product Page Improvement — Reference: Cuyana + Ace &amp; Tate</span>
+    <h2 class="action-title">Restructure the product page for conversion.</h2>
+    <p class="action-body">Cuyana's product page stacks material story + place of production + guarantee together. Ace &amp; Tate presents frame details (width, bridge, arm length) interactively. Olivio &amp; Co product pages list UV400 and material information as bullet points — but why it matters, what it means, which child it suits — none of this is answered. Description text stays below 150 words.</p>
+    <ul class="action-list">
+      <li><strong>Description length</strong> — minimum 150 words; explain in context why UV400 matters, what polarised lenses do, why BPA-free is preferred</li>
+      <li><strong>Collection story</strong> — add 1–2 sentences of collection context to the product description: "This Creative Edition D model was inspired by Matisse's colour block paintings"</li>
+      <li><strong>Guarantee integration</strong> — add a "This product is covered by our 13-month guarantee" block at the base of the description — with a clickable link</li>
+      <li><strong>Size guide link</strong> — a visible "How do I choose the right size?" link next to the size selector</li>
+      <li><strong>Age fit</strong> — age range + head circumference information should also appear within the description text itself</li>
+    </ul>
+  </div>
+
+  <div class="action-block">
+    <div class="action-numeral">14</div>
+    <span class="action-tag">Footer &amp; Overall Flow — Reference: Cuyana</span>
+    <h2 class="action-title">Reorganise the footer as a trust centre.</h2>
+    <p class="action-body">Cuyana's footer presents guarantee, returns, sustainability, and contact information in an organised, trust-affirming way. Olivio &amp; Co's footer contains this information but the hierarchy is flat — everything carries the same weight. The blog link is buried under "ABOUT US" in the footer. The footer is the last thing a visitor sees — trust signals here can tip the purchase decision.</p>
+    <ul class="action-list">
+      <li><strong>Remove blog from footer</strong> — move to main navigation; keep only support and policy links in the footer</li>
+      <li><strong>Guarantee emphasis</strong> — short guarantee strip at the very top of the footer: "13-Month Guarantee · 30-Day Returns · Free Shipping"</li>
+      <li><strong>Social media connection</strong> — social media icons in the footer should be enlarged and accompanied by "Join a community of 5,500+ families"</li>
+    </ul>
+  </div>
+
+  <div class="page-footer">
+    <span>Olivio &amp; Co · Landing Page Report</span>
+    <span>March 2026</span>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!-- PAGE 11 · FULL VISION OF NEW PAGE STRUCTURE (DARK)          -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div class="page page--dark">
+  <span class="eyebrow">Integrated Vision</span>
+  <h1 class="section-title">Ideal homepage<br>structure — top to bottom.</h1>
+  <p class="section-intro">The page flow that emerges when all applications are brought together. The function of each section and which reference inspired it are noted.</p>
+
+  <div style="margin-bottom: 0;">
+
+    <div style="border: 1px solid #2A2A2A; padding: 18px 22px; margin-bottom: 8px; background: #1E1E1E; display:flex; gap:20px; align-items:flex-start;">
+      <div style="font-family:var(--ff-mono);font-size:9px;color:#555;min-width:48px;padding-top:2px;">01</div>
+      <div style="flex:1;">
+        <div style="font-size:13px;font-weight:700;color:#E8E8E8;margin-bottom:4px;">Top Information Strip</div>
+        <div style="font-size:11px;color:#888;line-height:1.6;">"Free Shipping €69+ · 13-Month Guarantee · 30-Day Returns" — full page width, dark background</div>
+      </div>
+      <div style="font-family:var(--ff-mono);font-size:8px;color:#555;white-space:nowrap;padding-top:2px;">Existing → Improve</div>
+    </div>
+
+    <div style="border: 1px solid #555; padding: 18px 22px; margin-bottom: 8px; background: #1A1A1A; display:flex; gap:20px; align-items:flex-start;">
+      <div style="font-family:var(--ff-mono);font-size:9px;color:#666;min-width:48px;padding-top:2px;">02</div>
+      <div style="flex:1;">
+        <div style="font-size:13px;font-weight:700;color:#E8E8E8;margin-bottom:4px;">Hero — Fixed, Message-Led Visual</div>
+        <div style="font-size:11px;color:#888;line-height:1.6;">Lifestyle image + manifesto headline + dual CTA. Slider removed. Reference: Cuyana + Wildling</div>
+      </div>
+      <div style="font-family:var(--ff-mono);font-size:8px;color:#B05050;white-space:nowrap;padding-top:2px;">New · Priority</div>
+    </div>
+
+    <div style="border: 1px solid #555; padding: 18px 22px; margin-bottom: 8px; background: #1A1A1A; display:flex; gap:20px; align-items:flex-start;">
+      <div style="font-family:var(--ff-mono);font-size:9px;color:#666;min-width:48px;padding-top:2px;">03</div>
+      <div style="flex:1;">
+        <div style="font-size:13px;font-weight:700;color:#E8E8E8;margin-bottom:4px;">Age Selector Strip</div>
+        <div style="font-size:11px;color:#888;line-height:1.6;">"Who are you buying for?" → 5 clickable age categories, example product on hover. Reference: Allbirds</div>
+      </div>
+      <div style="font-family:var(--ff-mono);font-size:8px;color:#B05050;white-space:nowrap;padding-top:2px;">New · Priority</div>
+    </div>
+
+    <div style="border: 1px solid #2A2A2A; padding: 18px 22px; margin-bottom: 8px; background: #1E1E1E; display:flex; gap:20px; align-items:flex-start;">
+      <div style="font-family:var(--ff-mono);font-size:9px;color:#555;min-width:48px;padding-top:2px;">04</div>
+      <div style="flex:1;">
+        <div style="font-size:13px;font-weight:700;color:#E8E8E8;margin-bottom:4px;">Best Sellers — Improved</div>
+        <div style="font-size:11px;color:#888;line-height:1.6;">Colour clicking + age label + hover information. Reference: Ace &amp; Tate</div>
+      </div>
+      <div style="font-family:var(--ff-mono);font-size:8px;color:#A06020;white-space:nowrap;padding-top:2px;">Existing → Improve</div>
+    </div>
+
+    <div style="border: 1px solid #555; padding: 18px 22px; margin-bottom: 8px; background: #1A1A1A; display:flex; gap:20px; align-items:flex-start;">
+      <div style="font-family:var(--ff-mono);font-size:9px;color:#666;min-width:48px;padding-top:2px;">05</div>
+      <div style="flex:1;">
+        <div style="font-size:13px;font-weight:700;color:#E8E8E8;margin-bottom:4px;">Customer Reviews + UGC</div>
+        <div style="font-size:11px;color:#888;line-height:1.6;">3–4 curated reviews + family photos. Reference: Tinycottons + Judge.me</div>
+      </div>
+      <div style="font-family:var(--ff-mono);font-size:8px;color:#B05050;white-space:nowrap;padding-top:2px;">New · Priority</div>
+    </div>
+
+    <div style="border: 1px solid #2A2A2A; padding: 18px 22px; margin-bottom: 8px; background: #1E1E1E; display:flex; gap:20px; align-items:flex-start;">
+      <div style="font-family:var(--ff-mono);font-size:9px;color:#555;min-width:48px;padding-top:2px;">06</div>
+      <div style="flex:1;">
+        <div style="font-size:13px;font-weight:700;color:#E8E8E8;margin-bottom:4px;">Collections — With Narrative</div>
+        <div style="font-size:11px;color:#888;line-height:1.6;">Each collection with atmospheric text. Typo corrected. Reference: Tinycottons + Bobo Choses</div>
+      </div>
+      <div style="font-family:var(--ff-mono);font-size:8px;color:#A06020;white-space:nowrap;padding-top:2px;">Existing → Improve</div>
+    </div>
+
+    <div style="border: 1px solid #2A2A2A; padding: 18px 22px; margin-bottom: 8px; background: #1E1E1E; display:flex; gap:20px; align-items:flex-start;">
+      <div style="font-family:var(--ff-mono);font-size:9px;color:#555;min-width:48px;padding-top:2px;">07</div>
+      <div style="flex:1;">
+        <div style="font-size:13px;font-weight:700;color:#E8E8E8;margin-bottom:4px;">Mediterranean Manifesto Section</div>
+        <div style="font-size:11px;color:#888;line-height:1.6;">Existing image retained, text deepened. "About Us" link added. Reference: Bobo Choses</div>
+      </div>
+      <div style="font-family:var(--ff-mono);font-size:8px;color:#A06020;white-space:nowrap;padding-top:2px;">Existing → Deepen</div>
+    </div>
+
+    <div style="border: 1px solid #2A2A2A; padding: 18px 22px; margin-bottom: 8px; background: #1E1E1E; display:flex; gap:20px; align-items:flex-start;">
+      <div style="font-family:var(--ff-mono);font-size:9px;color:#555;min-width:48px;padding-top:2px;">08</div>
+      <div style="flex:1;">
+        <div style="font-size:13px;font-weight:700;color:#E8E8E8;margin-bottom:4px;">Awards — Contextual Grid</div>
+        <div style="font-size:11px;color:#888;line-height:1.6;">Logo strip → 3-column grid, name + year + 1 sentence for each award. Reference: Wildling</div>
+      </div>
+      <div style="font-family:var(--ff-mono);font-size:8px;color:#A06020;white-space:nowrap;padding-top:2px;">Existing → Redesign</div>
+    </div>
+
+    <div style="border: 1px solid #2A2A2A; padding: 18px 22px; margin-bottom: 8px; background: #1E1E1E; display:flex; gap:20px; align-items:flex-start;">
+      <div style="font-family:var(--ff-mono);font-size:9px;color:#555;min-width:48px;padding-top:2px;">09</div>
+      <div style="flex:1;">
+        <div style="font-size:13px;font-weight:700;color:#E8E8E8;margin-bottom:4px;">Sport &amp; Ski Goggles Blocks</div>
+        <div style="font-size:11px;color:#888;line-height:1.6;">Amazon link removed → /collections/sport-glasses. Ski as separate seasonal block. Reference: Allbirds</div>
+      </div>
+      <div style="font-family:var(--ff-mono);font-size:8px;color:#B05050;white-space:nowrap;padding-top:2px;">Critical Fix</div>
+    </div>
+
+    <div style="border: 1px solid #555; padding: 18px 22px; margin-bottom: 8px; background: #1A1A1A; display:flex; gap:20px; align-items:flex-start;">
+      <div style="font-family:var(--ff-mono);font-size:9px;color:#666;min-width:48px;padding-top:2px;">10</div>
+      <div style="flex:1;">
+        <div style="font-size:13px;font-weight:700;color:#E8E8E8;margin-bottom:4px;">Blog Featured Articles — 3 Pieces</div>
+        <div style="font-size:11px;color:#888;line-height:1.6;">Under "Our Guides": Ski Goggles · Screen Glasses · Eye Health. Moved from footer to navigation. Reference: Roshambo + Cuyana</div>
+      </div>
+      <div style="font-family:var(--ff-mono);font-size:8px;color:#B05050;white-space:nowrap;padding-top:2px;">New · Mid-term</div>
+    </div>
+
+    <div style="border: 1px solid #2A2A2A; padding: 18px 22px; background: #1E1E1E; display:flex; gap:20px; align-items:flex-start;">
+      <div style="font-family:var(--ff-mono);font-size:9px;color:#555;min-width:48px;padding-top:2px;">11</div>
+      <div style="flex:1;">
+        <div style="font-size:13px;font-weight:700;color:#E8E8E8;margin-bottom:4px;">Footer — Trust Centre</div>
+        <div style="font-size:11px;color:#888;line-height:1.6;">Guarantee strip at the top. "Trusted by 5,500+ families" social proof. Reference: Cuyana</div>
+      </div>
+      <div style="font-family:var(--ff-mono);font-size:8px;color:#A06020;white-space:nowrap;padding-top:2px;">Existing → Improve</div>
+    </div>
+
+  </div>
+
+  <div class="page-footer" style="border-color:#2A2A2A; color:#555;">
+    <span>Olivio &amp; Co · Landing Page Report</span>
+    <span>March 2026</span>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!-- PAGE 12 · PRIORITY PLAN                                     -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div class="page">
+  <span class="eyebrow">Priority Plan</span>
+  <h1 class="section-title">Everything in one place:<br>in order.</h1>
+  <p class="section-intro">Quick fixes, mid-term design changes, and strategic content improvements — grouped into three implementation waves.</p>
+
+  <div style="font-family: var(--ff-mono); font-size: 8px; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: var(--stone); margin-bottom: 16px; margin-top: 8px; display: flex; gap: 20px;">
+    <span style="display:flex; align-items:center; gap:6px;"><span style="width:8px;height:8px;border-radius:50%;background:#B03030;display:inline-block;"></span> This Week</span>
+    <span style="display:flex; align-items:center; gap:6px;"><span style="width:8px;height:8px;border-radius:50%;background:#A06020;display:inline-block;"></span> This Month</span>
+    <span style="display:flex; align-items:center; gap:6px;"><span style="width:8px;height:8px;border-radius:50%;background:#2A7A2A;display:inline-block;"></span> Next 90 Days</span>
+  </div>
+
+  <div class="priority-rows">
+    <div class="priority-row">
+      <div class="priority-dot priority-dot--now"></div>
+      <div class="priority-row-content">
+        <div class="priority-row-title">Correct the "Creative Dedition" typo</div>
+        <div class="priority-row-desc">Present in two homepage banners and the collection page. A single copy correction — the typo damages brand perception for a design-conscious audience.</div>
+      </div>
+      <div class="priority-row-tag">Quick Fix</div>
+    </div>
+    <div class="priority-row">
+      <div class="priority-dot priority-dot--now"></div>
+      <div class="priority-row-content">
+        <div class="priority-row-title">Redirect the Sport Sunglasses "Discover" button from Amazon to /collections/sport-glasses</div>
+        <div class="priority-row-desc">Traffic generated by the brand page is going to Amazon. One URL change reclaims the revenue, customer data, and brand experience.</div>
+      </div>
+      <div class="priority-row-tag">Quick Fix</div>
+    </div>
+    <div class="priority-row">
+      <div class="priority-dot priority-dot--now"></div>
+      <div class="priority-row-content">
+        <div class="priority-row-title">Add guarantee information to the top information strip</div>
+        <div class="priority-row-desc">Currently only shipping is shown: "Free Shipping $59+". Adding "13-Month Guarantee · 30-Day Returns" alongside it turns the highest-visibility area on the page into a trust signal.</div>
+      </div>
+      <div class="priority-row-tag">Quick Fix</div>
+    </div>
+    <div class="priority-row">
+      <div class="priority-dot priority-dot--now"></div>
+      <div class="priority-row-content">
+        <div class="priority-row-title">Fix the search bar error</div>
+        <div class="priority-row-desc">It throws an error the moment it opens on any page. A visitor who tries to search is immediately met with a broken experience.</div>
+      </div>
+      <div class="priority-row-tag">Technical</div>
+    </div>
+    <div class="priority-row">
+      <div class="priority-dot priority-dot--soon"></div>
+      <div class="priority-row-content">
+        <div class="priority-row-title">Convert the hero from a slider to a fixed, message-led image</div>
+        <div class="priority-row-desc">A single strong image + manifesto headline + dual CTA + trust strip. The greatest conversion impact of this entire report comes from this single change.</div>
+      </div>
+      <div class="priority-row-tag">Design</div>
+    </div>
+    <div class="priority-row">
+      <div class="priority-dot priority-dot--soon"></div>
+      <div class="priority-row-content">
+        <div class="priority-row-title">Add an age selector strip below the hero</div>
+        <div class="priority-row-desc">Answer the question "Who are you buying for?" directly below the hero. 5 clickable categories, example product on hover. Resolves the most common pre-purchase question immediately.</div>
+      </div>
+      <div class="priority-row-tag">UX</div>
+    </div>
+    <div class="priority-row">
+      <div class="priority-dot priority-dot--soon"></div>
+      <div class="priority-row-content">
+        <div class="priority-row-title">Add atmospheric sentences to collection texts</div>
+        <div class="priority-row-desc">1–2 sentences per collection. Not a product headline — atmosphere. Answer the question "where did this collection find its inspiration?"</div>
+      </div>
+      <div class="priority-row-tag">Copy</div>
+    </div>
+    <div class="priority-row">
+      <div class="priority-dot priority-dot--soon"></div>
+      <div class="priority-row-content">
+        <div class="priority-row-title">Convert the awards section from a logo strip to a contextual grid</div>
+        <div class="priority-row-desc">9 awards exist. Replace the logo alone with: award name + year + 1 sentence of explanation. "Red Dot Design Award" becomes a trust signal with context.</div>
+      </div>
+      <div class="priority-row-tag">Design</div>
+    </div>
+    <div class="priority-row">
+      <div class="priority-dot priority-dot--soon"></div>
+      <div class="priority-row-content">
+        <div class="priority-row-title">Add a customer reviews and UGC section</div>
+        <div class="priority-row-desc">After the Judge.me installation: 3–4 curated reviews + family photos from Instagram. Positioned directly below Best Sellers.</div>
+      </div>
+      <div class="priority-row-tag">Social Proof</div>
+    </div>
+    <div class="priority-row">
+      <div class="priority-dot priority-dot--soon"></div>
+      <div class="priority-row-content">
+        <div class="priority-row-title">Create the size guide page and link it from every product page</div>
+        <div class="priority-row-desc">Head circumference table for all 6 categories including the Kids/Junior overlap. Removes the leading cause of pre-checkout abandonment.</div>
+      </div>
+      <div class="priority-row-tag">Content + UX</div>
+    </div>
+    <div class="priority-row">
+      <div class="priority-dot priority-dot--later"></div>
+      <div class="priority-row-content">
+        <div class="priority-row-title">Move the blog to navigation; surface 3 featured articles on the homepage</div>
+        <div class="priority-row-desc">40+ articles exist but are invisible. Adding to navigation and surfacing them on the homepage turns content into a traffic and trust tool.</div>
+      </div>
+      <div class="priority-row-tag">Content</div>
+    </div>
+    <div class="priority-row">
+      <div class="priority-dot priority-dot--later"></div>
+      <div class="priority-row-content">
+        <div class="priority-row-title">Deepen the Mediterranean manifesto section + strengthen the About Us page</div>
+        <div class="priority-row-desc">Founder story, brand values, sustainability details. No competitor tells this story.</div>
+      </div>
+      <div class="priority-row-tag">Brand</div>
+    </div>
+    <div class="priority-row">
+      <div class="priority-dot priority-dot--later"></div>
+      <div class="priority-row-content">
+        <div class="priority-row-title">Expand all product descriptions to 150+ words</div>
+        <div class="priority-row-desc">Why UV400 matters, what polarised lenses do, collection story, guarantee information — contextual text works for both SEO and conversion.</div>
+      </div>
+      <div class="priority-row-tag">Copy + SEO</div>
+    </div>
+    <div class="priority-row">
+      <div class="priority-dot priority-dot--later"></div>
+      <div class="priority-row-content">
+        <div class="priority-row-title">Add colour clicking and hover information to product cards</div>
+        <div class="priority-row-desc">Image change on colour dot click, brief material summary on hover. Ace &amp; Tate reference — small interaction, significant conversion difference.</div>
+      </div>
+      <div class="priority-row-tag">UX Development</div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span>Olivio &amp; Co · Landing Page Report</span>
+    <span>March 2026</span>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!-- CLOSING PAGE (DARK)                                         -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div class="page page--dark" style="display:flex; flex-direction:column; justify-content:space-between;">
+
+  <div>
+    <span class="eyebrow" style="color:#555;">Summary</span>
+    <h1 class="section-title" style="max-width: 520px; margin-bottom: 32px;">The product is exceptional.<br>The page is not — yet.</h1>
+
+    <div style="border-left: 3px solid #2A2A2A; padding: 22px 28px; background: #1A1A1A; margin-bottom: 28px; max-width: 580px;">
+      <p style="font-size: 15px; font-weight: 300; font-style: italic; color: #CCCCCC; line-height: 1.85;">
+        Olivio &amp; Co's greatest problem is not the product or the brand — it is that these assets are invisible on the page. A 13-month guarantee exists but is hidden. 9 awards exist but lack context. A Mediterranean identity exists but remains at slogan level. Collection stories exist but are not told.
+      </p>
+      <p style="font-size: 15px; font-weight: 300; font-style: italic; color: #CCCCCC; line-height: 1.85; margin-top: 14px;">
+        None of the applications in this report require creating something new. Making existing assets visible, placing them in the right order, and adapting the proven approaches of reference brands to Olivio &amp; Co is sufficient.
+      </p>
+    </div>
+
+    <div style="background: #1E1E1E; border: 1px solid #2A2A2A; padding: 22px 26px; max-width: 520px;">
+      <div style="font-family: var(--ff-mono); font-size: 8px; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: #666; margin-bottom: 16px;">Scope of this report</div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px 32px;">
+        <div style="font-family: var(--ff-mono); font-size: 10px; color: #888; padding: 5px 0; border-bottom: 1px solid #222;">Current state summary + scoring</div>
+        <div style="font-family: var(--ff-mono); font-size: 10px; color: #888; padding: 5px 0; border-bottom: 1px solid #222;">Page structure anatomy</div>
+        <div style="font-family: var(--ff-mono); font-size: 10px; color: #888; padding: 5px 0; border-bottom: 1px solid #222;">6 reference brand analyses</div>
+        <div style="font-family: var(--ff-mono); font-size: 10px; color: #888; padding: 5px 0; border-bottom: 1px solid #222;">Section-by-section applications</div>
+        <div style="font-family: var(--ff-mono); font-size: 10px; color: #888; padding: 5px 0; border-bottom: 1px solid #222;">Before / after comparisons</div>
+        <div style="font-family: var(--ff-mono); font-size: 10px; color: #888; padding: 5px 0; border-bottom: 1px solid #222;">Ideal page structure vision</div>
+        <div style="font-family: var(--ff-mono); font-size: 10px; color: #888; padding: 5px 0; border-bottom: 1px solid #222;">14-point priority plan</div>
+        <div style="font-family: var(--ff-mono); font-size: 10px; color: #888; padding: 5px 0; border-bottom: 1px solid #222;">This week · This month · 90 days</div>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <div style="border-top: 1px solid #2A2A2A; padding-top: 24px; margin-bottom: 16px;">
+      <div style="font-family: var(--ff-mono); font-size: 8px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: #555; margin-bottom: 8px;">Next step</div>
+      <div style="font-size: 14px; color: #AAAAAA; font-weight: 300; line-height: 1.7;">The single change to start before anything else: the hero section. Everything else radiates outward from there.</div>
+    </div>
+    <div style="font-family: var(--ff-mono); font-size: 9px; color: #444; letter-spacing: 0.06em;">Olivio &amp; Co · Landing Page Uygulama Raporu · March 2026</div>
+  </div>
+
+</div>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
